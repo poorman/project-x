@@ -1,0 +1,343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Using CodeIgniter Drivers : CodeIgniter User Guide</title>
+
+<style type='text/css' media='all'>@import url('../userguide.css');</style>
+<link rel='stylesheet' type='text/css' media='all' href='../userguide.css' />
+
+<script type="text/javascript" src="../nav/nav.js"></script>
+<script type="text/javascript" src="../nav/prototype.lite.js"></script>
+<script type="text/javascript" src="../nav/moo.fx.js"></script>
+<script type="text/javascript" src="../nav/user_guide_menu.js"></script>
+
+<meta http-equiv='expires' content='-1' />
+<meta http-equiv= 'pragma' content='no-cache' />
+<meta name='robots' content='all' />
+<meta name='author' content='ExpressionEngine Dev Team' />
+<meta name='description' content='CodeIgniter User Guide' />
+
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"><script type="text/javascript">create_menu('../');</script></div></div>
+<div id="nav2"><a name="top"></a><a href="javascript:void(0);" onclick="myHeight.toggle();"><img src="../images/nav_toggle_darker.jpg" width="154" height="43" border="0" title="Toggle Table of Contents" alt="Toggle Table of Contents" /></a></div>
+<div id="masthead">
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<tr>
+<td><h1>CodeIgniter User Guide Version 2.1.0 Extended Functionality</h1></td>
+<td id="breadcrumb_right"><a href="../toc.html">Table of Contents Page</a></td>
+</tr>
+</table>
+</div>
+<!-- END NAVIGATION -->
+
+
+<!-- START BREADCRUMB -->
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<tr>
+<td id="breadcrumb">
+<a href="http://codeigniter.com/">CodeIgniter Home</a> &nbsp;&#8250;&nbsp;
+<a href="../index.html">User Guide Home</a> &nbsp;&#8250;&nbsp;
+Using CodeIgniter Drivers
+</td>
+<td id="searchbox"><form method="get" action="http://www.google.com/search"><input type="hidden" name="as_sitesearch" id="as_sitesearch" value="codeigniter.com/user_guide/" />Search User Guide&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
+</tr>
+</table>
+<!-- END BREADCRUMB -->
+
+<br clear="all" />
+
+
+<!-- START CONTENT -->
+<div id="content">
+
+<h1>Environment</h1>
+
+
+<p>&nbsp;</p>
+<h2>Sessions</h2>
+<p>Iinstead of creating many additional instance of mvc's on global level, lets leave it alone only for master processing. Keep mvc's other than loaders and setters in compartaments.<br />
+</p>
+<h2>Globals</h2>
+<p>Unless website is static, every website should have  some sort of backend panel to control behaviour and or content of the website.</p>
+<p>There also can be more areas not taking part in website production time, but still are essential to it in lifetime cycle, like developer panel.<br />
+</p>
+<p>These areas are referred to as Modules.  In extended functionality there are added three default modules.</p>
+<p>Modules are placed within <strong>application/modules/</strong></p>
+<p><strong>Website</strong> (client) files will be placed within <strong>site</strong> module.</p>
+<p><strong>Backend Panel</strong> files are in <strong>dashboard</strong> module.</p>
+<p><strong>Developer</strong> Area goes in <strong>gearbox</strong> module.<br />
+  <br />
+  Modules should not share resources, and should only work as stand alone services.<br />
+  <br />
+  In necessity of sharing data global function or plugins are used, so plan good what to keep where.
+</p>
+<p>MVC functionality is retained by keeping file structure within <strong>modules</strong> directory.</p>
+
+<p><code><var>application\modules\site\</var><br />
+    <strong><br />
+    -- controllers --</strong><br />
+  \gallery.php<br />
+  \blog.php<br />
+  <strong><br />
+  -- views --</strong><br />
+  \views\gallery.php<br />
+  \views\blog.php<br />
+  <strong><br />
+  -- models -- </strong><br />
+  \model\gallery_model.php<br />
+  \model\blog_model.php<br />
+  <br />
+  <strong>-- assets --</strong><br />
+  \assets\js\script.js<br />
+  \assets\css\style.css</code>
+</p>
+<h2>Definitions</h2>
+<p>Only Relevant definitions to Project-X</p>
+  <p>
+	<table>
+		<tr>
+			<td valign="top"><code>
+				[CI_CURRENT_LANGUAGE] => english<br />
+				[SELF] => index.php<br />
+				[EXT] => .php<br />
+				[BASEPATH] => /home2/systemw1/public_html/XFLO/system/<br />
+				[FCPATH] => /home2/systemw1/public_html/XFLO/WWW/<br />
+				[SYSDIR] => system<br />
+				[APPPATH] => application/<br />
+				[REL_APPLICATION] => application/<br />
+				[CI_VERSION] => 2.1.1<br />
+				[CI_CORE] => <br />
+				[FILE_READ_MODE] => 420<br />
+				[FILE_WRITE_MODE] => 438<br />
+				[DIR_READ_MODE] => 493<br />
+				[DIR_WRITE_MODE] => 511<br />
+				[FOPEN_READ] => rb<br />
+				[FOPEN_READ_WRITE] => r+b<br />
+				[FOPEN_WRITE_CREATE_DESTRUCTIVE] => wb<br />
+				[FOPEN_READ_WRITE_CREATE_DESTRUCTIVE] => w+b<br />
+				[FOPEN_WRITE_CREATE] => ab<br />
+				[FOPEN_READ_WRITE_CREATE] => a+b<br />
+				[FOPEN_WRITE_CREATE_STRICT] => xb<br />
+				[FOPEN_READ_WRITE_CREATE_STRICT] => x+b<br />
+				</code>
+			</td>
+			<td valign="top"><code>
+				[DEV_IP] => 192.168.1.1<br />
+				[DOMAIN_URL] => www.xflo.info/<br />
+				[DOMAIN_HTTP_URL] => http://www.xflo.info/<br />
+				[BASE_URL] => http://www.xflo.info/<br />
+				[UTF8_ENABLED] => 1<br />
+				[MB_ENABLED] => 1<br />
+				[MODULE] => www<br />
+				[SELECTED_DEVICE] => <br />
+				[GROUP_DEVELOPMENT] => 0<br />
+				[GROUP_SUPER_ADMIN] => 1<br />
+				[GROUP_ADMINISTRATOR] => 2<br />
+				[GROUP_MODERATOR] => 3<br />
+				[GROUP_USER] => 4<br />
+				[GROUP_GUEST] => 5<br />
+				[GROUP_CUSTOM] => 10<br />
+				[STATUS_0] => declined<br />
+				[STATUS_1] => active<br />
+				[STATUS_2] => new<br />
+				[STATUS_3] => pre-approved<br />
+				</code>
+			</td>
+			<td valign="top"><code>
+				[HTTP_MODE] => http<br />
+				[PRE] => #ui<br />
+				[JS_PRE] => ui<br />
+				[JS_BASE_URL] => http://xflo/index.php/<br />
+				[PATH_APPLICATION] => http://www.xflo.info/application/<br />
+				[PATH_PLUGINS] => http://www.xflo.info/application/plugins/<br />
+				[REL_PLUGINS] => application/plugins/<br />
+				[PATH_MODULES] => http://www.xflo.info/application/modules/<br />
+				[REL_MODULES] => application/modules/<br />
+				[PATH_WIDGETS] => http://www.xflo.info/application/modules/www/widgets/<br />
+				[PATH_ASSETS] => http://www.xflo.info/assets/<br />
+				[REL_ASSETS] => assets/<br />
+				[APPTEMPLATE] => default<br />
+				[APPTHEME] => default<br />
+				</code>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top"><code>
+				[PATH_THIRDPARTY] => http://www.xflo.info/assets/third_party/default/default/<br />
+				[REL_THIRDPARTYPATH] => assets/third_party/default/default/<br />
+				[PATH_LANGUAGES] => http://www.xflo.info/application/language/<br />
+				[REL_LANGUAGES] => application/language/<br />
+				[PATH_PLUGIN] => http://www.xflo.info/application/plugins/<br />
+				[PATH_IMAGE] => http://www.xflo.info/assets/images/<br />
+				[REL_IMAGE] => assets/images/<br />
+				[PATH_TEMPLATEIMAGE] => http://www.xflo.info/assets/images/default/<br />
+				[REL_TEMPLATEIMAGE] => assets/images/default/<br />
+				[PATH_THEMEIMAGE] => http://www.xflo.info/assets/images/default/default/<br />
+				[REL_THEMEIMAGEPATH_REL] => assets/images/default/default/<br />
+				[PATH_LANGUAGEIMAGES] => http://www.xflo.info/application/language/english/images/<br />
+				[REL_LANGUAGEIMAGES] => application/language/english/images/<br />
+				[PATH_TEMPLATELANGUAGEIMAGE] => http://www.xflo.info/application/language/english/images/default/<br />
+				[REL_TEMPLATELANGUAGEIMAGE] => application/language/english/images/default/<br />
+				[PATH_THEMELANGUAGEIMAGE] => http://www.xflo.info/application/language/english/images/default/default/<br />
+				[REL_THEMELANGUAGEIMAGEPATH_REL] => application/language/english/images/default/default/<br />
+				[PATH_SCRIPT] => http://www.xflo.info/assets/script/<br />
+				[REL_SCRIPT] => assets/script/<br />
+				[PATH_TEMPLATESCRIPT] => http://www.xflo.info/assets/script/default/<br />
+				[REL_TEMPLATESCRIPT] => assets/script/default/<br />
+				[PATH_THEMESCRIPT] => http://www.xflo.info/assets/script/default/default/<br />
+				[REL_THEMESCRIPT] => assets/script/default/default/<br />
+				[PATH_CSS] => http://www.xflo.info/assets/css/<br />
+				[REL_CSS] => assets/css/<br />
+				[PATH_TEMPLATECSS] => http://www.xflo.info/assets/css/default/<br />
+				[REL_TEMPLATECSS] => assets/css/default/<br />
+				[PATH_THEMECSS] => http://www.xflo.info/assets/css/default/default/<br />
+				[REL_THEMECSS] => assets/css/default/default/<br />
+				[PATH_PLUGIN_TEMPLATEIMAGE] => http://www.xflo.info/assets/images/plugin/default/<br />
+				[PATH_PLUGIN_THEMEIMAGE] => http://www.xflo.info/assets/images/plugin/default/default/<br />
+				[PATH_PLUGIN_LANGUAGEIMAGE] => http://www.xflo.info/application/language/english/images/plugin/<br />
+				[PATH_PLUGIN_TEMPLATELANGUAGEIMAGE] => http://www.xflo.info/application/language/english/images/plugin/default/<br />
+				[PATH_PLUGIN_THEMELANGUAGEIMAGE] => http://www.xflo.info/application/language/english/images/plugin/default/default/<br />
+				[PATH_PLUGIN_SCRIPT] => assets/script/<br />
+				[PATH_PLUGIN_TEMPLATESCRIPT] => assets/script/default/<br />
+				[PATH_PLUGIN_THEMESCRIPT] => assets/script/default/default/<br />
+				</code>
+			</td>
+			<td valign="top"><code>
+				[PATH_PLUGIN_CSS] => assets/css/<br />
+				[PATH_PLUGIN_TEMPLATECSS] => assets/css/default/<br />
+				[PATH_PLUGIN_THEMECSS] => assets/css/default/default/<br />
+				[PATH_MODULE_GLOBAL] => http://www.xflo.info/application/modules/global/<br />
+				[REL_MODULE_GLOBAL] => application/modules/global/<br />
+				[PATH_MODULE_WWW] => http://www.xflo.info/application/modules/www/<br />
+				[REL_MODULE_WWW] => application/modules/www/<br />
+				[PATH_MODULE] => http://www.xflo.info/http://www.xflo.info/application/modules/www/<br />
+				[REL_MODULE] => application/modules/www/<br />
+				[PATH_MODULE_ASSETS] => http://www.xflo.info/assets/www/<br />
+				[REL_MODULE_ASSETS] => assets/www/<br />
+				[MODULE_THIRDPARTYPATH] => http://www.xflo.info/assets/www/third_party/default/default/<br />
+				[MODULE_THIRDPARTYPATH_REL] => assets/www/third_party/default/default/<br />
+				[PATH_MODULE_IMAGE] => http://www.xflo.info/assets/www/images/<br />
+				[REL_MODULE_IMAGE] => assets/www/images/<br />
+				[PATH_MODULE_TEMPLATEIMAGE] => http://www.xflo.info/assets/www/images/default/<br />
+				[REL_MODULE_TEMPLATEIMAGE] => assets/www/images/default/<br />
+				[PATH_MODULE_THEMEIMAGE] => http://www.xflo.info/assets/www/images/default/default/<br />
+				[REL_MODULE_THEMEIMAGE] => assets/www/images/default/default/<br />
+				[PATH_MODULE_LANGUAGEIMAGE] => http://www.xflo.info/application/language/images/modules/<br />
+				[REL_MODULE_LANGUAGEIMAGE] => application/language/images/modules/<br />
+				[PATH_MODULE_TEMPLATELANGUAGEIMAGE] => http://www.xflo.info/application/language/images/modules/default/<br />
+				[REL_MODULE_TEMPLATELANGUAGEIMAGE] => application/language/images/modules/default/<br />
+				[PATH_MODULE_THEMELANGUAGEIMAGE] => http://www.xflo.info/application/language/images/modules/default/default/<br />
+				[MODULE_THEMELANGUAGEIMAGE] => application/language/images/modules/default/default/<br />
+				[PATH_MODULE_SCRIPT] => http://www.xflo.info/assets/www/script/<br />
+				[REL_MODULE_SCRIPT] => assets/www/script/<br />
+				[PATH_MODULE_TEMPLATESCRIPT] => http://www.xflo.info/assets/www/script/default/<br />
+				[REL_MODULE_TEMPLATESCRIPT] => assets/www/script/default/<br />
+				[PATH_MODULE_THEMESCRIPT] => http://www.xflo.info/assets/www/script/default/default/<br />
+				[REL_MODULE_THEMESCRIPT] => assets/www/script/default/default/<br />
+				[PATH_MODULE_CSS] => http://www.xflo.info/assets/www/css/<br />
+				[REL_MODULE_CSS] => assets/www/css/<br />
+				[PATH_MODULE_TEMPLATECSS] => http://www.xflo.info/assets/www/css/default/<br />
+				[REL_MODULE_TEMPLATECSS] => assets/www/css/default/<br />
+				[PATH_MODULE_THEMECSS] => http://www.xflo.info/assets/www/css/default/default/<br />
+				[REL_MODULE_THEMECSS] => assets/www/css/default/default/<br />
+				</code>
+			</td>
+			<td valign="top"><code>
+				[PATH_WIDGET] => http://www.xflo.info/http://www.xflo.info/application/modules/www/widgets/<br />
+				[REL_WIDGET] => application/modules/www/widgets/<br />
+				[PATH_WIDGET_IMAGE] => http://www.xflo.info/assets/www/images/widgets/<br />
+				[PATH_WIDGET_TEMPLATEIMAGE] => http://www.xflo.info/assets/www/images/widgets/default/<br />
+				[PATH_WIDGET_THEMEIMAGE] => http://www.xflo.info/assets/www/images/widgets/default/default/<br />
+				[PATH_WIDGET_LANGUAGEIMAGE] => http://www.xflo.info/application/language/images/modules/www/widgets/<br />
+				[PATH_WIDGET_TEMPLATELANGUAGEIMAGE] => http://www.xflo.info/application/language/images/modules/www/widgets/default/<br />
+				[PATH_WIDGET_THEMELANGUAGEIMAGE] => http://www.xflo.info/application/language/images/modules/www/widgets/default/default/<br />
+				[PATH_WIDGET_SCRIPT] => assets/script/<br />
+				[PATH_WIDGET_TEMPLATESCRIPT] => assets/script/default/<br />
+				[PATH_WIDGET_THEMESCRIPT] => assets/script/default/default/<br />
+				[PATH_WIDGET_CSS] => assets/css/<br />
+				[PATH_WIDGET_TEMPLATECSS] => assets/css/default/<br />
+				[PATH_WIDGET_THEMECSS] => assets/css/default/default/<br />
+				[PATH_WWW_SCRIPT] => http://www.xflo.info/assets/www/script/<br />
+				[REL_WWW_SCRIPT] => assets/www/script/<br />
+				[PATH_WWW_TEMPLATESCRIPT] => http://www.xflo.info/assets/www/script/default/<br />
+				[REL_WWW_TEMPLATESCRIPT] => assets/www/script/default/<br />
+				[PATH_WWW_THEMESCRIPTPATH] => http://www.xflo.info/assets/www/script/default/default/<br />
+				[REL_WWW_THEMESCRIPTPATH_REL] => assets/www/script/default/default/<br />
+				[PATH_WWW_CSS] => http://www.xflo.info/assets/www/css/www/<br />
+				[REL_WWW_CSS] => assets/www/css/script/<br />
+				[PATH_WWW_TEMPLATECSS] => http://www.xflo.info/assets/www/css/www/default/<br />
+				[REL_WWW_TEMPLATECSS] => assets/www/css/script/default/<br />
+				[PATH_WWW_THEMECSS] => http://www.xflo.info/assets/www/css/www/default/default/<br />
+				[REL_WWW_THEMECSS] => assets/www/css/script/default/default/<br />
+				</code>
+			</td>
+		</tr>
+	</table>
+    </p>
+  <h2>Widgets</h2>
+  <p>So while project grows you may need to start deviding functionality global to specific module. To help with that another level of mvc's Widgets are created.<br />
+    Essentially it is same as plugins 
+  but it exists in specific module directory.</p>
+  <code><var>application\modules\site\widgets\</var><br />
+    <strong><br />
+    -- controllers --</strong><br />
+    \gallery.php<br />
+    \blog.php<br />
+    <strong><br />
+    -- views --</strong><br />
+    \views\gallery.php<br />
+    \views\blog.php<br />
+    <strong><br />
+    -- models -- </strong><br />
+    \model\gallery_model.php<br />
+    \model\blog_model.php<br />
+    <br />
+    <strong>-- assets --</strong><br />
+    \assets\js\script.js<br />
+  \assets\css\style.css  </code>
+  <h2>DeviceType Listener</h2>
+  <p>User Device is set at the first load time and should not change in the session life-cycle.<br />
+    There is additional setting to view content under foreign device.{XXXXXXXX}<br />
+  </p>
+  <p>  Creating Your Own Drivers</p>
+  <p>Ple</p>
+  <p><code>$this->load->driver('<var>some_parent</var>');</code>
+    
+  </p>
+  <p>Methods of that class can then be invoked with:</p>
+
+<code>$this->some_parent->some_method();</code>
+
+<p>The child classes, the drivers themselves, can then be called directly through the parent class, without initializing them:</p>
+
+<code>$this->some_parent->child_one->some_method();<br />
+$this->some_parent->child_two->another_method();</code>
+
+<h2>Creating Your Own Drivers</h2>
+
+<p>Please read the section of the user guide that discusses how to <a href="creating_drivers.html">create your own drivers</a>.</p>
+
+
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+<p>
+Previous Topic:&nbsp;&nbsp;<a href="creating_libraries.html">Creating Libraries</a>
+&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+<a href="#top">Top of Page</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+<a href="../index.html">User Guide Home</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+Next Topic:&nbsp;&nbsp;<a href="creating_drivers.html">Creating Drivers</a>
+</p>
+<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>

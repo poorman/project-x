@@ -1,0 +1,1 @@
+alert('Dashboard Script works');
