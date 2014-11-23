@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Using CodeIgniter Drivers : CodeIgniter User Guide</title>
+
+<style type='text/css' media='all'>@import url('../userguide.css');</style>
+<link rel='stylesheet' type='text/css' media='all' href='../userguide.css' />
+
+<script type="text/javascript" src="../nav/nav.js"></script>
+<script type="text/javascript" src="../nav/prototype.lite.js"></script>
+<script type="text/javascript" src="../nav/moo.fx.js"></script>
+<script type="text/javascript" src="../nav/user_guide_menu.js"></script>
+
+<meta http-equiv='expires' content='-1' />
+<meta http-equiv= 'pragma' content='no-cache' />
+<meta name='robots' content='all' />
+<meta name='author' content='ExpressionEngine Dev Team' />
+<meta name='description' content='CodeIgniter User Guide' />
+
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"><script type="text/javascript">create_menu('../');</script></div></div>
+<div id="nav2"><a name="top"></a><a href="javascript:void(0);" onclick="myHeight.toggle();"><img src="../images/nav_toggle_darker.jpg" width="154" height="43" border="0" title="Toggle Table of Contents" alt="Toggle Table of Contents" /></a></div>
+<div id="masthead">
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<tr>
+<td><h1>CodeIgniter User Guide Version 2.1.0 Extended Functionality</h1></td>
+<td id="breadcrumb_right"><a href="../toc.html">Table of Contents Page</a></td>
+</tr>
+</table>
+</div>
+<!-- END NAVIGATION -->
+
+
+<!-- START BREADCRUMB -->
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<tr>
+<td id="breadcrumb">
+<a href="http://codeigniter.com/">CodeIgniter Home</a> &nbsp;&#8250;&nbsp;
+<a href="../index.html">User Guide Home</a> &nbsp;&#8250;&nbsp;
+Using CodeIgniter Drivers
+</td>
+<td id="searchbox"><form method="get" action="http://www.google.com/search"><input type="hidden" name="as_sitesearch" id="as_sitesearch" value="codeigniter.com/user_guide/" />Search User Guide&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
+</tr>
+</table>
+<!-- END BREADCRUMB -->
+
+<br clear="all" />
+
+
+<!-- START CONTENT -->
+<div id="content">
+
+<h1>Internationalization</h1>
+
+
+<p>Every language has its own deffinition files as well as option of its own images.</p>
+<p><code><var>application\language\</var>english<br />
+    <strong><br />
+-- images --</strong><br />
+images\gallery.php<br />
+images\template\gallery.php<br />
+images\template\theme\gallery.php<br />
+...
+<br />
+<strong><br />
+-- global and plugin definitions --</strong><br /> 
+.. default.php<br />
+.. some_plugin.php<br />
+.. ...
+<br />
+<strong><br />
+-- modules and widgets definitions-- </strong><br />
+\module\www\default.php<br />
+\module\www\some_widget.php<br />
+...
+<br />
+</code><br />
+</p>
+<h2>Switch</h2>
+<p>Executing controller <strong>ui</strong> function <strong>language</strong> parameters <strong>SomeLanguage</strong></p>
+
+<p><code><var>application\modules\site\</var><br />
+    <strong><br />
+    -- controllers --</strong><br />
+  \gallery.php<br />
+  \blog.php<br />
+  <strong><br />
+  -- views --</strong><br />
+  \views\gallery.php<br />
+  \views\blog.php<br />
+  <strong><br />
+  -- models -- </strong><br />
+  \model\gallery_model.php<br />
+  \model\blog_model.php<br />
+  <br />
+  <strong>-- assets --</strong><br />
+  \assets\js\script.js<br />
+  \assets\css\style.css</code>
+</p>
+<h2>Plugins</h2>
+<p>Plugins would be functionalities you would want to keep out of global controller-model-view but you wouldn't want to place it within module as it functionality is shared across multiple modules.<br />
+  Plugins can be shared 
+  between modules.<br />
+  MVC functionality is retained by keeping file structure within <strong>plugins</strong> directory.</p>
+  <p><code><var>application\plugins\</var><br />
+    <strong><br />
+    -- controllers --</strong><br />
+    \gallery.php<br />
+    \blog.php<br />
+    <strong><br />
+    -- views --</strong><br />
+    \views\gallery.php<br />
+    \views\blog.php<br />
+    <strong><br />
+    -- models -- </strong><br />
+    \model\gallery_model.php<br />
+    \model\blog_model.php<br />
+    <br />
+    <strong>-- assets --</strong><br />
+    \assets\js\script.js<br />
+  \assets\css\style.css  </code></p>
+  <h2>Widgets</h2>
+  <p>So while project grows you may need to start deviding functionality global to specific module. To help with that another level of mvc's Widgets are created.<br />
+    Essentially it is same as plugins 
+  but it exists in specific module directory.</p>
+  <code><var>application\modules\site\widgets\</var><br />
+    <strong><br />
+    -- controllers --</strong><br />
+    \gallery.php<br />
+    \blog.php<br />
+    <strong><br />
+    -- views --</strong><br />
+    \views\gallery.php<br />
+    \views\blog.php<br />
+    <strong><br />
+    -- models -- </strong><br />
+    \model\gallery_model.php<br />
+    \model\blog_model.php<br />
+    <br />
+    <strong>-- assets --</strong><br />
+    \assets\js\script.js<br />
+  \assets\css\style.css  </code>
+  <h2>DeviceType Listener</h2>
+  <p>User Device is set at the first load time and should not change in the session life-cycle.<br />
+    There is additional setting to view content under foreign device.{XXXXXXXX}<br />
+  </p>
+  <p>  Creating Your Own Drivers</p>
+  <p>Ple</p>
+  <p><code>$this->load->driver('<var>some_parent</var>');</code>
+    
+  </p>
+  <p>Methods of that class can then be invoked with:</p>
+
+<code>$this->some_parent->some_method();</code>
+
+<p>The child classes, the drivers themselves, can then be called directly through the parent class, without initializing them:</p>
+
+<code>$this->some_parent->child_one->some_method();<br />
+$this->some_parent->child_two->another_method();</code>
+
+
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+<p>
+Previous Topic:&nbsp;&nbsp;<a href="creating_libraries.html">Creating Libraries</a>
+&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+<a href="#top">Top of Page</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+<a href="../index.html">User Guide Home</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+Next Topic:&nbsp;&nbsp;<a href="creating_drivers.html">Creating Drivers</a>
+</p>
+<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>
