@@ -8,26 +8,26 @@
 <!------------------------------------------------------------------------------------------------------------------->
 <!-- CSS STYLES HEADER ---------------------------------------------------------------------------------------------->
 <!------------------------------------------------------------------------------------------------------------------->
-<link rel="stylesheet" href="<?php echo PATH_THEMECSS;?>facebox/facebox.css" media="screen" type="text/css"/>
-<link rel="stylesheet" href="<?php echo PATH_THEMECSS;?>preloaders/preloaders.css" media="screen" type="text/css"/>
+<link rel="stylesheet" href="<?php echo REL_THEMECSS;?>facebox/facebox.css" media="screen" type="text/css"/>
+<link rel="stylesheet" href="<?php echo REL_THEMECSS;?>preloaders/preloaders.css" media="screen" type="text/css"/>
 <?php /* AUTO STYLES */
 if (file_exists( REL_CSS.'autostyle.css')) {
-	echo '<link rel="stylesheet" href="'.PATH_CSS.'autostyle.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
+	echo '<link rel="stylesheet" href="'.REL_CSS.'autostyle.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
 }
 if (file_exists( REL_TEMPLATECSS.'autotemplate.css')) {
 	echo '<link rel="stylesheet" href="'.REL_TEMPLATECSS.'autotemplate.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
 }
 if (file_exists( REL_THEMECSS.'autotheme.css')) {
-	echo '<link rel="stylesheet" href="'.PATH_THEMECSS.'autotheme.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
+	echo '<link rel="stylesheet" href="'.REL_THEMECSS.'autotheme.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
 }/* END AUTO STYLES */
 if (file_exists( REL_THEMECSS.'theme.css')) {
-	echo '<link rel="stylesheet" href="'.PATH_THEMECSS.'theme.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
+	echo '<link rel="stylesheet" href="'.REL_THEMECSS.'theme.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
 }
 if (file_exists( REL_THEMECSS.'theme.php')) {
-	include(PATH_THEMECSS.'theme.php?language='.$language.'&path='.$template_path);
+	include(REL_THEMECSS.'theme.php?language='.$language.'&path='.$template_path);
 }
 if (file_exists( REL_TEMPLATECSS.'template.css')) {
-	echo '<link rel="stylesheet" href="'.PATH_TEMPLATECSS.'template.css" type="text/css" media="screen" charset="utf-8"'.PHP_EOL;
+	echo '<link rel="stylesheet" href="'.REL_TEMPLATECSS.'template.css" type="text/css" media="screen" charset="utf-8"'.PHP_EOL;
 }
 if (file_exists(REL_TEMPLATECSS.'template.php')) {
 	include(PATH_TEMPLATECSS.'template.php?language='.$language['language'].'&path='.$path['template_system_path']);
@@ -36,8 +36,8 @@ if (file_exists(REL_TEMPLATECSS.'template.php')) {
 <!------------------------------------------------------------------------------------------------------------------->
 <!-- JAVASCRIPT HEADER ---------------------------------------------------------------------------------------------->
 <!------------------------------------------------------------------------------------------------------------------->
-<script src="<?php echo PATH_SCRIPT;?>jquery/jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="<?php echo PATH_THEMESCRIPT;?>facebox/facebox.js" type="text/javascript"></script>
+<script src="<?php echo REL_SCRIPT;?>jquery/jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo REL_THEMESCRIPT;?>facebox/facebox.js" type="text/javascript"></script>
 
 <script>
 	window.pre = '<?php echo JS_PRE?>';
