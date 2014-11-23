@@ -1,9 +1,9 @@
 <p>
-	<i>Module :<b>Site</b></i><br />
+	<i>Module :<b>Panel</b></i><br />
     <i>Widget :<b>Examplewidget</b></i><br />
 	<i>Page : <b>Ajaxed Element</b></i><br />
 	<i>Device : <b>Default</b></i><br />
-	<i>File : <b>modules/site/widgets/examplewidget/views/<?php echo $template['name'];?>/widget.php</b></i><br />
+	<i>File : <b>modules/panel/widgets/examplewidget/views/<?php echo $template['name'];?>/widget.php</b></i><br />
 	<i>Template : <b><?php echo $template['name'];?></b></i>
 </p>
 <hr />

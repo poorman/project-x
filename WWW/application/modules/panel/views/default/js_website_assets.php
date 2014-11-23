@@ -1,1 +1,1 @@
-alert('Module Script works');
+alert('Module Panel Script works');

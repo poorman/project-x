@@ -1,10 +1,10 @@
 <div id="dialog_example">
 <p>
-	<i>Module :<b>Site</b></i><br />
+	<i>Module :<b>Panel</b></i><br />
 	<i>Widget :<b>Examplewidget</b></i><br />
 	<i>Page : <b>Dialog</b></i><br />
 	<i>Device : <b>Mobile</b></i><br />
-	<i>File : <b>modules/site/widgets/examplewigdget/views/<?php echo $template['name'];?>/widget_dialog_mobi.php</b></i><br />
+	<i>File : <b>modules/panel/widgets/examplewigdget/views/<?php echo $template['name'];?>/widget_dialog_mobi.php</b></i><br />
 	<i>Template : <b><?php echo $template['name'];?></b></i>
 </p>
 <hr />

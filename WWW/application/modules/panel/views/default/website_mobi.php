@@ -1,8 +1,8 @@
 <p>
-	<i>Module :<b>Site</b></i><br />
+	<i>Module :<b>Panel</b></i><br />
 	<i>Page : <b>Ajaxed Element</b></i><br />
 	<i>Device : <b>Mobile</b></i><br />
-	<i>File : <b>modules/site/views/<?php echo $template['name'];?>/website_mobi.php</b></i><br />
+	<i>File : <b>modules/panel/views/<?php echo $template['name'];?>/website_mobi.php</b></i><br />
 	<i>Template : <b><?php echo $template['name'];?></b></i>
 </p>
 <hr />
