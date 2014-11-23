@@ -4,7 +4,7 @@
 <div><a href="<?php echo PRE;?>/exampleplugin/home">Examples</a></div>
 <?php
 echo EXAMPLE_PLUGIN_TEST.'<br>';
-echo MODULE_SITE_TEST.'<br>';
+echo MODULE_TEST.'<br>';
 echo EXAMPLE_WIDGET_TEST;
  ?>
 <span id="logo">
