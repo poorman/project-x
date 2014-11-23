@@ -186,14 +186,38 @@ class Ui extends CI_Controller
 	}
 	
 	/**
-	 * function not tested for use
-	 * function is language environment switcher
+	 * Function is a php starting point for internationalization language switch
+	 * 
 	 */
 	function language($args = array()) {//args should be /language/change/english';
 		$action = $this->uri->segment(3);
 		$language = $this->uri->segment(4);
 		$function = $action.'_language';
 		$this->load->$function($this->ui,$language);
+		return;
+	}
+	
+	/**
+	 * Function is a php starting point for internationalization language switch
+	 * 
+	 */
+	function template($args = array()) {//args should be /template/change/sometemplate';
+		$action = $this->uri->segment(3);
+		$template = $this->uri->segment(4);
+		$function = $action.'_template';
+		$this->load->$function($this->ui,$template);
+		return;
+	}
+	
+	/**
+	 * Function is a php starting point for internationalization language switch
+	 * 
+	 */
+	function theme($args = array()) {//args should be /template/change/sometemplate';
+		$action = $this->uri->segment(3);
+		$template = $this->uri->segment(4);
+		$function = $action.'_template';
+		$this->load->$function($this->ui,$template);
 		return;
 	}
 }

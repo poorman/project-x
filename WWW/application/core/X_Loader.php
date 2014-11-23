@@ -437,7 +437,6 @@ class X_Loader extends CI_Loader
 	function change_language(&$ui,$language)
 	{
 		$mode = array('language' => $language);
-		
 		return $this->re_session($ui, $mode);
 	}
 
@@ -527,6 +526,33 @@ class X_Loader extends CI_Loader
 		$this->ui['user_widgets'] = $ui['user_widgets'];
 		$this->language($ui);//loads plugin definitions
 		$_SESSION['UI'] = $ui;
+	}
+	
+	/**
+	 * function currently not in use
+	 *
+	 * @param void;
+	 *
+	 * @return array
+	 */
+	function change_template(&$ui,$template)
+	{
+		$mode = array('template' => $template);
+		return $this->re_session($ui, $mode);
+	}
+	
+	/**
+	 * function currently not in use
+	 *
+	 * @param void;
+	 *
+	 * @return array
+	 */
+	 
+	function change_theme(&$ui,$heme)
+	{
+		$mode = array('theme' => $yheme);
+		return $this->re_session($ui, $mode);
 	}
 	
 	/**
@@ -1212,7 +1238,16 @@ class X_Loader extends CI_Loader
 			/* Set language data */
 			$ui['language'] = $ci->language_model->get_language($mode['language']);
 			$ui['languages'] = $ci->language_model->fetch_indexed_array_of_languages();
-			$_SESSION['option_set'] = 'language';
+		}
+		if(array_key_exists ('template', $mode) == true) {
+			/* Set language data */
+			//$ui['language'] = $ci->language_model->get_language($mode['language']);
+			//$ui['languages'] = $ci->language_model->fetch_indexed_array_of_languages();
+		}
+		if(array_key_exists ('theme', $mode) == true) {
+			/* Set language data */
+			//$ui['language'] = $ci->language_model->get_language($mode['language']);
+			//$ui['languages'] = $ci->language_model->fetch_indexed_array_of_languages();
 		}
 		$this->paths($ui);
 		$this->get_request();

@@ -578,10 +578,24 @@ var option = {
 		return false;
 	},
 	ChangeTemplate : function (obj) {
-		alert('Change Template');
+		
+		//MUST CHANGE THEME RIGHT AWAY....
+		
+		var url = pre+'/template/change/'+obj.value;
+		url = url.replace('#',''); 
+		window.pseudo_link.setAttribute('href',url);
+		ui.element(pseudo_link);
+		ui.refresh_page();
+		return false;
 	},
 	ChangeTheme : function (obj) {
-		alert('Change Theme');
+		//CHANGES THEME ONLY....
+		var url = pre+'/theme/change/'+obj.value;
+		url = url.replace('#',''); 
+		window.pseudo_link.setAttribute('href',url);
+		ui.element(pseudo_link);
+		ui.refresh_page();
+		return false;
 	}
 };
 
