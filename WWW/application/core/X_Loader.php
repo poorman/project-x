@@ -437,7 +437,8 @@ class X_Loader extends CI_Loader
 	function change_language(&$ui,$language)
 	{
 		$mode = array('language' => $language);
-		$this->re_session($ui, $mode);
+		
+		return $this->re_session($ui, $mode);
 	}
 
 	/**
@@ -1203,96 +1204,23 @@ class X_Loader extends CI_Loader
 			return false;
 		}
 		$ui = $_SESSION['UI'];
-		$user = array_search ('user', $mode);
-		$language = array_search ('language', $mode);
-		$template = array_search ('template', $mode);
-		$module = array_search ('module', $mode);
-		$ci =& get_instance(); 
-//		isset($_SESSION['SOURCE']) ? $ui['module'] = $_SESSION['SOURCE'] : $ui['module'] = 'site';
-//		isset($_SESSION['SOURCE_ID']) ? $ui['module_id'] = $_SESSION['SOURCE_ID'] : $ui['module_id'] = $this->get_module_id($ui['module']);
-//		$ui['session'] = crc32($_SERVER['REMOTE_ADDR'].time()); // unique session
-//		$ui['session_start'] = time(); // unique session
-//		$ui['device'] =  $ci->mobile->get_device();
-		$ui['selected_device'] = false;
-//		$ui['groups'] = $this->user_groups();
-		foreach ($ui['groups'] as $group) {
-			define('GROUP_'.strtoupper($group['system_name']),	$group['group_id']);
-		}
-		if($user) {
-			$ui['group_id'] = GROUP_GUEST;
-			$ui['user_modules'] = $this->user_modules($ui);
-			$ui['user_plugins'] = $this->user_plugins($ui);
-			$ui['user_widgets'] = $this->user_widgets($ui);
-		}
-	/* Set language data */
-//		if ($ci->config->item('language')) {
-		if($language) {
-			$ui['language'] = $ci->language_model->get_language($language);
-		}
-//		}
-//		else {
-//			$ui['language'] = $ci->language_model->get_language($ui);
-//		}
-//		$ui['languages'] = $ci->language_model->fetch_indexed_array_of_languages();
-		/* Set template data */
-		if($template || $module) {
-			unset($ui['template']);
-			unset($ui['theme']);
-			if($template) {
-				$ui['template'] = $ci->template_model->get_template($template);
-			}
-			else {
-				if($module) {
-					$ui['template'] = $ci->template_model->get_template(false,$module);
-				}
-			}
-			if($module) {
-				$ui['templates'] = $ci->template_model->fetch_indexed_array_of_templates($ui['module_id']);
-			}
-			if (isset($ui['template'])&& count($ui['template'])) {
-				/* Set theme data */
-				$ui['theme'] = $ci->theme_model->get_theme($ui['template']['template_id']);
-				$ui['themes'] = $ci->theme_model->fetch_indexed_array_of_themes($ui['template']['template_id']);
-				/* Set template paths */
-				if ($ui['template']['system_name'] != '') {
-					$ui['path']['template_system_path'] =  $ui['template']['system_name'].'/';
-					$ui['template_system_name'] =  $ui['template']['system_name'];
-				}
-				else {
-					$ui['path']['template_system_path'] = $ui['template_system_name'] = '';
-				}
-				/* Set theme paths */
-				if (isset($ui['theme'])&& count($ui['theme'])) {
-					if ($ui['theme']['system_name'] != '') {
-						$ui['path']['theme_system_path'] = $ui['theme']['system_name'].'/';
-						$ui['theme_system_name'] = $ui['theme']['system_name'];
-					}
-					else {
-						$ui['path']['theme_system_path'] = $ui['theme_system_name'] = $ui['theme']['system_name'];
-					}
-				}
-				else {
-					$ui['path']['theme_system_path'] = $ui['theme_system_name'] = '';
-				}
-			}
-			else {
-				$ui['theme'] = false;
-				$ui['themes'] = array();
-				$ui['path']['template_system_path'] = $ui['template_system_name'] = '';
-				$ui['path']['theme_system_path'] = $ui['theme_system_name'] =  '';
-			}
-		}
-		$ui['path']['resources_path'] = $ui['path']['template_system_path'].$ui['path']['theme_system_path'];
+		unset($_SESSION['UI']);
 		
+
+		$ci =& get_instance(); 
+		if(array_key_exists ('language', $mode) == true) {
+			/* Set language data */
+			$ui['language'] = $ci->language_model->get_language($mode['language']);
+			$ui['languages'] = $ci->language_model->fetch_indexed_array_of_languages();
+			$_SESSION['option_set'] = 'language';
+		}
 		$this->paths($ui);
 		$this->get_request();
 		$this->ui = $ui;
-		$this->ui['plugins'] = $ui['plugins'];
-		$this->ui['widgets'] = $ui['widgets'];
-		$this->ui['user_plugins'] = $ui['user_plugins'];
-		$this->ui['user_widgets'] = $ui['user_widgets'];
 		$this->language($ui);//loads plugin definitions
 		$_SESSION['UI'] = $ui;
+		
+		return $ui;
 	}
 	
 	/**

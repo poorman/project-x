@@ -5,6 +5,10 @@
 <!--
 =======================================================================================================================================
 -->
+<H1><?php echo LOADED_LANGUAGE; ?></H1>
+<H1><?php echo LOADED_PLUGIN_LANGUAGE; ?></H1>
+<H1><?php echo LOADED_MODULE_LANGUAGE; ?></H1>
+<H1><?php echo LOADED_WIDGET_LANGUAGE; ?></H1>
 <h2><a href="/kill">KILL</a></h2>
 
 <?php echo $select_input_language; ?><br /><?php echo $select_input_template; ?><br /><?php echo $select_input_theme; ?>

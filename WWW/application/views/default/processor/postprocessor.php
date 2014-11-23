@@ -571,9 +571,10 @@ var option = {
  */
 	ChangeLanguage : function (obj) {
 		var url = pre+'/language/change/'+obj.value;
-		url = url.replace('#','');alert(url);
+		url = url.replace('#',''); 
 		window.pseudo_link.setAttribute('href',url);
 		ui.element(pseudo_link);
+		ui.refresh_page();
 		return false;
 	},
 	ChangeTemplate : function (obj) {

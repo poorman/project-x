@@ -158,9 +158,9 @@ function create_menu(basepath)
 		'<li><a href="'+base+'extended/environment.html">Enviroment</a></li>' +
 		'<li><a href="'+base+'extended/global.html">Global application</a></li>' +
 		'<li><a href="'+base+'extended/plugins.html">Global Plugins</a></li>' +
-		'<li><a href="'+base+'extended/website.html">Website module</a></li>' +
-		'<li><a href="'+base+'extended/dashboard.html">Dashboard Module</a></li>' +
-		'<li><a href="'+base+'extended/gearbox.html">Gearbox module</a></li>' +
+		'<li><a href="'+base+'extended/modules.html">Modules</a></li>' +
+		'<li><a href="'+base+'extended/internationalization.html">Internationalization</a></li>' +
+		'<li><a href="'+base+'extended/templates.html">Templating Engine</a></li>' +
 		'</ul>' +
 
 		'</td></tr></table>');

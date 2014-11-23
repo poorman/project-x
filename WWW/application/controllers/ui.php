@@ -194,6 +194,6 @@ class Ui extends CI_Controller
 		$language = $this->uri->segment(4);
 		$function = $action.'_language';
 		$this->load->$function($this->ui,$language);
-		$this->index();
+		return;
 	}
 }

@@ -27,12 +27,13 @@ class Exampleplugin
 		$this->ui['interface']=true;
 		$this->ui['content'] = 'home';
 		$this->ui['js_content'] = 'js_home';
+		$language = $_SESSION['UI']['language']['language_id'];
 		$language_select_properties = array(
 											'name' => 'language',
 											'id' => 'language',
 											//'class' => '',
 											'values' => $this->ui['languages'],
-											'selected' => $this->ui['language']['system_name'],
+											'selected' => $language,
 											'script' => array('onChange' => 'option.ChangeLanguage(this);return false'),
 											'label' => 'Select language'
 											);
