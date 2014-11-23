@@ -2,23 +2,26 @@
 /*
 	Date: 10/14/2014
 	framework Codeigniter 2
-	Package Cosmic 2
+	Package X
 	Global Model: theme_model.php
 	Author: Sebastian Rzeszowicz for system-work.com
 	Email: sebastian@system-work.com
 */
-class Example_model extends CI_Model {
-/**
- * constructor
- *
- * @Param void
- *
- * @Return void
- */
-	function __construct() {
+class Example_model extends CI_Model
+{
+	/**
+	 * constructor
+	 *
+	 * @Param void
+	 *
+	 * @Return void
+	 */
+	function __construct() 
+	{
 		parent::__construct();
 	}
-	function example() {
+	function example() 
+	{
 		return '
 	<div style="
 	font-family:Arial, Helvetica, sans-serif;

@@ -2,15 +2,16 @@
 /*
 	Date: 11/12/2014
 	framework Codeigniter 2
-	Package Cosmic 2
-	Global Model: core\MY_Loader.php
+	Package X
+	Global Model: core\X_Loader.php
 	Author: Sebastian Rzeszowicz for system-work.com
 	Email: sebastian@system-work.com
 */
 /**
  * Extended loader
  */
-class X_Loader extends CI_Loader {
+class X_Loader extends CI_Loader
+{
 	
 	var $ui = NULL;
 	var $device = NULL;
@@ -27,9 +28,9 @@ class X_Loader extends CI_Loader {
 	var $_website_plugin_ci_view_path = '';
 	var $_template = 'default/';
 	
-/**
- * Constructor
- */
+	/**
+	 * Constructor
+	 */
 	function __construct()
 	{
 		parent::__construct();
@@ -52,11 +53,11 @@ class X_Loader extends CI_Loader {
 		$this->template = $this->ui['path']['template_system_path'];
 	}
 
-/**
- * Loads module 
- * 
- * @return void
- */
+	/**
+	 * Loads module 
+	 * 
+	 * @return void
+	 */
 	function _module_ci_load($ui, $_ci_data)
 	{
 		// Set the default data variables
@@ -165,11 +166,12 @@ class X_Loader extends CI_Loader {
 			@ob_end_clean();
 		}
 	}
-/**
- * Loads plugin 
- * 
- * @return void
- */
+
+	/**
+	 * Loads plugin 
+	 * 
+	 * @return void
+	 */
 	function _plugin_ci_load($obj,$_ci_data)
 	{
 		// get info about calling class so that we can get the name and therefore the directory to build paths
@@ -281,11 +283,12 @@ class X_Loader extends CI_Loader {
 			@ob_end_clean();
 		}
 	}
-/**
- * Loads widget 
- * 
- * @return void
- */
+
+	/**
+	 * Loads widget 
+	 * 
+	 * @return void
+	 */
 	function _widget_ci_load($obj, $_ci_data)
 	{
 		// get info about calling class so that we can get the name and therefore the directory to build paths
@@ -397,14 +400,15 @@ class X_Loader extends CI_Loader {
 		}
 	}
 	
-/*
-* once a plugin is loaded, assigns the $ci object's properties to the new plugin object
-*
-* @param object
-* @param bool
-*
-* @return void
-*/
+
+	/*
+	* once a plugin is loaded, assigns the $ci object's properties to the new plugin object
+	*
+	* @param object
+	* @param bool
+	*
+	* @return void
+	*/
 	function assign_libraries($instance, $use_reference = TRUE)
 	{
 		$ci =& get_instance(); 
@@ -422,18 +426,27 @@ class X_Loader extends CI_Loader {
 			}
 		}
 	}
-	
-	function change_language(&$ui,$language) {
+
+	/**
+	 * function currently not in use
+	 *
+	 * @param void;
+	 *
+	 * @return array
+	 */
+	function change_language(&$ui,$language)
+	{
 		$mode = array('language' => $language);
 		$this->re_session($ui, $mode);
 	}
-/**
- * set all client session data
- *
- * @param void;
- *
- * @return array
- */
+
+	/**
+	 * set all client session data
+	 *
+	 * @param void;
+	 *
+	 * @return array
+	 */
 	function client_session(&$ui, $mode = false)
 	{
 		$ci =& get_instance(); 
@@ -515,30 +528,30 @@ class X_Loader extends CI_Loader {
 		$_SESSION['UI'] = $ui;
 	}
 	
-/**
- * gets module_id by name
- *
- * @param string
- *
- * @return int
- */
-function get_module_id($module)
-{
-	$ci =& get_instance();
-	$ci->db->where('system_name',strtolower($module));
-	$ci->db->limit(1);
-	$query = $ci->db->get('modules');
-	$row = $query->row();
-	return $row->module_id;
-}
+	/**
+	 * gets module_id by name
+	 *
+	 * @param string
+	 *
+	 * @return int
+	 */
+	function get_module_id($module)
+	{
+		$ci =& get_instance();
+		$ci->db->where('system_name',strtolower($module));
+		$ci->db->limit(1);
+		$query = $ci->db->get('modules');
+		$row = $query->row();
+		return $row->module_id;
+	}
 
-/**
- * function parses GET data  to array args
- *
- *@param void
- *
- *@return void
- */
+	/**
+	 * function parses GET data  to array args
+	 *
+	 *@param void
+	 *
+	 *@return void
+	 */
 	function get_request()
 	{ 
 		$ci =& get_instance(); 
@@ -561,12 +574,12 @@ function get_module_id($module)
 		return false;
 	}
 	
-/** loads instance
- *
- * @param array
- *
- * @return void
- */
+	/** loads instance
+	 *
+	 * @param array
+	 *
+	 * @return void
+	 */
 	function instance($action, $function, $params)
 	{
 		/*
@@ -588,12 +601,12 @@ function get_module_id($module)
 		return $out;
 	}
 
-/** loads language definition files for globals, plugins,  modules, widgets 
- *
- * @param array
- *
- * @return void
- */
+	/** loads language definition files for globals, plugins,  modules, widgets 
+	 *
+	 * @param array
+	 *
+	 * @return void
+	 */
 	function language($ui = false)
 	{
 		if (empty($ui['language']['language'])) {
@@ -621,14 +634,14 @@ function get_module_id($module)
 		}
 	}	
 
-/**
- * load module by checking if module registered, if user allowed, if files exist
- *
- *@param string
- *@param array
- *
- *@Return void
- */
+	/**
+	 * load module by checking if module registered, if user allowed, if files exist
+	 *
+	 *@param string
+	 *@param array
+	 *
+	 *@Return void
+	 */
 	function load_module($module = NULL, $params = NULL)
 	{
 		$ci =& get_instance(); 
@@ -656,14 +669,14 @@ function get_module_id($module)
 		return  $instances[$instance_name];
 	}
 	
-/**
- * load plugin by checking if plugin registered, if user allowed, if files exist
- *
- *@param string
- *@param array
- *
- *@return void
- */
+	/**
+	 * load plugin by checking if plugin registered, if user allowed, if files exist
+	 *
+	 *@param string
+	 *@param array
+	 *
+	 *@return void
+	 */
 	function load_plugin($plugin = NULL, $params = NULL)
 	{
 		$ci =& get_instance(); 
@@ -693,14 +706,14 @@ function get_module_id($module)
 		return  $instances[$instance_name];
 	}
 	
-/**
- * load widgeet by checking if widget registered, if user allowed, if files exist
- *
- *@param string
- *@param array
- *
- *@Return void
- */
+	/**
+	 * load widgeet by checking if widget registered, if user allowed, if files exist
+	 *
+	 *@param string
+	 *@param array
+	 *
+	*@Return void
+	 */
 	function load_widget($widget = NULL, $params = NULL)
 	{
 		$ci =& get_instance(); 
@@ -731,13 +744,13 @@ function get_module_id($module)
 		return  $instances[$instance_name];
 	}
 	
-/**
- * check and load plugin
- *
-  *@Param void
- *
- *@Return void
- */
+	/**
+	 * check and load plugin
+	 *
+	 *@Param void
+	 *
+	 *@Return void
+	 */
 	function module($module,  $function = NULL, $args = NULL) {
 		$msg = str_replace('<MODULE>', '<b>' . $module . '</b>', '<div class="msg-error">'.NO_MODULE.'</div>');
 		if (!$module = $this->load_module($module)) {
@@ -822,13 +835,13 @@ function get_module_id($module)
 		return $this->_module_ci_load($this->ui, array('_ci_view' => $this->template.$view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
 	}
 
-/**
- * function returns plugins data array
- *
- * @Param int (language id)
- *
- * @return array
- */
+	/**
+	 * function returns plugins data array
+	 *
+	 * @Param int (language id)
+	 *
+	 * @return array
+	 */
 	function modules()
 	{
 		$ci =& get_instance();
@@ -837,14 +850,14 @@ function get_module_id($module)
 		return $query->result_array();
 	}
 	
-/**
- * function defines default  paths
- *
- * @Param	string
- * @Param	string
- * @Param	string
- * @return	void
- */
+	/**
+	 * function defines default  paths
+	 *
+	 * @Param	string
+	 * @Param	string
+	 * @Param	string
+	 * @return	void
+	 */
 	function paths($ui = false)
 	{
 		define('HTTP_MODE','http');
@@ -1011,13 +1024,13 @@ function get_module_id($module)
 		define('NOT_APPLICABLE',	'N/A');
 	}
 
-/**
- * call plugin load then check loaded data
- *
- * @Param void
- *
- *@Return void
- */
+	/**
+	 * call plugin load then check loaded data
+	 *
+	 * @Param void
+	 *
+	 *@Return void
+	 */
 	function plugin($plugin = NULL, $function = NULL, $args = NULL)
 	{
 		$msg = str_replace('<PLUGIN>', '<b>' . $plugin . '</b>', '<div class="msg-error">'.NO_PLUGIN.'</div>');
@@ -1105,13 +1118,13 @@ function get_module_id($module)
 	}
 	
 
-/**
- * function returns plugins data array
- *
- * @Param int (language id)
- *
- * @return array
- */
+	/**
+	 * function returns plugins data array
+	 *
+	 * @Param int (language id)
+	 *
+	 * @return array
+	 */
 	function plugins()
 	{
 		$ci =& get_instance();
@@ -1121,13 +1134,13 @@ function get_module_id($module)
 		return $query->result_array();
 	}
 	
-/**
- * set all client session data
- *
- * @param void;
- *
- * @return array
- */
+	/**
+	 * set all client session data
+	 *
+	 * @param void;
+	 *
+	 * @return array
+	 */
 	function request(&$ui)
 	{
 		$ci =& get_instance(); 
@@ -1176,13 +1189,14 @@ function get_module_id($module)
 		}
 	}
 
-/**
- * reset some conditional client session data
- *
- * @param void;
- *
- * @return array
- */
+	/**
+	 * Prototype function not in production
+	 * reset some conditional client session data
+	 *
+	 * @param void;
+	 *
+	 * @return array
+	 */
 	function re_session(&$ui, $mode = false)
 	{
 		if(!$mode) {
@@ -1281,13 +1295,20 @@ function get_module_id($module)
 		$_SESSION['UI'] = $ui;
 	}
 	
+	/**
+	 * functon sets up collection 'app' if session failed to set
+	 *
+	 * @param void;
+	 *
+	 * @return array
+	 */
 	function setup()
 	{
 		$url = $_SERVER['SERVER_NAME'];
 		$module = array_shift((explode(".",$_SERVER['SERVER_NAME'])));
 		$extension = pathinfo($url, PATHINFO_EXTENSION);
 		$parsed_url = parse_url($url);
-		if(!empty($parsed_url['host'])) {
+		if (!empty($parsed_url['host'])) {
 			$parts = explode('.',$parsed_url['host']);
 		}
 		else {
@@ -1304,13 +1325,13 @@ function get_module_id($module)
 		$app = $_SESSION['app'] = array('scheme' => $scheme, 'module' => $module, 'domain' => $domain, 'extension' => $extension, 'url' => $url, 'base_url' => $base_url);
 		return $app;
 	}
-/**
- * function returns plugins data array
- *
- * @Param int (language id)
- *
- * @return array
- */
+	/**
+	 * function returns plugins data array
+	 *
+	 * @Param int (language id)
+	 *
+	 * @return array
+	 */
 	function user_plugins($ui = false)
 	{
 		$ci =& get_instance();
@@ -1338,14 +1359,13 @@ function get_module_id($module)
 		return $user_plugins;
 	}
 
-	
-/**
- * function returns plugins data array
- *
- * @Param int (language id)
- *
- * @return array
- */
+	/**
+	 * function returns plugins data array
+	 *
+	 * @Param int (language id)
+	 *
+	 * @return array
+	 */
 	function user_modules($ui = false)
 	{
 		$ci =& get_instance();
@@ -1369,13 +1389,14 @@ function get_module_id($module)
 		return $user_modules;
 	}
 	
-/**
- * function returns plugins data array
- *
- * @Param int (language id)
- *
- * @return array
- */
+
+	/**
+	 * function returns plugins data array
+	 *
+	 * @Param int (language id)
+	 *
+	 * @return array
+	 */
 	function user_widgets($ui=false)
 	{
 		$ci =& get_instance();
@@ -1414,13 +1435,13 @@ function get_module_id($module)
 		return $user_groups;
 	}
 
-/**
- * call widget load then check loaded data
- *
- * @Param void
- *
- *@Return void
- */
+	/**
+	 * call widget load then check loaded data
+	 *
+	 * @Param void
+	 *
+	 *@Return void
+	 */
 	function widget($widget = NULL, $function = NULL, $args = NULL)
 	{
 		$msg = str_replace('<WIDGET>', '<b>' . $widget . '</b>', '<div class="msg-error">'.NO_WIDGET.'</div>');
@@ -1493,6 +1514,7 @@ function get_module_id($module)
 		$obj->$name->_assign_libraries();
 		$this->_ci_models[] = $name;	
 	}
+	
 	/**
 	 * Loads plugin view
 	 * 
@@ -1506,13 +1528,13 @@ function get_module_id($module)
 		return $this->_widget_ci_load($obj, array('_ci_view' => $this->template.$view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
 	}
 
-/**
- * function returns widgets data array
- *
- * @Param int (language id)
- *
- * @return array
- */
+	/**
+	 * function returns widgets data array
+	 *
+	 * @Param int (language id)
+	 *
+	 * @return array
+	 */
 	function widgets($module=false)
 	{
 		$ci =& get_instance();

@@ -7,23 +7,58 @@
 	Author: Sebastian Rzeszowicz for system-work.com
 	Email: sebastian@system-work.com
 */
-class Theme_model extends CI_Model {
-/**
- * constructor
- *
- * @Param void
- *
- * @Return void
- */
-	 function __construct() {
+class Theme_model extends CI_Model
+{
+	/**
+	 * constructor
+	 *
+	 * @Param void
+	 *
+	 * @Return void
+	 */
+	function __construct()
+	{
 		parent::__construct();
 	}
-/**
- * function theme session
- *
- * @return	bool
- */
-	function get_theme($template_id = false,$theme_id = false) {
+	
+	/**
+	 * fetch indexed array of all themes for specified template
+	 *
+	 * @return	bool
+	 */
+	function fetch_indexed_array_of_themes($template_id = false)
+	{
+		$indexed_themes = array();
+		$themes = $this->fetch_themes($template_id);
+		foreach($themes as $theme) {
+			$indexed_themes[$theme['theme_id']] = $theme;
+		}
+		return $indexed_themes;
+	}
+
+	/**
+	 * fetch all themes for specified template
+	 *
+	 * @return	bool
+	 */
+	function fetch_themes($template_id = false)
+	{
+		if(!$template_id) {
+			return false;
+		}
+		$this->db->where('template_id',$template_id);
+		$query = $this->db->get('themes');
+		$this->db->flush_cache();
+		return $query->result_array();
+	}
+	
+	/**
+	 * function theme session
+	 *
+	 * @return	bool
+	 */
+	function get_theme($template_id = false,$theme_id = false)
+	{
 		if(!$template_id) {
 			return false;
 		}
@@ -39,30 +74,6 @@ class Theme_model extends CI_Model {
 		$query = $this->db->get('themes');
 		$this->db->flush_cache();
 		return $query->row_array();
-	}
-	
-/**
- * fetch all themes for specified template
- *
- * @return	bool
- */
-	function fetch_themes($template_id = false) {
-		if(!$template_id) {
-			return false;
-		}
-		$this->db->where('template_id',$template_id);
-		$query = $this->db->get('themes');
-		$this->db->flush_cache();
-		return $query->result_array();
-	}
-	
-	function fetch_indexed_array_of_themes($template_id = false) {
-		$indexed_themes = array();
-		$themes = $this->fetch_themes($template_id);
-		foreach($themes as $theme) {
-			$indexed_themes[$theme['theme_id']] = $theme;
-		}
-		return $indexed_themes;
 	}
 }
 ?>

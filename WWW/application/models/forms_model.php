@@ -2,26 +2,28 @@
 /*
 	Date: 10/14/2014
 	framework Codeigniter 2
-	Package Cosmic 2
+	Package X
 	Global Model: theme_model.php
 	Author: Sebastian Rzeszowicz for system-work.com
 	Email: sebastian@system-work.com
 */
-class Forms_model extends CI_Model {
-/**
- * constructor
- *
- * @Param void
- *
- * @Return void
- */
-	function __construct() {
+class Forms_model extends CI_Model
+{
+	/**
+	 * constructor
+	 *
+	 * @Param void
+	 *
+	 * @Return void
+	 */
+	function __construct()
+	{
 		parent::__construct();
 	}
-/**
- * Select box	
- *
-*/
+	/**
+	 * Select box	
+	 *
+	*/
 	function select_input($properties=array())
 	{
 		/* settings will include
@@ -31,9 +33,9 @@ class Forms_model extends CI_Model {
 			id of element
 			name of element
 		*/
-		if(!empty($properties['label'])) {
+		if (!empty($properties['label'])) {
 			$out = '<label ';
-			if(!empty($properties['id'])) {
+			if (!empty($properties['id'])) {
 				$out .= 'for="'.$properties['id'].'" ';
 			}
 			$out .= '>'.$properties['label'].'</label><select ';
@@ -47,11 +49,11 @@ class Forms_model extends CI_Model {
 		if (!empty($properties['name'])) {
 			$out .= 'name = "'.$properties['name'].'" ';
 		}
-		if(!empty($properties['class'])) {
+		if (!empty($properties['class'])) {
 			$out .= 'class ="';
-			if(is_array($properties['class'])) {
+			if (is_array($properties['class'])) {
 				$out .= 'class =" ';
-				foreach($properties['class'] as $class) {
+				foreach ($properties['class'] as $class) {
 					$out .=$class.' ';
 				}
 			}
@@ -60,11 +62,11 @@ class Forms_model extends CI_Model {
 			}
 			$out .= '" ';
 		}
-		if(!empty($properties['script'])) {
-			if(is_array($properties['script'])) {
-				foreach($properties['script'] as $event => $script) {
+		if (!empty($properties['script'])) {
+			if (is_array($properties['script'])) {
+				foreach ($properties['script'] as $event => $script) {
 					$out .= $event.' = " ';
-					if(is_array($script)) {
+					if (is_array($script)) {
 						foreach ($script as $call) {
 							$out .= $call.'; ';
 						}
@@ -85,8 +87,8 @@ class Forms_model extends CI_Model {
 		}
 		foreach ($properties['values'] as $id => $value) {
 			$out .= '<option id = "'.$id.'" ';
-			if(!empty($properties['selected'])) {
-				if($properties['selected'] == $id) {
+			if (!empty($properties['selected'])) {
+				if ($properties['selected'] == $id) {
 					$out .= 'selected="selected" ';
 				}
 			} 
