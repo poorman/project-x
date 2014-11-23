@@ -1,8 +1,8 @@
 <p>
-	<i>Module :<b>Site</b></i><br />
+	<i>Module :<b>Gearbox</b></i><br />
 	<i>Page : <b>Assets</b></i><br />
 	<i>Device : <b>Default</b></i><br />
-	<i>File : <b>modules/site/views/<?php echo $template['name'];?>/website_assets.php</b></i><br />
+	<i>File : <b>modules/gearbox/views/<?php echo $template['name'];?>/website_assets.php</b></i><br />
 	<i>Template : <b><?php echo $template['name'];?></b></i>
 </p>
 <hr />

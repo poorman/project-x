@@ -11,6 +11,9 @@ RewriteCond %{HTTP_REFERER} !^http://www.xflo.info$      [NC]
 RewriteCond %{HTTP_REFERER} !^http://panel.xflo.info/.*$      [NC]
 RewriteCond %{HTTP_REFERER} !^http://panel.xflo.info$      [NC]
 
+RewriteCond %{HTTP_REFERER} !^http://gearbox.xflo.info/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://gearbox.xflo.info$      [NC]
+
 RewriteRule .*\.(jpg|jpeg|gif|png|bmp)$ - [F,NC]
 
 

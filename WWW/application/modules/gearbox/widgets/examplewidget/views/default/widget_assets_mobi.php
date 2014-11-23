@@ -1,9 +1,9 @@
 <p>
-	<i>Module :<b>Site</b></i><br />
+	<i>Module :<b>Gearbox</b></i><br />
 	<i>Widget : <b>Examplewidget</b></i><br />
 	<i>Page : <b>Assets</b></i><br />
 	<i>Device : <b>Mobile</b></i><br />
-	<i>File : <b>modules/site/widget/examplewidget/views/<?php echo $template['name'];?>/website_assets_mobi.php</b></i><br />
+	<i>File : <b>modules/gearbox/widget/examplewidget/views/<?php echo $template['name'];?>/webpanel_assets_mobi.php</b></i><br />
 	<i>Template : <b><?php echo $template['name'];?></b></i>
 </p>
 <hr />
@@ -11,7 +11,7 @@
 <div id="code">
 	&nbsp;&nbsp;array(<br />
 	&nbsp;&nbsp;&nbsp;&nbsp;'script' => 'ui.discard("dialog");'<br />
-	&nbsp;&nbsp;&nbsp;&nbsp;'ajax' => $this->load->widget_view('website',$data,true),<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;'ajax' => $this->load->widget_view('webpanel',$data,true),<br />
 	&nbsp;&nbsp;)
 </div>
 <span class="annotation">Result:</span>
