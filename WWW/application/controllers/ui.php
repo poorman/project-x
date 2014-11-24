@@ -180,9 +180,14 @@ class Ui extends CI_Controller
 	 */
 	function index()
 	{
-		$this->ui['content'] = 'content';
-		$view = APPTEMPLATE.'/main';
-		$this->load->view($view,$this->ui);
+		if($module = $this->load->load_module($this->ui['module'])) {
+			$module->index($this->ui);
+		}
+		else {
+			$this->ui['content'] = 'content';
+			$view = APPTEMPLATE.'/main';
+			$this->load->view($view,$this->ui);
+		}
 	}
 	
 	/**

@@ -15,7 +15,12 @@ class Gearbox
 		 $this->ui = $_SESSION['UI'];
 		 
 	 }
- 
+
+	function index($ui) {
+		$ui['content'] = 'content';
+		$view = APPTEMPLATE.'/main';
+		$this->load->view($view,$ui);
+	}
  /**
  * Example Home
  *
