@@ -11,16 +11,28 @@ class Www
 {
 	private $ui;
 	private $out = NULL;
-	 function __construct() {
-		 $this->ui = $_SESSION['UI'];
-		 
-	 }
- 
- /**
- * Example Home
- *
- * @return array
- */
+	function __construct()
+	{
+		$this->ui = $_SESSION['UI'];
+	}
+
+	/**
+	* WWW initialize function
+	* @Params
+	*
+	*/
+	function module()
+	{
+		$this->ui['content'] = 'content';
+		$view = APPTEMPLATE.'/main';
+		$this->load->view($view,$this->ui);
+	}
+	
+	/**
+	* Example Home
+	*
+	* @return array
+	 */
 
 	function home() {
 		$this->out = array();

@@ -11,22 +11,33 @@ class Gearbox
 {
 	private $ui;
 	private $out = NULL;
-	 function __construct() {
+	
+	/**
+	 * constructor
+	 *
+	 */
+	function __construct()
+	{
 		 $this->ui = $_SESSION['UI'];
-		 
-	 }
-
-	function index($ui) {
-		$ui['content'] = 'content';
-		$view = APPTEMPLATE.'/main';
-		$this->load->view($view,$ui);
 	}
- /**
- * Example Home
- *
- * @return array
- */
 
+	/**
+	 * Gearbox initialize function
+	 * @Params
+	 *
+	 */
+	function module()
+	{
+		$this->ui['content'] = 'content';
+		$view = APPTEMPLATE.'/main';
+		$this->load->view($view,$this->ui);
+	}
+
+	/**
+	* Example Home
+	*
+	* @return array
+	*/
 	function home() {
 		$this->out = array();
 		$this->ui = $_SESSION['UI'];

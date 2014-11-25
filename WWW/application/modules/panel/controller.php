@@ -11,17 +11,28 @@ class Panel
 {
 	private $ui;
 	private $out = NULL;
-	 function __construct() {
-		 $this->ui = $_SESSION['UI'];
-		 
-	 }
- 
- /**
- * Example Home
- *
- * @return array
- */
+	function __construct()
+	{
+		$this->ui = $_SESSION['UI'];
+	}
 
+	/**
+	 * Panel initialize function
+	 * @Params
+	 *
+	 */
+	function module()
+	{
+		$this->ui['content'] = 'content';
+		$view = APPTEMPLATE.'/main';
+		$this->load->view($view,$this->ui);
+	}
+
+	/**
+	 * Example Home
+	 *
+	 * @return array
+	 */
 	function home() {
 		$this->out = array();
 		$this->ui = $_SESSION['UI'];
@@ -33,11 +44,11 @@ class Panel
 		return $this->out;
 	}
 	
-/**
- * test function
- *
- * @return array
- */
+	/**
+	 * test function
+	 *
+	 * @return array
+	 */
 	function example($args=array()) {
 		!empty($args[0]) ? $test = $args[0] : $test = $this->uri->segment(4);
 		switch ($test) {

@@ -181,7 +181,7 @@ class Ui extends CI_Controller
 	function index()
 	{
 		if($module = $this->load->load_module($this->ui['module'])) {
-			$module->index($this->ui);
+			$module->module();
 		}
 		else {
 			$this->ui['content'] = 'content';
