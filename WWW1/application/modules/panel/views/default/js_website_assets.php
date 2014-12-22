@@ -1,0 +1,1 @@
+alert('Module Panel Script works');
