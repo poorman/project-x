@@ -451,6 +451,7 @@ class X_Loader extends CI_Loader
 	{
 		$ci =& get_instance(); 
 		$ui['module'] = !empty($_SESSION['app']['module']) ? $_SESSION['app']['module'] : $this->default_module;
+		
 		$ui['app'] = !empty($_SESSION['app']) ? $_SESSION['app'] : $this->setup();
 		if (!empty($_SESSION['app'])) {
 			unset($_SESSION['app']);
@@ -468,10 +469,15 @@ class X_Loader extends CI_Loader
 		$ui['path'] = array();
 		$ui['modules'] = $this->modules();
 		$ui['plugins'] = $this->plugins();
+		
 		$ui['widgets'] = $this->widgets();
 		$ui['user_modules'] = $this->user_modules($ui);
 		$ui['user_plugins'] = $this->user_plugins($ui);
 		$ui['user_widgets'] = $this->user_widgets($ui);
+		
+		$ui['module_controllers'] = $this->module_controllers($ui['module']);
+		$ui['plugin_controllers'] = $this->plugin_controllers($ui['user_plugins']);
+		$ui['widget_controllers'] = $this->widget_controllers($ui['user_widgets']);
 	/* Set language data */
 		if ($ci->config->item('language')) {
 			$ui['language'] = $ci->language_model->get_language($ci->config->item('language'));
@@ -518,6 +524,8 @@ class X_Loader extends CI_Loader
 		$ui['path']['resources_path'] = $ui['path']['template_system_path'].$ui['path']['theme_system_path'];
 		
 		$this->paths($ui);
+		/* set url to links collection*/
+		$this->links($ui);
 		$this->get_request();
 		$this->ui = $ui;
 		$this->ui['plugins'] = $ui['plugins'];
@@ -600,34 +608,44 @@ class X_Loader extends CI_Loader
 		}
 		return false;
 	}
-	
 	/** loads instance
 	 *
 	 * @param array
 	 *
 	 * @return void
 	 */
-	function instance($action, $function, $params)
+	 function instance(&$ui, $action, $function, $params, $return=false)
 	{
-		/*
-		Call to plugin controller
-		*/
-		if (!$out = $this->plugin($action, $function, $params)) {
+		$function = ($function) ? $function : $this->default_function;
+		if(!empty($action['module_id'])) {
 			/*
-			Call to module controller
+				Load action through module
 			*/
-			if (!$out = $this->module($action, $function, $params)) {
-				/*
-				Call to module widget controller
+			if (in_array($action['action'],$ui['module_controllers'])) {
+				/* 
+					Load module controller
 				*/
-				if (!$out = $this->widget($action, $function, $params)) {
-					$out['error'] = TRUE;
+				$out = $this->module($action['action'], $function, $params);
+			}
+			else {
+				if(in_array($action['action'],$ui['widget_controllers'])) {
+					/* 
+					Load widget
+					*/
+					$out = $this->widget($action['action'], $function, $params,true);
 				}
+			}
+		}
+		else {
+			/*
+				Load plugin
+			*/
+			if (in_array($action,$ui['plugin_controllers'])) {
+				$out = $this->plugin('exampleplugin', 'home', NULL,true);
 			}
 		}
 		return $out;
 	}
-
 	/** loads language definition files for globals, plugins,  modules, widgets 
 	 *
 	 * @param array
@@ -661,6 +679,28 @@ class X_Loader extends CI_Loader
 		}
 	}	
 
+	/**
+		Creates a collection 
+	*/
+	function links(&$ui)
+	{
+		$ci =& get_instance();
+		$links = array();
+		$ci->db->where('flag_active',1);
+		$query = $ci->db->get('links');
+		if ($query->num_rows()) {
+			$result = $query->result();
+			foreach ($result as $link) {
+				$links[$link->link] = array(
+												'module_id' => $link->module_id,
+												'action' => $link->action,
+												'functionality' => $link->functionality
+											);
+			}
+		}
+		
+		$ui['links'] = $links;
+	}
 	/**
 	 * load module by checking if module registered, if user allowed, if files exist
 	 *
@@ -786,7 +826,18 @@ class X_Loader extends CI_Loader
 		$function = $function ? $function : 'index';
 		return $module->$function($args);
 	}
-
+function module_controllers($module)
+	{
+		$module_dir = REL_APPLICATION.'modules/'.$module.'/';
+		$controller_files = scandir($module_dir);
+		$controllers = array();
+		foreach ($controller_files as $c_file) {
+			if (strpos($c_file,'.php')) {
+				$controllers[] = str_replace('.php','',$c_file);
+			}
+		}
+		return $controllers;
+	}
 	/**
 	 * Loads dashboard model
 	 * 
@@ -1067,7 +1118,13 @@ class X_Loader extends CI_Loader
 		$function = $function ? $function : 'index';
 		return $plugin->$function($args);
 	}
-
+	function plugin_controllers($plugins) {
+		$plugin_controllers = array();
+		foreach($plugins as $plugin) {
+			$plugin_controllers[$plugin['plugin_id']] = $plugin['system_name'];
+		}
+		return $plugin_controllers;
+	}
 	/**
 	 * Loads plugin model
 	 * 
@@ -1414,7 +1471,13 @@ class X_Loader extends CI_Loader
 		$function = $function ? $function : 'index';
 		return $widget->$function($args);
 	}
-
+	function widget_controllers($widgets) {
+		$widget_controllers = array();
+		foreach($widgets as $widget) {
+			$widget_controllers[$widget['widget_id']] = $widget['system_name'];
+		}
+		return $widget_controllers;
+	}
 	/**
 	 * Loads dashboard plugin model
 	 * 
