@@ -1,10 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('Access denied.'); ?>
-<script>
+<script>//active
 /*
  * Global javaScript variables
 */
 window.action = false;
-window.base_url = '<?php echo $app['base_url'];?>index.php/';
+window.base_url = '<?php echo JS_BASE_URL?>';
 window.containers = null;
 window.containers_obj = null;
 window.debug = true;//false;
