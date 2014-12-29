@@ -8,3 +8,13 @@
 	z-index:1000;
 	display:none;
 }
+body {
+	background-color:#000;
+	color:#CCC
+}
+#logo {
+	position:absolute;
+	top:30px;
+	margin:0 auto;
+}
+a { color:#FFF; font-weight:bold; }

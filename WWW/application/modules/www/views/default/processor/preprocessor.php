@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="<?php echo REL_MODULE_THEMECSS;?>preloaders/preloaders.css" media="screen" type="text/css"/>
 <?php /* AUTO STYLES */
 if (file_exists( REL_CSS.'autostyle.css')) {
-	echo '<link rel="stylesheet" href="'.REL_CSS.'autostyle.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
+	echo '<link rel="stylesheet" href="'.REL_MODULE_CSS.'autostyle.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
 }
 if (file_exists( REL_MODULE_TEMPLATECSS.'autotemplate.css')) {
 	echo '<link rel="stylesheet" href="'.REL_MODULE_TEMPLATECSS.'autotemplate.css" type="text/css" media="screen" charset="utf-8" />'.PHP_EOL;
@@ -46,25 +46,25 @@ if ($plugin_dirs = opendir(REL_PLUGINS)) {
 	while (FALSE !== ($file = readdir($plugin_dirs))) {
 		if ($file == '..' || $file == '.') {
 			continue;
+		}log_msg(REL_PLUGINS_CSS.'style.css');
+		if (file_exists(REL_PLUGINS_CSS. $file .'/style.css')) {
+			echo '<link rel="stylesheet" href="' . REL_PLUGINS_CSS. $file .'/style.css' . '" type="text/css" />'.PHP_EOL;
 		}
-		if (file_exists(REL_PLUGINS . $file . '/'.PATH_PLUGINS_CSS.'style.css')) {
-			echo '<link rel="stylesheet" href="' . REL_PLUGINS . $file . '/'.PATH_PLUGINS_CSS.'style.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_PLUGINS_TEMPLATECSS. $file .'/template.css')) {
+			echo '<link rel="stylesheet" href="' . REL_PLUGINS_TEMPLATECSS. $file .'/template.css' . '" type="text/css" />'.PHP_EOL;
 		}
-		if (file_exists(REL_PLUGINS . $file . '/'.PATH_PLUGINS_TEMPLATECSS.'template.css')) {
-			echo '<link rel="stylesheet" href="' . REL_PLUGINS . $file . '/'.PATH_PLUGINS_TEMPLATECSS.'template.css' . '" type="text/css" />'.PHP_EOL;
-		}
-		if (file_exists(REL_PLUGINS . $file . '/'.PATH_PLUGINS_THEMECSS.'theme.css')) {
-			echo '<link rel="stylesheet" href="' . REL_PLUGINS . $file .'/'.PATH_PLUGINS_THEMECSS.'theme.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_PLUGINS_THEMECSS. $file .'/theme.css')) {
+			echo '<link rel="stylesheet" href="' . REL_PLUGINS_THEMECSS. $file .'/theme.css' . '" type="text/css" />'.PHP_EOL;
 		}
 
-		if (file_exists(REL_PLUGINS . $file . '/'.PATH_PLUGINS_SCRIPT.'script.js')) {
-			echo '<script type="text/javascript" src="' . REL_PLUGINS . $file . '/'.PATH_PLUGINS_SCRIPT.'script.js"></script>'.PHP_EOL;
+		if (file_exists(REL_PLUGINS_SCRIPT. $file .'/script.js')) {
+			echo '<script type="text/javascript" src="' . REL_PLUGINS_SCRIPT. $file .'/script.js"></script>'.PHP_EOL;
 		}
-		if (file_exists(REL_PLUGINS . $file . '/'. PATH_PLUGINS_TEMPLATESCRIPT.'template.js')) {
-			echo '<script type="text/javascript" src="' . REL_PLUGINS . $file . '/'.PATH_PLUGINS_TEMPLATESCRIPT.'template.js"></script>'.PHP_EOL;
+		if (file_exists(REL_PLUGINS_TEMPLATESCRIPT. $file .'/template.js')) {
+			echo '<script type="text/javascript" src="' . REL_PLUGINS_TEMPLATESCRIPT. $file .'/template.js"></script>'.PHP_EOL;
 		}
-		if(file_exists(REL_PLUGINS . $file . '/'. PATH_PLUGINS_THEMESCRIPT.'theme.js')) {
-			echo '<script type="text/javascript" src="' . REL_PLUGINS . $file . '/'.PATH_PLUGINS_THEMESCRIPT.'theme.js"></script>'.PHP_EOL;
+		if(file_exists(REL_PLUGINS_THEMESCRIPT. $file .'/theme.js')) {
+			echo '<script type="text/javascript" src="' . REL_PLUGINS_THEMESCRIPT. $file .'/theme.js"></script>'.PHP_EOL;
 		}
 	}
 	closedir($plugin_dirs);
@@ -102,24 +102,24 @@ if ($widget_dirs = opendir(REL_WIDGETS)) {
 		if ($file == '..' || $file == '.') {
 			continue;
 		}
-		if (file_exists(REL_WIDGETS . $file . '/'.PATH_WIDGETS_CSS.'style.css')) {
-			echo '<link rel="stylesheet" href="' . REL_WIDGETS . $file . '/'.PATH_WIDGETS_CSS.'style.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_WIDGETS_CSS. $file . '/style.css')) {
+			echo '<link rel="stylesheet" href="' . REL_WIDGETS_CSS. $file . '/style.css' . '" type="text/css" />'.PHP_EOL;
 		}
-		if (file_exists(REL_WIDGETS . $file . '/'.PATH_WIDGETS_TEMPLATECSS.'template.css')) {
-			echo '<link rel="stylesheet" href="' . REL_WIDGETS . $file . '/'.PATH_WIDGETS_TEMPLATECSS.'template.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_WIDGETS_TEMPLATECSS. $file . '/template.css')) {
+			echo '<link rel="stylesheet" href="' . REL_WIDGETS_TEMPLATECSS. $file . '/template.css' . '" type="text/css" />'.PHP_EOL;
 		}
-		if (file_exists(REL_WIDGETS . $file . '/'.PATH_WIDGETS_THEMECSS.'theme.css')) {
-			echo '<link rel="stylesheet" href="' . REL_WIDGETS . $file .'/'.PATH_WIDGETS_THEMECSS.'theme.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_WIDGETS_THEMECSS. $file . '/theme.css')) {
+			echo '<link rel="stylesheet" href="' . REL_WIDGETS_THEMECSS. $file . '/theme.css' . '" type="text/css" />'.PHP_EOL;
 		}
 
-		if (file_exists(REL_WIDGETS . $file . '/'.PATH_WIDGETS_SCRIPT.'script.js')) {
-			echo '<script type="text/javascript" src="' .REL_WIDGETS . $file . '/'.PATH_WIDGETS_SCRIPT.'script.js"></script>'.PHP_EOL;
+		if (file_exists(REL_WIDGETS_SCRIPT. $file . '/script.js')) {
+			echo '<script type="text/javascript" src="' .REL_WIDGETS_SCRIPT. $file . '/script.js"></script>'.PHP_EOL;
 		}
-		if (file_exists(REL_WIDGETS . $file . '/'. PATH_WIDGETS_TEMPLATESCRIPT.'template.js')) {
-			echo '<script type="text/javascript" src="' . REL_WIDGETS . $file . '/'.PATH_WIDGETS_TEMPLATESCRIPT.'template.js"></script>'.PHP_EOL;
+		if (file_exists(REL_WIDGETS_TEMPLATESCRIPT. $file . '/template.js')) {
+			echo '<script type="text/javascript" src="' . REL_WIDGETS_TEMPLATESCRIPT. $file . '/template.js"></script>'.PHP_EOL;
 		}
-		if(file_exists(REL_WIDGETS . $file . '/'. PATH_WIDGETS_THEMESCRIPT.'theme.js')) {
-			echo '<script type="text/javascript" src="' . REL_WIDGETS . $file . '/'.PATH_WIDGETS_THEMESCRIPT.'theme.js"></script>'.PHP_EOL;
+		if(file_exists(REL_WIDGETS_THEMESCRIPT. $file . '/theme.js')) {
+			echo '<script type="text/javascript" src="' . REL_WIDGETS_THEMESCRIPT. $file . '/theme.js"></script>'.PHP_EOL;
 		}
 	}
 	closedir($widget_dirs);

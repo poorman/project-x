@@ -19,13 +19,13 @@ window.screen_width = null;
 window.speed = 150;// speed for fadeIn/fadeOut 
 window.timestamp =new Date().getTime();
 window.url = null;
-window.no_refresh = false;
+//window.no_refresh = false;
 /*
  * Appends hash to url
 */
 if(!window.location.hash) {
 	window.location.hash = window.pre;
-	window.no_refresh = true;
+//	window.no_refresh = true;
 }
 else {
 	window.hash = window.location.hash.slice(1);
@@ -67,9 +67,9 @@ else {
 $(window).bind('hashchange', function () {
 	window.hash = window.location.hash.slice(1);
 	if (window.hash == window.pre) {
-		if(!window.no_refresh) {
+		//if(!window.no_refresh) {
 			ui.refresh_page();
-		}
+		//}
 		return false;
 	}
 	else {
