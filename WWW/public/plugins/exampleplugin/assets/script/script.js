@@ -1,0 +1,1 @@
+/* JavaScript Document PLUGIN script.js */
