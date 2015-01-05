@@ -406,4 +406,59 @@ class Ui extends CI_Controller
 		$this->load->$function($this->ui,$template);
 		return;
 	}
+	
+	
+	
+	/**
+	 * test function
+	 *
+	 * @return array
+	 */
+	function example()
+	{
+		switch ($this->uri->segment(3)) {
+			case 'dialog' : 
+				return array(
+							'script' => 'ui.discard("dialog");',
+							'dialog' => $this->load->view($this->url.'examples/dialog',$this->ui, TRUE)
+							);
+				break;
+			case 'interface' :
+				return array(
+							'script' => 'ui.discard("interface");',
+							'interface' => $this->load->view($this->url.'examples/interface',NULL, TRUE)
+							
+							);
+				break;
+			case 'element' :
+				if($this->uri->segment(4)) {
+					return array(
+								'script' => 'ui.discard("ajax");',
+								'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE).$this->uri->segment(4)
+								);
+				}
+				else {
+					return array(
+								'script' => 'ui.discard("ajax");',
+								'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE)
+								); 
+				} 
+				break;
+			case 'assets' : 
+							$this->load->model('example_model');
+							$this->ui['model'] = $this->example_model->example();
+							if($this->uri->segment(4)) { 
+								$out = array('script' => 'ui.discard("ajax");alert("Linked via javaScript");', 'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE).$this->uri->segment(4));
+							}
+							else {
+								$out = array('script' => 'ui.discard("ajax");alert("Linked via javaScript");','ajax' => $this->load->view($this->url.'examples/assets',$this->ui, TRUE) ); 
+							} 
+							return $out; break;
+			default:
+				return array(
+							'script' => 'alert("No tests selected")'
+							);
+				break;
+		}
+	}
 }
