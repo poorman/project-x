@@ -1,0 +1,1 @@
+<?php // DYNAMIC JavaScript WIDGET THEME Document ?>
