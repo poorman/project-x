@@ -18,13 +18,6 @@ class X_Loader extends CI_Loader
 	var $controler = 'ui';
 	var $default_module = 'www';
 	var $default_function = 'home';
-	var $_widget_ci_view_path = '';
-	var $_dashboard_ci_view_path = '';
-	var $_dashboard_plugin_ci_view_path = '';
-	var $_gearbox_ci_view_path = '';
-	var $_gearbox_plugin_ci_view_path = '';
-	var $_website_ci_view_path = '';
-	var $_website_plugin_ci_view_path = '';
 	var $_template = 'default/';
 	
 	/**
@@ -34,12 +27,6 @@ class X_Loader extends CI_Loader
 	{
 		parent::__construct();
 		$this->_ci_is_php5 = (floor(phpversion()) >= 5) ? TRUE : FALSE;
-		if (isset($_SESSION['UI']['module'])) {
-			$this->_widget_ci_view_path = REL_APPLICATION.'modules/'.$_SESSION['UI']['module'].'/widgets/';
-		}
-		else {
-			$this->_widget_ci_view_path =  REL_APPLICATION.'modules/'.$this->default_module.'/widgets/';
-		}
 		!empty($_SESSION['UI']) ? $this->ui = $_SESSION['UI'] : $this->ui = NULL;
 		!empty($this->ui['device']['ext']) ? $this->device = $this->ui['device']['ext'] : $this->device = '';
 		if ($this->ui['selected_device'] !== false) {
@@ -298,14 +285,16 @@ class X_Loader extends CI_Loader
 		if ($_ci_path == '') {
 			$_ci_ext = pathinfo($_ci_view, PATHINFO_EXTENSION);
 			$_ci_file = ($_ci_ext == '') ? $_ci_view.EXT : $_ci_view;
-			$_ci_path = $this->_widget_ci_view_path.$current_widget.'/views/'.$_ci_file;
+			//$_ci_path = $this->_widget_ci_view_path.$current_widget.'/views/'.$_ci_file;
+			$_ci_path = REL_PUBLIC_WIDGETS . $current_widget . WIDGET_VIEWS . $_ci_file;
 		}
 		else {
 			$_ci_x = explode('/', $_ci_path);
 			$_ci_file = end($_ci_x);
 		}
 		$_ci_d_file = ($_ci_ext == '') ? $_ci_view.$this->device.EXT : $_ci_view;
-		$_ci_d_path = $this->_widget_ci_view_path.$current_widget.'/views/'.$_ci_d_file;
+		//$_ci_d_path = $this->_widget_ci_view_path.$current_widget.'/views/'.$_ci_d_file;
+		$_ci_d_path = REL_PUBLIC_WIDGETS . $current_widget . WIDGET_VIEWS . $_ci_file;
 		if($this->ui['selected_device'] !== false) {
 			if ( file_exists($_ci_d_path)) {
 				$_ci_path = $_ci_d_path;
@@ -871,7 +860,7 @@ class X_Loader extends CI_Loader
 		if (!array_key_exists($instance_name, $instances)) {
 			// instance does not exist, so create it
 			if(! class_exists($widget)) {
-				include_once($this->_widget_ci_view_path . $widget . '/controller.php');
+				include_once(REL_APPLICATION.'modules/'.$module.'/widgets/' . $widget . '/controller.php');
 			}
 			$instance = new $widget($params);
 			$instance->parent_name = ucfirst(get_class($instance)); 
@@ -1155,39 +1144,30 @@ Widgets have templates and languages
 =================================================================*/
 		define('PATH_WIDGETS', PATH_MODULE.'widgets/');
 		define('REL_WIDGETS', REL_MODULE.'widgets/');
-		define('PATH_WIDGETS_ASSETS', PATH_MODULE_ASSETS.'widgets/');
-		define('REL_WIDGETS_ASSETS', REL_MODULE_ASSETS.'widgets/');
-	//LANGUAGES
-		define('PATH_WIDGETS_LANGUAGE',PATH_MODULE_LANGUAGE.'widgets/');
-		define('REL_WIDGETS_LANGUAGE', REL_MODULE_LANGUAGE.'widgets/');
-	//IMAGES
-		define('PATH_WIDGETS_IMAGE', PATH_WIDGETS_ASSETS.'images/');
-		define('REL_WIDGETS_IMAGE', REL_WIDGETS_ASSETS.'images/');
-		define('PATH_WIDGETS_TEMPLATEIMAGE',PATH_WIDGETS_IMAGE.$template);
-		define('REL_WIDGETS_TEMPLATEIMAGE',REL_WIDGETS_IMAGE.$template);
-		define('PATH_WIDGETS_THEMEIMAGE', PATH_WIDGETS_TEMPLATEIMAGE.$theme);
-		define('REL_WIDGETS_THEMEIMAGE', REL_WIDGETS_TEMPLATEIMAGE.$theme);
+		define('PATH_PUBLIC_WIDGETS',PATH_PUBLIC.$module.'/widgets/');
+		define('REL_PUBLIC_WIDGETS', REL_PUBLIC.$module.'/widgets/');
+	//LANGUAGE
+		define('PATH_WIDGETS_LANGUAGE',PATH_LANGUAGE.'modules/'.$module.'/widgets/');
+		define('REL_WIDGETS_LANGUAGE', REL_LANGUAGE.'modules/'.$module.'/widgets/');
+
+
+		define('WIDGET_VIEWS', '/views/');
+		define('WIDGET_ASSETS', '/assets/');
 		
-		define('PATH_WIDGETS_LANGUAGE_IMAGE', PATH_WIDGETS_IMAGE.$language.'/');
-		define('REL_WIDGETS_LANGUAGE_IMAGE', REL_WIDGETS_IMAGE.$language.'/');
-		define('PATH_WIDGETS_LANGUAGE_TEMPLATEIMAGE', PATH_WIDGETS_LANGUAGE_IMAGE.$template);
-		define('REL_WIDGETS_LANGUAGE_TEMPLATEIMAGE',REL_WIDGETS_LANGUAGE_IMAGE.$template);
-		define('PATH_WIDGETS_LANGUAGE_THEMEIMAGE', PATH_WIDGETS_LANGUAGE_TEMPLATEIMAGE.$theme);
-		define('REL_WIDGETS_LANGUAGE_THEMEIMAGE',REL_WIDGETS_LANGUAGE_TEMPLATEIMAGE.$theme);
-		//SCRIPT
-		define('PATH_WIDGETS_SCRIPT',PATH_WIDGETS_ASSETS.'script/');
-		define('REL_WIDGETS_SCRIPT',REL_WIDGETS_ASSETS.'script/');
-		define('PATH_WIDGETS_TEMPLATESCRIPT',PATH_WIDGETS_SCRIPT.$template);
-		define('REL_WIDGETS_TEMPLATESCRIPT',REL_WIDGETS_SCRIPT.$template);
-		define('PATH_WIDGETS_THEMESCRIPT',PATH_WIDGETS_TEMPLATESCRIPT.$theme);
-		define('REL_WIDGETS_THEMESCRIPT',REL_WIDGETS_TEMPLATESCRIPT.$theme);
-		//CSS
-		define('PATH_WIDGETS_CSS',PATH_WIDGETS_ASSETS.'css/');
-		define('REL_WIDGETS_CSS',REL_WIDGETS_ASSETS.'css/');
-		define('PATH_WIDGETS_TEMPLATECSS',PATH_WIDGETS_CSS.$template);
-		define('REL_WIDGETS_TEMPLATECSS',REL_WIDGETS_CSS.$template);
-		define('PATH_WIDGETS_THEMECSS',PATH_WIDGETS_TEMPLATECSS.$theme);
-		define('REL_WIDGETS_THEMECSS',REL_WIDGETS_TEMPLATECSS.$theme);
+		define('WIDGET_IMAGE', WIDGET_ASSETS.'/images/');
+		define('WIDGET_TEMPLATEIMAGE', WIDGET_IMAGE.$template);
+		define('WIDGET_THEMEIMAGE', WIDGET_TEMPLATEIMAGE.$theme);
+		define('WIDGET_LANGUAGE_IMAGE', WIDGET_IMAGE.$language.'/');
+		define('WIDGET_LANGUAGE_TEMPLATEIMAGE', WIDGET_LANGUAGE_IMAGE.$theme);
+		define('WIDGET_LANGUAGE_THEMEIMAGE', WIDGET_LANGUAGE_TEMPLATEIMAGE.$theme);
+		
+		define('WIDGET_CSS', WIDGET_ASSETS.'css/');
+		define('WIDGET_TEMPLATECSS', WIDGET_CSS.$template);
+		define('WIDGET_THEMECSS', WIDGET_TEMPLATECSS.$theme);
+		
+		define('WIDGET_SCRIPT', WIDGET_ASSETS.'script/');
+		define('WIDGET_TEMPLATESCRIPT', WIDGET_SCRIPT.$template);
+		define('WIDGET_THEMESCRIPT', WIDGET_TEMPLATESCRIPT.$theme);
 /* ADDONS
 Addons don't have languages but it does have templates
 ==================================================================*/

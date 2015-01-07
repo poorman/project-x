@@ -56,11 +56,11 @@ if ($plugin_dirs = opendir(REL_PLUGINS)) {
 		if ($file == '..' || $file == '.') {
 			continue;
 		}
-		if (file_exists(REL_PUBLIC_PLUGINS. $file .PLUGIN_CSS.'/style.css')) {
-			echo '<link rel="stylesheet" href="' . REL_PUBLIC_PLUGINS. $file .PLUGIN_CSS.'/style.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_PLUGINS. $file .PLUGIN_CSS.'style.css')) {
+			echo '<link rel="stylesheet" href="' . REL_PUBLIC_PLUGINS. $file .PLUGIN_CSS.'style.css' . '" type="text/css" />'.PHP_EOL;
 		}
-		if (file_exists(REL_PUBLIC_PLUGINS. $file .PLUGIN_SCRIPT.'/script.js')) {
-			echo '<script type="text/javascript" src="' . REL_PUBLIC_PLUGINS. $file .PLUGIN_SCRIPT.'/script.js"></script>'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_PLUGINS. $file .PLUGIN_SCRIPT.'script.js')) {
+			echo '<script type="text/javascript" src="' . REL_PUBLIC_PLUGINS. $file .PLUGIN_SCRIPT.'script.js"></script>'.PHP_EOL;
 		}
 	}
 	closedir($plugin_dirs);
@@ -76,24 +76,24 @@ if ($widget_dirs = opendir(REL_WIDGETS)) {
 		if ($file == '..' || $file == '.') {
 			continue;
 		}
-		if (file_exists(REL_WIDGETS_CSS. $file . '/style.css')) {
-			echo '<link rel="stylesheet" href="' . REL_WIDGETS_CSS. $file . '/style.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_WIDGETS. $file . WIDGET_CSS.'style.css')) {
+			echo '<link rel="stylesheet" href="' . REL_PUBLIC_WIDGETS. $file . WIDGET_CSS.'style.css' . '" type="text/css" />'.PHP_EOL;
 		}
-		if (file_exists(REL_WIDGETS_TEMPLATECSS. $file . '/template.css')) {
-			echo '<link rel="stylesheet" href="' . REL_WIDGETS_TEMPLATECSS. $file . '/template.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_WIDGETS. $file . WIDGET_TEMPLATECSS.'template.css')) {
+			echo '<link rel="stylesheet" href="' . REL_PUBLIC_WIDGETS. $file . WIDGET_TEMPLATECSS.'template.css' . '" type="text/css" />'.PHP_EOL;
 		}
-		if (file_exists(REL_WIDGETS_THEMECSS. $file . '/theme.css')) {
-			echo '<link rel="stylesheet" href="' . REL_WIDGETS_THEMECSS. $file . '/theme.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_WIDGETS. $file . WIDGET_THEMECSS.'theme.css')) {
+			echo '<link rel="stylesheet" href="' . REL_PUBLIC_WIDGETS. $file . WIDGET_THEMECSS.'theme.css' . '" type="text/css" />'.PHP_EOL;
 		}
 
-		if (file_exists(REL_WIDGETS_SCRIPT. $file . '/script.js')) {
-			echo '<script type="text/javascript" src="' .REL_WIDGETS_SCRIPT. $file . '/script.js"></script>'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_WIDGETS. $file . WIDGET_SCRIPT.'script.js')) {
+			echo '<script type="text/javascript" src="' .REL_PUBLIC_WIDGETS. $file . WIDGET_SCRIPT .'script.js"></script>'.PHP_EOL;
 		}
-		if (file_exists(REL_WIDGETS_TEMPLATESCRIPT. $file . '/template.js')) {
-			echo '<script type="text/javascript" src="' . REL_WIDGETS_TEMPLATESCRIPT. $file . '/template.js"></script>'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_WIDGETS. $file . WIDGET_TEMPLATESCRIPT.'template.js')) {
+			echo '<script type="text/javascript" src="' . REL_PUBLIC_WIDGETS. $file . WIDGET_TEMPLATESCRIPT.'template.js"></script>'.PHP_EOL;
 		}
-		if(file_exists(REL_WIDGETS_THEMESCRIPT. $file . '/theme.js')) {
-			echo '<script type="text/javascript" src="' . REL_WIDGETS_THEMESCRIPT. $file . '/theme.js"></script>'.PHP_EOL;
+		if(file_exists(REL_PUBLIC_WIDGETS. $file . WIDGET_THEMESCRIPT.'theme.js')) {
+			echo '<script type="text/javascript" src="' . REL_PUBLIC_WIDGETS. $file . WIDGET_THEMESCRIPT.'theme.js"></script>'.PHP_EOL;
 		}
 	}
 	closedir($widget_dirs);
