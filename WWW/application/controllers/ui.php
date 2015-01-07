@@ -14,6 +14,7 @@ class Ui extends CI_Controller
 	protected $url = '';
 	protected $ajaxload = false;
 	protected $params = false;
+	protected $default_function = 'home';
 
 	/**
 	 * constructor
@@ -42,59 +43,72 @@ class Ui extends CI_Controller
 	 * controller and function within one of the components
 	 * call maybe ajax request or echo
 	 */
-	 function load() {
-			/* 
-				if curl request return as ajax
-				$this->out will get set
-			*/
-			$this->ajaxload = ($this->input->post('curl') == SECRET) ? $this->ajaxload = true : $this->ajaxload;
+	 function load()
+	 {
+		 $this->default_function = ($this->uri->segment(3)) ? $this->uri->segment(3) : $this->default_function;
+		 $controller = false;
+		 $function = false;
+		 
+		/* 
+			if curl request return as ajax
+			$this->out will get set
+		*/
+		$this->ajaxload = ($this->input->post('curl') == SECRET) ? $this->ajaxload = true : $this->ajaxload;
+		/*
+			if ajax request return as array
+			$this->out will get set
+		*/
+		$this->ajaxload = ($this->input->get('ajax')||$this->input->post('ajax')) ? $this->ajaxload = true : $this->ajaxload;
+		/*
+			this is either this constructors own function
+			or
+			this is plugin name
+		*/
+		$controller = $this->uri->segment(2) ? $this->uri->segment(2) : false;
+		/*
+			is call global?
+			global when $function exists within this class
+			or when segment 1 does not exist
+		*/
+		$global = ($controller) ? method_exists($this, $controller) : true;
+		if($this->ui['module_seo'] && $controller) {
 			/*
-				if ajax request return as array
-				$this->out will get set
+				Trying SEO load
 			*/
-			$this->ajaxload = ($this->input->get('ajax')||$this->input->post('ajax')) ? $this->ajaxload = true : $this->ajaxload;
-			if ($this->ajaxload) {
-			/*
-				this is either this constructors own function
-				or
-				this is plugin name
-			*/
-			$controller = $this->uri->segment(2) ? $this->uri->segment(2) : 'home';
-			/*
-				is call global?
-				global when $function exists within this class
-				or when segment 1 does not exist
-			*/
-			$global = ($controller) ? method_exists($this, $controller) : true;
-			/*
-				check if calling global function
-			*/
-			if (!$global) {
-				/*
-					What controller and function to envoke
-				*/
-				$controller = ($this->uri->segment(2)) ? $this->ui['links'][$this->uri->segment(2)]['action'] : 'home';
+			if(!empty($this->ui['links'][$controller])) {
+				$controller = $this->ui['links'][$controller]['action'];
+				$global = ($controller) ? method_exists($this, $controller) : true;
 				if($this->uri->segment(3)) {
-					$function = (!empty($this->ui['functions'][$this->uri->segment(3)])) ? $this->ui['functions'][$this->uri->segment(3)] : $this->uri->segment(3);
+					$function = (!empty($this->ui['functions'][$this->uri->segment(3)]['action'])) ? $this->ui['functions'][$this->uri->segment(3)]['action'] : $this->uri->segment(3);
+				}
+				else {
+					$function = $this->ui['links'][$controller]['functionality'];
 				}
 			}
+			$function = ($function) ? $function : $this->default_function;
+		}
+		else {
 			/*
-				All following segments convert to parameter ($args)
+				Non SEO Load
 			*/
-			$params = NULL;
-			if ($this->uri->segment(4) !== FALSE) {
-				$params = array();
-				$param = 4;
-				$has_params = TRUE;
-				while ($has_params) {
-					$params[] = $this->uri->segment($param);
-					$param++;
-					if ($this->uri->segment($param) === FALSE) {
-						$has_params = FALSE;
-					}
+			$function = ($this->uri->segment(3)) ? $this->uri->segment(3) : $this->default_function;
+		}
+		/*
+			All following segments convert to parameter ($args)
+		*/
+		$params = NULL;
+		if ($this->uri->segment(4) !== FALSE) {
+			$params = array();
+			$param = 4;
+			$has_params = TRUE;
+			while ($has_params) {
+				$params[] = $this->uri->segment($param);
+				$param++;
+				if ($this->uri->segment($param) === FALSE) {
+					$has_params = FALSE;
 				}
 			}
-			
+		}
 		/*
 			this is ajax request
 		*/
@@ -103,16 +117,13 @@ class Ui extends CI_Controller
 				/*
 					Global ajax call
 				*/
-				if(!$this->out = $this->$controller()) {
-					//exit(0); //this prevents reloading of function
-				}
+				$this->out = $this->$controller();
 			}
 			else {
 				/*
 					component ajax call
 				*/
 				$this->out = $this->load->instance($this->ui, $controller, $function, $params,true);
-				//$this->out = $this->load->instance($this->ui, $controller, $function, $params, true);
 			}
 		}
 		else {
@@ -120,11 +131,9 @@ class Ui extends CI_Controller
 				/*
 					echo component
 				*/
-					$this->load->instance($this->ui, $controller, $function, $params, true);
-				}
+				$this->load->instance($this->ui, $controller, $function, $params, true);
 			}
 		}
-		
 		/*
 			if there is ajax data to output
 			output as json
@@ -143,7 +152,7 @@ class Ui extends CI_Controller
 	{
 		$this->ui['interface']=true;
 		$this->ui['content'] = 'content';
-		$view = APPTEMPLATE.'/'.$this->ui['content'];
+		$view = $this->ui['content'];
 		$this->out['interface'] = $this->load->view($view,$this->ui, TRUE);
 		return $this->out;
 	}
@@ -155,14 +164,9 @@ class Ui extends CI_Controller
 	 */
 	function index()
 	{
-		if($module = $this->load->load_module($this->ui['module'])) {
-			$module->module();
-		}
-		else {
-			$this->ui['content'] = 'content';
-			$view = APPTEMPLATE.'/main';
-			$this->load->view($view,$this->ui);
-		}$_SESSION['skip'] = 1;
+		//$module = $this->load->load_module($this->ui['module']);
+		$module = $this->load->load_module($this->ui);
+		$module->module();
 	}
 	
 	/**
@@ -199,5 +203,60 @@ class Ui extends CI_Controller
 		$function = $action.'_template';
 		$this->load->$function($this->ui,$template);
 		return;
+	}
+	
+	
+	
+	/**
+	 * test function
+	 *
+	 * @return array
+	 */
+	function example()
+	{
+		switch ($this->uri->segment(3)) {
+			case 'dialog' : 
+				return array(
+							'script' => 'ui.discard("dialog");',
+							'dialog' => $this->load->view($this->url.'examples/dialog',$this->ui, TRUE)
+							);
+				break;
+			case 'interface' :
+				return array(
+							'script' => 'ui.discard("interface");',
+							'interface' => $this->load->view($this->url.'examples/interface',NULL, TRUE)
+							
+							);
+				break;
+			case 'element' :
+				if($this->uri->segment(4)) {
+					return array(
+								'script' => 'ui.discard("ajax");',
+								'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE).$this->uri->segment(4)
+								);
+				}
+				else {
+					return array(
+								'script' => 'ui.discard("ajax");',
+								'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE)
+								); 
+				} 
+				break;
+			case 'assets' : 
+							$this->load->model('example_model');
+							$this->ui['model'] = $this->example_model->example();
+							if($this->uri->segment(4)) { 
+								$out = array('script' => 'ui.discard("ajax");alert("Linked via javaScript");', 'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE).$this->uri->segment(4));
+							}
+							else {
+								$out = array('script' => 'ui.discard("ajax");alert("Linked via javaScript");','ajax' => $this->load->view($this->url.'examples/assets',$this->ui, TRUE) ); 
+							} 
+							return $out; break;
+			default:
+				return array(
+							'script' => 'alert("No tests selected")'
+							);
+				break;
+		}
 	}
 }

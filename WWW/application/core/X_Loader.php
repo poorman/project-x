@@ -12,20 +12,12 @@
  */
 class X_Loader extends CI_Loader
 {
-	
 	var $ui = NULL;
 	var $device = NULL;
+	var $host = NULL;
 	var $controler = 'ui';
 	var $default_module = 'www';
-	var $_plugin_ci_view_path = '';
-	var $_module_ci_view_path = '';
-	var $_widget_ci_view_path = '';
-	var $_dashboard_ci_view_path = '';
-	var $_dashboard_plugin_ci_view_path = '';
-	var $_gearbox_ci_view_path = '';
-	var $_gearbox_plugin_ci_view_path = '';
-	var $_website_ci_view_path = '';
-	var $_website_plugin_ci_view_path = '';
+	var $default_function = 'home';
 	var $_template = 'default/';
 	
 	/**
@@ -35,14 +27,6 @@ class X_Loader extends CI_Loader
 	{
 		parent::__construct();
 		$this->_ci_is_php5 = (floor(phpversion()) >= 5) ? TRUE : FALSE;
-		$this->_plugin_ci_view_path = REL_APPLICATION.'plugins/';
-		$this->_module_ci_view_path = REL_APPLICATION.'modules/';
-		if (isset($_SESSION['UI']['module'])) {
-			$this->_widget_ci_view_path = REL_APPLICATION.'modules/'.$_SESSION['UI']['module'].'/widgets/';
-		}
-		else {
-			$this->_widget_ci_view_path =  REL_APPLICATION.'modules/'.$this->default_module.'/widgets/';
-		}
 		!empty($_SESSION['UI']) ? $this->ui = $_SESSION['UI'] : $this->ui = NULL;
 		!empty($this->ui['device']['ext']) ? $this->device = $this->ui['device']['ext'] : $this->device = '';
 		if ($this->ui['selected_device'] !== false) {
@@ -50,7 +34,7 @@ class X_Loader extends CI_Loader
 		}
 		!empty($this->ui['module']) ? define('MODULE', $this->ui['module']) : define('MODULE', $this->default_module);
 		define('SELECTED_DEVICE', $this->device);
-		$this->template = $this->ui['path']['template_system_path'];
+		$this->_template = ($this->ui['path']['template_system_path']) ? $this->ui['path']['template_system_path'] : $this->_template;
 	}
 
 	/**
@@ -68,15 +52,15 @@ class X_Loader extends CI_Loader
 		if ($_ci_path == '') {
 			$_ci_ext = pathinfo($_ci_view, PATHINFO_EXTENSION);
 			$_ci_file = ($_ci_ext == '') ? $_ci_view.EXT : $_ci_view;
-			$_ci_path = $this->_module_ci_view_path.strtolower($ui['module']).'/views/'.$_ci_file;
+			$_ci_path = REL_MODULE_VIEWS.$_ci_file;
 		}
 		else {
 			$_ci_x = explode('/', $_ci_path);
 			$_ci_file = end($_ci_x);
 		}
-		$_ci_d_file = ($_ci_ext == '') ? $_ci_view.$this->device.EXT : $_ci_view;
-		$_ci_d_path = $this->_module_ci_view_path.strtolower($ui['module']).'/views/'.$_ci_d_file;
 		
+		$_ci_d_file = ($_ci_ext == '') ? $_ci_view.$this->device.EXT : $_ci_view;
+		$_ci_d_path = REL_MODULE_VIEWS.$_ci_d_file;
 		if($this->ui['selected_device'] !== false) {
 			if ( file_exists($_ci_d_path)) {
 				$_ci_path = $_ci_d_path;
@@ -185,14 +169,14 @@ class X_Loader extends CI_Loader
 		if ($_ci_path == '') {
 			$_ci_ext = pathinfo($_ci_view, PATHINFO_EXTENSION);
 			$_ci_file = ($_ci_ext == '') ? $_ci_view.EXT : $_ci_view;
-			$_ci_path = $this->_plugin_ci_view_path.$current_plugin.'/views/'.$_ci_file;
+			$_ci_path = REL_PUBLIC_PLUGINS.$current_plugin.PLUGIN_VIEWS.$_ci_file;
 		}
 		else {
 			$_ci_x = explode('/', $_ci_path);
 			$_ci_file = end($_ci_x);
 		}
 		$_ci_d_file = ($_ci_ext == '') ? $_ci_view.$this->device.EXT : $_ci_view;
-		$_ci_d_path = $this->_plugin_ci_view_path.$current_plugin.'/views/'.$_ci_d_file;
+		$_ci_d_path = REL_PUBLIC_PLUGINS.$current_plugin.PLUGIN_VIEWS.$_ci_d_file;
 		if($this->ui['selected_device'] !== false) {
 			if ( file_exists($_ci_d_path)) {
 				$_ci_path = $_ci_d_path;
@@ -301,14 +285,16 @@ class X_Loader extends CI_Loader
 		if ($_ci_path == '') {
 			$_ci_ext = pathinfo($_ci_view, PATHINFO_EXTENSION);
 			$_ci_file = ($_ci_ext == '') ? $_ci_view.EXT : $_ci_view;
-			$_ci_path = $this->_widget_ci_view_path.$current_widget.'/views/'.$_ci_file;
+			//$_ci_path = $this->_widget_ci_view_path.$current_widget.'/views/'.$_ci_file;
+			$_ci_path = REL_PUBLIC_WIDGETS . $current_widget . WIDGET_VIEWS . $_ci_file;
 		}
 		else {
 			$_ci_x = explode('/', $_ci_path);
 			$_ci_file = end($_ci_x);
 		}
 		$_ci_d_file = ($_ci_ext == '') ? $_ci_view.$this->device.EXT : $_ci_view;
-		$_ci_d_path = $this->_widget_ci_view_path.$current_widget.'/views/'.$_ci_d_file;
+		//$_ci_d_path = $this->_widget_ci_view_path.$current_widget.'/views/'.$_ci_d_file;
+		$_ci_d_path = REL_PUBLIC_WIDGETS . $current_widget . WIDGET_VIEWS . $_ci_file;
 		if($this->ui['selected_device'] !== false) {
 			if ( file_exists($_ci_d_path)) {
 				$_ci_path = $_ci_d_path;
@@ -457,6 +443,7 @@ class X_Loader extends CI_Loader
 			unset($_SESSION['app']);
 		}
 		$ui['module_id'] = $this->get_module_id($ui['module']);
+		//$ui['module_seo'] = $seo_enabled = $this->seo_enabled($ui['module']);
 		$ui['session'] = crc32($_SERVER['REMOTE_ADDR'].time()); // unique session
 		$ui['session_start'] = time(); // unique session
 		$ui['device'] =  $ci->mobile->get_device();
@@ -478,6 +465,7 @@ class X_Loader extends CI_Loader
 		$ui['module_controllers'] = $this->module_controllers($ui['module']);
 		$ui['plugin_controllers'] = $this->plugin_controllers($ui['user_plugins']);
 		$ui['widget_controllers'] = $this->widget_controllers($ui['user_widgets']);
+		$ui['module_seo'] = $seo_enabled = $this->seo_enabled($ui['module_id'],$ui['modules']);
 	/* Set language data */
 		if ($ci->config->item('language')) {
 			$ui['language'] = $ci->language_model->get_language($ci->config->item('language'));
@@ -525,7 +513,8 @@ class X_Loader extends CI_Loader
 		
 		$this->paths($ui);
 		/* set url to links collection*/
-		$this->links($ui);
+		//$this->links($ui);
+		($seo_enabled) ? $this->links($ui) : $ui['links'] = false;
 		$this->get_request();
 		$this->ui = $ui;
 		$this->ui['plugins'] = $ui['plugins'];
@@ -563,6 +552,21 @@ class X_Loader extends CI_Loader
 		return $this->re_session($ui, $mode);
 	}
 	
+	/**
+	 * gets module by id
+	 *
+	 * @param string
+	 *
+	 * @return array
+	 */
+	function get_module_by_id($module_id)
+	{
+		$ci =& get_instance();
+		$ci->db->where('module_id',$module_id);
+		$ci->db->limit(1);
+		$query = $ci->db->get('modules');
+		return $query->row_array();
+	}
 	/**
 	 * gets module_id by name
 	 *
@@ -608,40 +612,65 @@ class X_Loader extends CI_Loader
 		}
 		return false;
 	}
+	/**
+	 * gets host info
+	 *
+	 * @return array
+	 */
+	function host()
+	{
+		$url = $_SERVER['SERVER_NAME'];
+		$module = array_shift((explode(".",$_SERVER['SERVER_NAME'])));
+		$extension = pathinfo($url, PATHINFO_EXTENSION);
+		$parsed_url = parse_url($url);
+		if(!empty($parsed_url['host'])) {
+			$parts = explode('.',$parsed_url['host']);
+		}
+		else {
+			$parts = explode('.',$url);
+		}
+		
+		$domain = $parts[1];
+		if (empty($parsed_url['scheme'])) {
+			$base_url = 'http://' . ltrim($url, '/').'/';
+			$scheme = 'http://';
+		}
+		else {
+			$scheme = $parsed_url['scheme'];
+		}
+		return array('scheme' => $scheme, 'module' => $module, 'domain' => $domain, 'extension' => $extension, 'url' => $url, 'base_url' => $base_url);
+	}
 	/** loads instance
 	 *
 	 * @param array
 	 *
 	 * @return void
 	 */
-	 function instance(&$ui, $action, $function, $params, $return=false)
+	function instance(&$ui, $action, $function, $params, $return=false)
 	{
 		$function = ($function) ? $function : $this->default_function;
-		if(!empty($action['module_id'])) {
-			/*
-				Load action through module
-			*/
-			if (in_array($action['action'],$ui['module_controllers'])) {
-				/* 
-					Load module controller
-				*/
-				$out = $this->module($action['action'], $function, $params);
-			}
-			else {
-				if(in_array($action['action'],$ui['widget_controllers'])) {
-					/* 
-					Load widget
-					*/
-					$out = $this->widget($action['action'], $function, $params,true);
-				}
-			}
+		
+		
+		if (in_array($action,$ui['plugin_controllers'])) {
+			$out = $this->plugin($action, $function, $params,true);
 		}
 		else {
 			/*
-				Load plugin
+				Load action through module
 			*/
-			if (in_array($action,$ui['plugin_controllers'])) {
-				$out = $this->plugin('exampleplugin', 'home', NULL,true);
+			if (in_array($action,$ui['module_controllers'])) {
+				/* 
+					Load module controller
+				*/
+				$out = $this->module($ui, $action, $function, $params);
+			}
+			else {
+				if(in_array($action,$ui['widget_controllers'])) {
+					/* 
+					Load widget
+					*/
+					$out = $this->widget($action, $function, $params,true);
+				}
 			}
 		}
 		return $out;
@@ -691,14 +720,22 @@ class X_Loader extends CI_Loader
 		if ($query->num_rows()) {
 			$result = $query->result();
 			foreach ($result as $link) {
-				$links[$link->link] = array(
-												'module_id' => $link->module_id,
-												'action' => $link->action,
-												'functionality' => $link->functionality
-											);
+				if($link->is_method) {
+					$functions[$link->link] = array(
+													'module_id' => $link->module_id,
+													'action' => $link->action
+												);
+				}
+				else {
+					$links[$link->link] = array(
+													'module_id' => $link->module_id,
+													'action' => $link->action,
+													'functionality' => $link->functionality
+												);
+				}
 			}
 		}
-		
+		$ui['functions'] = $functions;
 		$ui['links'] = $links;
 	}
 	/**
@@ -709,31 +746,54 @@ class X_Loader extends CI_Loader
 	 *
 	 *@Return void
 	 */
-	function load_module($module = NULL, $params = NULL)
+	//function load_module($module = NULL, $params = NULL)
+	function load_module($ui, $class=false, $function=false, $all_params = NULL)
 	{
 		$ci =& get_instance(); 
 		static $instances = array();
 		$parent = 0;
-		// make sure this module is registered
-		$ci->db->where('name', strtolower($module));
-		$ci->db->limit(1);
-		$query = $ci->db->get('modules');
-		if(!$row = $query->row()) return FALSE;
-		$instance_id = $row->module_id;
-		$instance_name = $module . $instance_id;
-		// see if there already is an instance of the plugin
-		if (!array_key_exists($instance_name, $instances)) {
-			// instance does not exist, so create it
-			if(! class_exists($module)) {
-				include_once($this->_module_ci_view_path . strtolower($module) . '/controller.php');
+		/*
+			make sure user has access to this module
+		*/
+		if(in_array($ui['module'],$ui['module_controllers'])) {
+			$module = $ui['module'];
+			$module_id = $ui['module_id'];
+			$params = array();
+			if($all_params) {
+				foreach($all_params as $param) {
+					if(!$class) {
+						$class = $param;
+					}
+					else {
+						if(!$function) { //function is not used
+							$function = $param;
+						}
+						else {
+							$params[] = $param;
+						}
+					}
+				}
 			}
-			$instance = new $module($params);
-			$instance->parent_name = ucfirst(get_class($instance)); 
-			$instance->id = $instance_id;
-			$this->assign_libraries($instance, TRUE);
-			$instances[$instance_name] =& $instance;
+			else {
+				$class = $module;
+			}
+			$instance_name = $module . $module_id . $class;
+			// see if there already is an instance of the plugin
+			
+			if (!array_key_exists($instance_name, $instances)) {
+				// instance does not exist, so create it
+				if(! class_exists($class)) {
+					include_once(REL_MODULE_CONTROLLERS.$class.'.php');
+				}
+				$instance = new $class($params);
+				$instance->parent_name = ucfirst(get_class($instance)); 
+				$instance->id = $module_id . $class;
+				$this->assign_libraries($instance, TRUE);
+				$instances[$instance_name] =& $instance;
+			}
+			return  $instances[$instance_name];
 		}
-		return  $instances[$instance_name];
+		return false;
 	}
 	
 	/**
@@ -762,7 +822,7 @@ class X_Loader extends CI_Loader
 		if (!array_key_exists($instance_name, $instances)) {
 			if(! class_exists($plugin)) {
 				// instance does not exist, so create it
-				include_once($this->_plugin_ci_view_path . $plugin . '/controller.php');
+				include_once(REL_PLUGINS . $plugin . '/controller.php');
 			}
 			$instance = new $plugin($params);
 			$instance->parent_name = ucfirst(get_class($instance)); 
@@ -800,7 +860,7 @@ class X_Loader extends CI_Loader
 		if (!array_key_exists($instance_name, $instances)) {
 			// instance does not exist, so create it
 			if(! class_exists($widget)) {
-				include_once($this->_widget_ci_view_path . $widget . '/controller.php');
+				include_once(REL_APPLICATION.'modules/'.$module.'/widgets/' . $widget . '/controller.php');
 			}
 			$instance = new $widget($params);
 			$instance->parent_name = ucfirst(get_class($instance)); 
@@ -818,17 +878,16 @@ class X_Loader extends CI_Loader
 	 *
 	 *@Return void
 	 */
-	function module($module,  $function = NULL, $args = NULL) {
-		$msg = str_replace('<MODULE>', '<b>' . $module . '</b>', '<div class="msg-error">'.NO_MODULE.'</div>');
-		if (!$module = $this->load_module($module)) {
+	function module($ui, $module=false,  $function = NULL, $params = NULL) {
+		if (!$module = $this->load_module($ui, $module, $function, $params)) {
 			return false;
 		}
 		$function = $function ? $function : 'index';
-		return $module->$function($args);
+		return $module->$function($params);
 	}
 function module_controllers($module)
 	{
-		$module_dir = REL_APPLICATION.'modules/'.$module.'/';
+		$module_dir = REL_APPLICATION.'modules/'.$module.'/controllers/';
 		$controller_files = scandir($module_dir);
 		$controllers = array();
 		foreach ($controller_files as $c_file) {
@@ -910,7 +969,7 @@ function module_controllers($module)
 	 */
 	function module_view($view, $vars = array(), $return = FALSE)
 	{
-		return $this->_module_ci_load($this->ui, array('_ci_view' => $this->template.$view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
+		return $this->_module_ci_load($this->ui, array('_ci_view' => $this->_template.$view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
 	}
 
 	/**
@@ -923,9 +982,15 @@ function module_controllers($module)
 	function modules()
 	{
 		$ci =& get_instance();
-		$ci->db->from('modules');
+		$ci->db->from('modules as m');
+		$ci->db->join('module_structure as s', 's.module_id = m.module_id', 'left');
 		$query = $ci->db->get();
-		return $query->result_array();
+		$modules_result = $query->result_array();
+		$modules = array();
+		foreach($modules_result as $module) {
+			$modules[$module['module_id']] = $module;
+		}
+		return $modules;
 	}
 	
 	/**
@@ -938,170 +1003,190 @@ function module_controllers($module)
 	 */
 	function paths($ui = false)
 	{
-		define('HTTP_MODE','http');
-		define('PRE','#'.$this->controler);
-		define('JS_PRE',$this->controler);
-		define('JS_BASE_URL','http://'.$ui['app']['domain'].'/index.php/');
+		$ci =& get_instance();
+		!empty($ui['language']['language']) ? $language = $ui['language']['language'] : $language = $ci->config->item('language');
+		!empty($ui['template']['system_name']) ? $template = $ui['template']['system_name'] : $template = 'default';
+		!empty($ui['theme']['system_name']) ? $theme = $ui['theme']['system_name'] : $theme = 'default';
 		
-		define('PATH_APPLICATION', base_url().REL_APPLICATION);
-		define('PATH_PLUGINS', PATH_APPLICATION.'plugins/');
-		define('REL_PLUGINS', REL_APPLICATION.'plugins/');
-		define('PATH_MODULES', PATH_APPLICATION.'modules/');
-		define('REL_MODULES', REL_APPLICATION.'modules/');
-		isset($_SESSION['UI']['module']) ? define('PATH_WIDGETS', PATH_MODULES.$_SESSION['UI']['module'].'/widgets/') : define('PATH_WIDGETS', PATH_MODULES.$this->default_module.'/widgets/');
-		define('PATH_ASSETS', base_url().'assets/');
-		define('REL_ASSETS', 'assets/');
-		!empty($ui['language']['language']) ? $language = $ui['language']['language'] : $language = $this->config->item('language');
-		!empty($ui['template']['system_name']) ? $template = $ui['template']['system_name'] : $template = '_default';
-		!empty($ui['theme']['system_name']) ? $theme = $ui['theme']['system_name'] : $theme = '_default';
 		define('APPTEMPLATE',$template);
 		define('APPTHEME',$theme);
+		
 		$template .= '/';
 		$theme .= '/';
-/* GLOBAL */
-		define('PATH_THIRDPARTY',PATH_ASSETS.'third_party/'.$template.$theme);
-		define('REL_THIRDPARTYPATH',REL_ASSETS.'third_party/'.$template.$theme);
+		$scheme = $ui['scheme'];
+		$module = $ui['module'];
+		$domain = $ui['domain'];
+		$extension = $ui['extension'];
+		$language = $ui['language']['system_name'];
+		
+		define('HTTP_MODE',str_replace('://','',$scheme));
+		define('PRE','#'.$this->controler);
+		define('JS_PRE',$this->controler);
+		define('JS_BASE_URL',$scheme.$module.'.'.$domain.'.'.$extension.'/index.php/');
+/* GLOBAL 
+Global has no templates, it has languages
+=================================================================*/
+		define('PATH_APPLICATION', base_url().REL_APPLICATION);
+		define('PATH_ASSETS', base_url().'assets/');
+		define('REL_ASSETS', 'assets/');
+		define('PATH_PUBLIC', base_url().'public/');
+		define('REL_PUBLIC', 'public/');
+		/*
+		define('PATH_',);
+		define('REL_',);
+		define('PATH_',);
+		define('REL_',);*/
+		
+	//LANGUAGE
 		define('PATH_LANGUAGES',PATH_APPLICATION.'language/');
 		define('REL_LANGUAGES',REL_APPLICATION.'language/');
-		define('PATH_PLUGIN',PATH_APPLICATION.'plugins/');
+		define('PATH_LANGUAGE',PATH_LANGUAGES.$language.'/');
+		define('REL_LANGUAGE',REL_LANGUAGES.$language.'/');
 	//IMAGES
 		define('PATH_IMAGE', PATH_ASSETS.'images/');
 		define('REL_IMAGE', REL_ASSETS.'images/');
-		define('PATH_TEMPLATEIMAGE', PATH_IMAGE.$template);
-		define('REL_TEMPLATEIMAGE',REL_IMAGE.$template);
-		define('PATH_THEMEIMAGE', PATH_TEMPLATEIMAGE.$theme);
-		define('REL_THEMEIMAGEPATH_REL', REL_TEMPLATEIMAGE.$theme);
-		
-		define('PATH_LANGUAGEIMAGES', PATH_LANGUAGES.$language.'/images/');
-		define('REL_LANGUAGEIMAGES', REL_LANGUAGES.$language.'/images/');
-		define('PATH_TEMPLATELANGUAGEIMAGE', PATH_LANGUAGEIMAGES.$template);
-		define('REL_TEMPLATELANGUAGEIMAGE', REL_LANGUAGEIMAGES.$template);
-		define('PATH_THEMELANGUAGEIMAGE', PATH_TEMPLATELANGUAGEIMAGE.$theme);
-		define('REL_THEMELANGUAGEIMAGEPATH_REL', REL_TEMPLATELANGUAGEIMAGE.$theme);
+		define('PATH_LANGUAGE_IMAGE', PATH_ASSETS.'images/'.$language.'/');
+		define('REL_LANGUAGE_IMAGE', REL_ASSETS.'images/'.$language.'/');
 	//SCRIPT
 		define('PATH_SCRIPT',PATH_ASSETS.'script/');
 		define('REL_SCRIPT',REL_ASSETS.'script/');
-		define('PATH_TEMPLATESCRIPT',PATH_SCRIPT.$template);
-		define('REL_TEMPLATESCRIPT',REL_SCRIPT.$template);
-		define('PATH_THEMESCRIPT',PATH_TEMPLATESCRIPT.$theme);
-		define('REL_THEMESCRIPT',REL_TEMPLATESCRIPT.$theme);
 	//CSS
 		define('PATH_CSS',PATH_ASSETS.'css/');
 		define('REL_CSS',REL_ASSETS.'css/');
-		define('PATH_TEMPLATECSS',PATH_CSS.$template);
-		define('REL_TEMPLATECSS',REL_CSS.$template);
-		define('PATH_THEMECSS',PATH_TEMPLATECSS.$theme);
-		define('REL_THEMECSS',REL_TEMPLATECSS.$theme);
-/* PLUGINS */
-	//IMAGES	
-		define('PATH_PLUGIN_TEMPLATEIMAGE', PATH_IMAGE.'plugin/'.$template);
-		define('PATH_PLUGIN_THEMEIMAGE', PATH_PLUGIN_TEMPLATEIMAGE.$theme);
-		define('PATH_PLUGIN_LANGUAGEIMAGE', PATH_LANGUAGEIMAGES.'plugin/');
-		define('PATH_PLUGIN_TEMPLATELANGUAGEIMAGE', PATH_PLUGIN_LANGUAGEIMAGE.$template);
-		define('PATH_PLUGIN_THEMELANGUAGEIMAGE', PATH_PLUGIN_TEMPLATELANGUAGEIMAGE.$theme);
-	//SCRIPT
-		define('PATH_PLUGIN_SCRIPT','assets/script/');
-		define('PATH_PLUGIN_TEMPLATESCRIPT',PATH_PLUGIN_SCRIPT.$template);
-		define('PATH_PLUGIN_THEMESCRIPT',PATH_PLUGIN_TEMPLATESCRIPT.$theme);
-	//CSS
-		define('PATH_PLUGIN_CSS','assets/css/');
-		define('PATH_PLUGIN_TEMPLATECSS',PATH_PLUGIN_CSS.$template);
-		define('PATH_PLUGIN_THEMECSS',PATH_PLUGIN_TEMPLATECSS.$theme);
-
-/* MODULES */
-		foreach($ui['user_modules'] as $module) {
-			define('PATH_MODULE_'.strtoupper($module['system_name']), PATH_MODULES.$module['system_name'].'/');
-			define('REL_MODULE_'.strtoupper($module['system_name']), REL_MODULES.$module['system_name'].'/');
-			if($module['system_name'] == $ui['module']) {
-				$current_path_moduleapppath = 'PATH_MODULE_'.strtoupper($module['system_name']);
-				$current_rel_moduleapppath = 'REL_MODULE_'.strtoupper($module['system_name']);
-			}
-		}
-		define('PATH_MODULE', base_url().constant($current_path_moduleapppath));
-		define('REL_MODULE', constant($current_rel_moduleapppath));
+/* PLUGINS 
+Plugins have no templates, they do have languages
+=================================================================*/
+		define('PATH_PLUGINS', PATH_APPLICATION.'plugins/');
+		define('REL_PLUGINS', REL_APPLICATION.'plugins/');
+		define('PATH_PLUGINS_ASSETS',PATH_ASSETS.'plugins/');
+		define('REL_PLUGINS_ASSETS', REL_ASSETS.'plugins/');
+	//LANGUAGE
+		define('PATH_PLUGINS_LANGUAGE',PATH_LANGUAGE.'plugins/');
+		define('REL_PLUGINS_LANGUAGE', REL_LANGUAGE.'plugins/');
 		
-		define('PATH_MODULE_ASSETS', PATH_ASSETS.MODULE.'/');
-		define('REL_MODULE_ASSETS', REL_ASSETS.MODULE.'/');
-
-		define('MODULE_THIRDPARTYPATH',PATH_MODULE_ASSETS.'third_party/'.$template.$theme);
-		define('MODULE_THIRDPARTYPATH_REL',REL_MODULE_ASSETS.'third_party/'.$template.$theme);
+		define('PATH_PUBLIC_PLUGINS', PATH_PUBLIC.'plugins/');
+		define('REL_PUBLIC_PLUGINS', REL_PUBLIC.'plugins/');
+		define('PLUGIN_VIEWS', '/views/');
+		define('PLUGIN_ASSETS', '/assets/');
+		define('PLUGIN_IMAGES', PLUGIN_ASSETS.'images/');
+		define('PLUGIN_CSS', PLUGIN_ASSETS.'css/');
+		define('PLUGIN_SCRIPT', PLUGIN_ASSETS.'script/');
+		
 	//IMAGES
-		define('PATH_MODULE_IMAGE', PATH_MODULE_ASSETS.'images/');
+		define('PATH_PLUGINS_IMAGE', PATH_PLUGINS_ASSETS.'images/');
+		define('REL_PLUGINS_IMAGE', REL_PLUGINS_ASSETS.'images/');
+		define('PATH_PLUGINS_LANGUAGE_IMAGE', PATH_PLUGINS_ASSETS.'images/'.$language.'/');
+		define('REL_PLUGINS_LANGUAGE_IMAGE', REL_PLUGINS_ASSETS.'images/'.$language.'/');
+	//SCRIPT
+		define('PATH_PLUGINS_SCRIPT', PATH_PLUGINS_ASSETS.'script/');
+		define('REL_PLUGINS_SCRIPT', REL_PLUGINS_ASSETS.'script/');
+		define('PATH_PLUGINS_TEMPLATESCRIPT', PATH_PLUGINS_SCRIPT.$template);
+		define('REL_PLUGINS_TEMPLATESCRIPT', REL_PLUGINS_SCRIPT.$template);
+		define('PATH_PLUGINS_THEMESCRIPT', PATH_PLUGINS_TEMPLATESCRIPT.$theme);
+		define('REL_PLUGINS_THEMESCRIPT', REL_PLUGINS_TEMPLATESCRIPT.$theme);
+	//CSS
+		define('PATH_PLUGINS_CSS',PATH_PLUGINS_ASSETS.'css/');
+		define('REL_PLUGINS_CSS',REL_PLUGINS_ASSETS.'css/');
+		define('PATH_PLUGINS_TEMPLATECSS',PATH_PLUGINS_CSS.$template);
+		define('REL_PLUGINS_TEMPLATECSS',REL_PLUGINS_CSS.$template);
+		define('PATH_PLUGINS_THEMECSS',PATH_PLUGINS_TEMPLATECSS.$theme);
+		define('REL_PLUGINS_THEMECSS',REL_PLUGINS_TEMPLATECSS.$theme);
+/* MODULES 
+Modules have templates and languages
+=================================================================*/
+		define('PATH_MODULES', PATH_APPLICATION.'modules/');
+		define('REL_MODULES', REL_APPLICATION.'modules/');
+		define('PATH_MODULE', PATH_APPLICATION.'modules/'.$module.'/');
+		define('REL_MODULE', REL_APPLICATION.'modules/'.$module.'/');
+		define('PATH_MODULE_CONTROLLERS', PATH_MODULE.'controllers/');
+		define('REL_MODULE_CONTROLLERS', REL_MODULE.'controllers/');
+		define('PATH_MODULE_MODELS', PATH_MODULE.'models/');
+		define('REL_MODULE_MODELS', REL_MODULE.'models/');
+		define('PATH_MODULE_VIEWS', PATH_PUBLIC.$module.'/views/');
+		define('REL_MODULE_VIEWS', REL_PUBLIC.$module.'/views/');
+		define('PATH_MODULE_ASSETS',PATH_PUBLIC.$module.'/assets/');
+		define('REL_MODULE_ASSETS', REL_PUBLIC.$module.'/assets/');
+	//LANGUAGE
+		define('PATH_MODULE_LANGUAGE',PATH_LANGUAGE.'modules/'.$module.'/');
+		define('REL_MODULE_LANGUAGE', REL_LANGUAGE.'modules/'.$module.'/');
+	//IMAGES
+		define('PATH_MODULE_IMAGE',PATH_MODULE_ASSETS.'images/');
 		define('REL_MODULE_IMAGE', REL_MODULE_ASSETS.'images/');
-		
 		define('PATH_MODULE_TEMPLATEIMAGE', PATH_MODULE_IMAGE.$template);
-		define('REL_MODULE_TEMPLATEIMAGE', REL_MODULE_IMAGE.$template);
-		
+		define('REL_MODULE_TEMPLATEIMAGE',REL_MODULE_IMAGE.$template);
 		define('PATH_MODULE_THEMEIMAGE', PATH_MODULE_TEMPLATEIMAGE.$theme);
-		define('REL_MODULE_THEMEIMAGE', REL_MODULE_TEMPLATEIMAGE.$theme);
-		
-		define('PATH_MODULE_LANGUAGEIMAGE', PATH_LANGUAGES.'images/modules/');
-		define('REL_MODULE_LANGUAGEIMAGE', REL_LANGUAGES.'images/modules/');
-		define('PATH_MODULE_TEMPLATELANGUAGEIMAGE', PATH_MODULE_LANGUAGEIMAGE.$template);
-		define('REL_MODULE_TEMPLATELANGUAGEIMAGE', REL_MODULE_LANGUAGEIMAGE.$template);
-		
-		define('PATH_MODULE_THEMELANGUAGEIMAGE', PATH_MODULE_TEMPLATELANGUAGEIMAGE.$theme);
-		define('MODULE_THEMELANGUAGEIMAGE', REL_MODULE_TEMPLATELANGUAGEIMAGE.$theme);
+		define('REL_MODULE_THEMEIMAGE',REL_MODULE_TEMPLATEIMAGE.$theme);
+
+		define('PATH_MODULE_LANGUAGE_IMAGE', PATH_MODULE_IMAGE.$language.'/');
+		define('REL_MODULE_LANGUAGE_IMAGE', REL_MODULE_IMAGE.$language.'/');
+		define('PATH_MODULE_LANGUAGE_TEMPLATEIMAGE', PATH_MODULE_LANGUAGE_IMAGE.$template);
+		define('REL_MODULE_LANGUAGE_TEMPLATEIMAGE',REL_MODULE_LANGUAGE_IMAGE.$template);
+		define('PATH_MODULE_LANGUAGE_THEMEIMAGE', PATH_MODULE_LANGUAGE_TEMPLATEIMAGE.$theme);
+		define('REL_MODULE_LANGUAGE_THEMEIMAGE',REL_MODULE_LANGUAGE_TEMPLATEIMAGE.$theme);
 	//SCRIPT
 		define('PATH_MODULE_SCRIPT',PATH_MODULE_ASSETS.'script/');
-		define('REL_MODULE_SCRIPT',REL_MODULE_ASSETS.'script/');
-		define('PATH_MODULE_TEMPLATESCRIPT',PATH_MODULE_SCRIPT.$template);
+		define('REL_MODULE_SCRIPT', REL_MODULE_ASSETS.'script/');
+		define('PATH_MODULE_TEMPLATESCRIPT',PATH_MODULE_SCRIPT.$template);		//template level script
 		define('REL_MODULE_TEMPLATESCRIPT',REL_MODULE_SCRIPT.$template);
-		define('PATH_MODULE_THEMESCRIPT',PATH_MODULE_TEMPLATESCRIPT.$theme);
+		define('PATH_MODULE_THEMESCRIPT',PATH_MODULE_TEMPLATESCRIPT.$theme);	//theme level script
 		define('REL_MODULE_THEMESCRIPT',REL_MODULE_TEMPLATESCRIPT.$theme);
 	//CSS
 		define('PATH_MODULE_CSS',PATH_MODULE_ASSETS.'css/');
-		define('REL_MODULE_CSS',REL_MODULE_ASSETS.'css/');
+		define('REL_MODULE_CSS', REL_MODULE_ASSETS.'css/');
 		define('PATH_MODULE_TEMPLATECSS',PATH_MODULE_CSS.$template);
-		define('REL_MODULE_TEMPLATECSS',REL_MODULE_CSS.$template);
+		define('REL_MODULE_TEMPLATECSS', REL_MODULE_CSS.$template);
 		define('PATH_MODULE_THEMECSS',PATH_MODULE_TEMPLATECSS.$theme);
-		define('REL_MODULE_THEMECSS',REL_MODULE_TEMPLATECSS.$theme);
-/* WIDGETS */
-		define('PATH_WIDGET',PATH_MODULE.'widgets/');
-		define('REL_WIDGET',REL_MODULE.'widgets/');
-	//IMAGES		
-		define('PATH_WIDGET_IMAGE', PATH_MODULE_IMAGE.'widgets/');
-		define('PATH_WIDGET_TEMPLATEIMAGE',PATH_WIDGET_IMAGE.$template);
-		define('PATH_WIDGET_THEMEIMAGE', PATH_WIDGET_TEMPLATEIMAGE.$theme);
-
-		define('PATH_WIDGET_LANGUAGEIMAGE', PATH_MODULE_LANGUAGEIMAGE.MODULE.'/widgets/');
-		define('PATH_WIDGET_TEMPLATELANGUAGEIMAGE', PATH_WIDGET_LANGUAGEIMAGE.$template);
-		define('PATH_WIDGET_THEMELANGUAGEIMAGE', PATH_WIDGET_TEMPLATELANGUAGEIMAGE.$theme);
-	//SCRIPT		
-		define('PATH_WIDGET_SCRIPT','assets/script/');
-		define('PATH_WIDGET_TEMPLATESCRIPT',PATH_WIDGET_SCRIPT.$template);
-		define('PATH_WIDGET_THEMESCRIPT',PATH_WIDGET_TEMPLATESCRIPT.$theme);
+		define('REL_MODULE_THEMECSS', REL_MODULE_TEMPLATECSS.$theme);
 		
-	//CSS		
-		define('PATH_WIDGET_CSS','assets/css/');
-		define('PATH_WIDGET_TEMPLATECSS',PATH_WIDGET_CSS.$template);
-		define('PATH_WIDGET_THEMECSS',PATH_WIDGET_TEMPLATECSS.$theme);
-	// AUTO DEFINITIONS	
-		foreach ($ui['user_modules'] as $module) {
-			if ($module['module_id'] != 1) {//exclude gloabal module
-				define('PATH_'.strtoupper($module['system_name']).'_SCRIPT',PATH_MODULE_SCRIPT);
-				define('REL_'.strtoupper($module['system_name']).'_SCRIPT',REL_MODULE_SCRIPT);
-				define('PATH_'.strtoupper($module['system_name']).'_TEMPLATESCRIPT',constant('PATH_'.strtoupper($module['system_name']).'_SCRIPT').$template);
-				define('REL_'.strtoupper($module['system_name']).'_TEMPLATESCRIPT',constant('REL_'.strtoupper($module['system_name']).'_SCRIPT').$template);
-				define('PATH_'.strtoupper($module['system_name']).'_THEMESCRIPTPATH',constant('PATH_'.strtoupper($module['system_name']).'_TEMPLATESCRIPT').$theme);
-				define('REL_'.strtoupper($module['system_name']).'_THEMESCRIPTPATH_REL',constant('REL_'.strtoupper($module['system_name']).'_TEMPLATESCRIPT').$theme);
-				define('PATH_'.strtoupper($module['system_name']).'_CSS',PATH_MODULE_CSS.$module['system_name'].'/');
-				define('REL_'.strtoupper($module['system_name']).'_CSS',REL_MODULE_CSS.'script/');
-				define('PATH_'.strtoupper($module['system_name']).'_TEMPLATECSS',constant('PATH_'.strtoupper($module['system_name']).'_CSS').$template);
-				define('REL_'.strtoupper($module['system_name']).'_TEMPLATECSS',constant('REL_'.strtoupper($module['system_name']).'_CSS').$template);
-				define('PATH_'.strtoupper($module['system_name']).'_THEMECSS',constant('PATH_'.strtoupper($module['system_name']).'_TEMPLATECSS').$theme);
-				define('REL_'.strtoupper($module['system_name']).'_THEMECSS',constant('REL_'.strtoupper($module['system_name']).'_TEMPLATECSS').$theme);
-			}
-		}
-		define('STATUS_0',	'declined');
-		define('STATUS_1',	'active');
-		define('STATUS_2',	'new');
-		define('STATUS_3',	'pre-approved');
-/* == */	
-		define('CI_CURRENT_LANGUAGE', 'english');
-		define('NOT_APPLICABLE',	'N/A');
-	}
 
+/* WIDGETS 
+Widgets have templates and languages
+=================================================================*/
+		define('PATH_WIDGETS', PATH_MODULE.'widgets/');
+		define('REL_WIDGETS', REL_MODULE.'widgets/');
+		define('PATH_PUBLIC_WIDGETS',PATH_PUBLIC.$module.'/widgets/');
+		define('REL_PUBLIC_WIDGETS', REL_PUBLIC.$module.'/widgets/');
+	//LANGUAGE
+		define('PATH_WIDGETS_LANGUAGE',PATH_LANGUAGE.'modules/'.$module.'/widgets/');
+		define('REL_WIDGETS_LANGUAGE', REL_LANGUAGE.'modules/'.$module.'/widgets/');
+
+
+		define('WIDGET_VIEWS', '/views/');
+		define('WIDGET_ASSETS', '/assets/');
+		
+		define('WIDGET_IMAGE', WIDGET_ASSETS.'/images/');
+		define('WIDGET_TEMPLATEIMAGE', WIDGET_IMAGE.$template);
+		define('WIDGET_THEMEIMAGE', WIDGET_TEMPLATEIMAGE.$theme);
+		define('WIDGET_LANGUAGE_IMAGE', WIDGET_IMAGE.$language.'/');
+		define('WIDGET_LANGUAGE_TEMPLATEIMAGE', WIDGET_LANGUAGE_IMAGE.$theme);
+		define('WIDGET_LANGUAGE_THEMEIMAGE', WIDGET_LANGUAGE_TEMPLATEIMAGE.$theme);
+		
+		define('WIDGET_CSS', WIDGET_ASSETS.'css/');
+		define('WIDGET_TEMPLATECSS', WIDGET_CSS.$template);
+		define('WIDGET_THEMECSS', WIDGET_TEMPLATECSS.$theme);
+		
+		define('WIDGET_SCRIPT', WIDGET_ASSETS.'script/');
+		define('WIDGET_TEMPLATESCRIPT', WIDGET_SCRIPT.$template);
+		define('WIDGET_THEMESCRIPT', WIDGET_TEMPLATESCRIPT.$theme);
+/* ADDONS
+Addons don't have languages but it does have templates
+==================================================================*/
+		define('PATH_ADDONS',PATH_ASSETS.'addons/'.$template);
+		define('REL_ADDONS',REL_ASSETS.'addons/'.$template);
+	//IMAGES
+		define('PATH_ADDONS_TEMPLATEIMAGE',PATH_ADDONS.'images/');
+		define('REL_ADDONS_TEMPLATEIMAGE',REL_ADDONS.'images/');
+		define('PATH_ADDONS_THEMEIMAGE',PATH_ADDONS_TEMPLATEIMAGE.$theme);
+		define('REL_ADDONS_THEMEIMAGE',REL_ADDONS_TEMPLATEIMAGE.$theme);
+	//SCRIPT
+		define('PATH_ADDONS_SCRIPT',PATH_ADDONS.'script/');
+		define('REL_ADDONS_SCRIPT',REL_ADDONS.'script/');
+	//CSS
+		define('PATH_ADDONS_CSS',PATH_ADDONS.'css/');
+		define('REL_ADDONS_CSS',REL_ADDONS.'css/');
+		define('PATH_ADDONS_THEMECSS',PATH_ADDONS_CSS.$theme);
+		define('REL_ADDONSTHEMECSS',REL_ADDONS_CSS.$theme);
+	}
 	/**
 	 * call plugin load then check loaded data
 	 *
@@ -1111,7 +1196,6 @@ function module_controllers($module)
 	 */
 	function plugin($plugin = NULL, $function = NULL, $args = NULL)
 	{
-		$msg = str_replace('<PLUGIN>', '<b>' . $plugin . '</b>', '<div class="msg-error">'.NO_PLUGIN.'</div>');
 		if (!$plugin = $this->load_plugin($plugin)) {
 			return false;
 		}
@@ -1169,8 +1253,8 @@ function module_controllers($module)
 			show_error('The model name you are loading is the name of a resource that is already being used: '.$name);
 		}
 		$model = strtolower($model);
-		if ( ! file_exists($this->_plugin_ci_view_path.$current_plugin.'/models/'.$path.$model.EXT)) {
-			show_error('Unable to locate the model you have specified: '.$model.'  '.$this->_plugin_ci_view_path.$current_plugin.'/models/'.$path.$model.EXT);
+		if ( ! file_exists(REL_PLUGINS.$current_plugin.'/models/'.$path.$model.EXT)) {
+			show_error('Unable to locate the model you have specified: '.$model.'  '.REL_PLUGINS.$current_plugin.'/models/'.$path.$model.EXT);
 		}
 		if ($db_conn !== FALSE AND ! class_exists('CI_DB')) {
 			if ($db_conn === TRUE) {
@@ -1181,7 +1265,7 @@ function module_controllers($module)
 		if ( ! class_exists('Model')) {
 			load_class('Model', FALSE);
 		}		
-		require_once($this->_plugin_ci_view_path.$current_plugin.'/models/'.$path.$model.EXT);
+		require_once(REL_PLUGINS.$current_plugin.'/models/'.$path.$model.EXT);
 		$model = ucfirst($model);
 		$obj->$name = new $model();
 		$obj->$name->_assign_libraries();
@@ -1198,7 +1282,7 @@ function module_controllers($module)
 	 */
 	function plugin_view($obj, $view, $vars = array(), $return = FALSE)
 	{
-		return $this->_plugin_ci_load($obj,array('_ci_view' => $this->template.$view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
+		return $this->_plugin_ci_load($obj,array('_ci_view' => $view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
 	}
 	
 
@@ -1228,6 +1312,30 @@ function module_controllers($module)
 	function request(&$ui)
 	{
 		$ci =& get_instance(); 
+		/*
+			check for existing session
+		*/
+		if (!empty($_SESSION['UI'])) {
+			$ui = $_SESSION['UI'];
+		}
+		/*
+			This gives variables
+		
+			[scheme] => http://
+			[module] => www
+			[domain] => xflo
+			[extension] => info
+			[url] => www.xflo.info
+			[base_url] => http://www.xflo.info/
+		*/
+		extract($this->host = $this->host());
+		$ui['module'] = $module;
+		$ui['scheme'] = $scheme;
+		$ui['domain'] = $domain;
+		$ui['extension'] = $extension;
+		$ui['url'] = $url;
+		$ui['base_url'] = $base_url;
+		
 		if(!empty($_SESSION['module']) && $_SESSION['module'] == $ci->uri->segment(2)) {
 			$_SESSION['widget'] = $ci->uri->segment(3);
 			if(isset($_SESSION['plugin'])) {
@@ -1314,7 +1422,22 @@ function module_controllers($module)
 		
 		return $ui;
 	}
-	
+	function seo_enabled($module_id,$modules=false) {
+		if($modules) {
+			foreach ($modules as $module) {
+				if ($module['module_id'] == $module_id) {
+					return $module['seo_enabled'];
+				}
+			}
+		}
+		else {
+			$module = $this->get_module_by_id($module_id);
+			if(!empty($module['seo_enabled'])) {
+				return $module['seo_enabled'];
+			}
+		}
+		return false;
+	}
 	/**
 	 * functon sets up collection 'app' if session failed to set
 	 *
@@ -1551,7 +1674,7 @@ function module_controllers($module)
 	 */
 	function widget_view($obj, $view, $vars = array(), $return = FALSE)
 	{
-		return $this->_widget_ci_load($obj, array('_ci_view' => $this->template.$view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
+		return $this->_widget_ci_load($obj, array('_ci_view' => $this->_template.$view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
 	}
 
 	/**

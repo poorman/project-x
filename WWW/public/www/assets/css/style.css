@@ -1,0 +1,156 @@
+/* CSS MODULE Document */
+/* CSS Document plugins/testing/css/style.css 
+ here styles on global level */
+.bold {	font-weight:bold;	}
+#example {
+	font-family:Arial, Helvetica, sans-serif;
+	margin:0 auto;
+	display:block;
+	width:1000px;
+	
+}
+#dialog_example {
+	font-family:Arial, Helvetica, sans-serif;
+	margin:0 auto;
+	display:block;
+	
+}
+#l-margin {
+	font-family:"Courier New", Courier, monospace;
+	font-size:11px;
+	float:left;
+	width:250px;
+	padding:50px 10px;
+	-webkit-border-radius: 50px 0px 0px 50px;
+	-moz-border-radius: 50px 0px 0px 50px;
+	border-radius: 50px 0px 0px 50px;
+	background:rgba(186,186,186,0.5);
+	-webkit-box-shadow: #B3B3B3 6px 6px 6px;
+	-moz-box-shadow: #B3B3B3 6px 6px 6px;
+	box-shadow: #B3B3B3 6px 6px 6px;
+	}
+#l-margin a {	font-weight:bold;	 }
+#content {
+	width:700px;
+	float:left;
+	padding:50px 10px;
+	-webkit-border-radius: 0px 50px 50px 0px;
+	-moz-border-radius: 0px 50px 50px 0px;
+	border-radius: 0px 50px 50px 0px;
+	background:rgba(227,215,193,0.5);
+	-webkit-box-shadow: #B3B3B3 6px 6px 6px;
+	-moz-box-shadow: #B3B3B3 6px 6px 6px;
+	box-shadow: #B3B3B3 6px 6px 6px;
+}
+.example_fieldset {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.example_fieldset legend {
+	font-family:Arial, Helvetica, sans-serif;
+	font-style:italic;
+	font-size:12px;
+}
+#code {
+	font-family:"Courier New", Courier, monospace;
+	font-size:12px;
+	border:1px solid #069;
+	background:rgba(186,186,186,0.2);
+	padding:5px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	white-space:nowrap;
+}
+#result {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	border:1px solid #069;
+	background:rgba( 21,185,180,0.2);
+	padding:5px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	white-space:nowrap;
+}
+#notes {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	border:1px solid #069;
+	background:rgba(229,150,158,0.2);
+	padding:5px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	white-space:nowrap;
+}
+.annotation {
+	display:block;
+	padding-top:15px;
+	font-size:12px;
+}
+.global_font {	color: #06F;	}
+.global_font a{	color: #06F;	}
+.global_border {	border:1px solid #06F;	}
+
+.global_note {	
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	border:1px solid #069;
+	padding:5px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background: rgba(13,141,210,0.2);
+}
+.plugin_font {	color: #F60;	}
+.plugin_font a{	color: #F60;	}
+.plugin_border {	border:1px solid #F60;	}
+.plugin_note {	
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	border:1px solid #069;
+	padding:5px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background:rgba( 251,214,4,0.2);
+}
+.module_font {	color: #CF0;	}
+.module_font a{	color: #CF0;	}
+.module_border {	border:1px solid #CF0;	}
+.module_note {	
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	border:1px solid #CF0;
+	padding:5px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background:rgba(  167,226,181,0.4);
+}
+.widget_font {	color: #903;	}
+.widget_font a{	color: #903;	}
+.widget_border {	border:1px solid #903;	}
+.widget_note {	
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	border:1px solid #069;
+	padding:5px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background:rgba( 255,117,117,0.4);
+}
+.arguments_note {	
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	border:1px solid #069;
+	padding:5px 15px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background:rgba( 131,121,103,0.4);
+}
+
