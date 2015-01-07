@@ -1,0 +1,1 @@
+/* JavaScript Document GLOBAL script.js */
