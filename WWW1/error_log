@@ -1,3 +1,0 @@
-[21-Dec-2014 00:43:29 America/Denver] PHP Fatal error:  Call to undefined method Www::index() in /home2/systemw1/public_html/XFLO/WWW/application/controllers/ui.php on line 184
-[21-Dec-2014 00:43:33 America/Denver] PHP Fatal error:  Call to undefined method Www::index() in /home2/systemw1/public_html/XFLO/WWW/application/controllers/ui.php on line 184
-[21-Dec-2014 00:43:36 America/Denver] PHP Fatal error:  Call to undefined method Www::index() in /home2/systemw1/public_html/XFLO/WWW/application/controllers/ui.php on line 184

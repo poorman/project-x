@@ -1,0 +1,1 @@
+/* JavaScript Document COMPONENT script.js */
