@@ -28,11 +28,11 @@ class Template_model extends CI_Model
 	 *
 	 * @return array
 	 */
-	function fetch_indexed_array_of_templates($module_id = false)
+	function fetch_indexed_array_of_templates( $module_id = false )
 	{
 		$indexed_templates = array();
-		$templates = $this->fetch_templates($module_id);
-		foreach($templates as $template) {
+		$templates = $this->fetch_templates( $module_id );
+		foreach ( $templates as $template ) {
 			$indexed_templates[$template['template_id']] = $template;
 		}
 		return $indexed_templates;
@@ -45,12 +45,12 @@ class Template_model extends CI_Model
 	 *
 	 * @return array
 	 */
-	function fetch_templates($module_id = false) // fetch templates for module or all or global
+	function fetch_templates( $module_id = false ) // fetch templates for module or all or global
 	{
-		if($module_id) {
-			$this->db->where('module_id',$module_id);
+		if( $module_id ) {
+			$this->db->where( 'module_id', $module_id );
 		}
-		$query=$this->db->get('templates');
+		$query=$this->db->get( 'templates' );
 		$this->db->flush_cache();
 		return $query->result_array();
 	}
@@ -62,11 +62,11 @@ class Template_model extends CI_Model
 	 *
 	 * @return array
 	 */
-	function get_module_template($module_id=false)
+	function get_module_template( $module_id = false )
 	{
-		$this->db->where('module_id',$module_id);
+		$this->db->where( 'module_id', $module_id );
 		$this->db->limit(1);
-		$query=$this->db->get('templates');
+		$query=$this->db->get( 'templates' );
 		$this->db->flush_cache();
 		return $query->row_array();
 	}
@@ -78,17 +78,17 @@ class Template_model extends CI_Model
 	 *
 	 * @return array
 	 */
-	function get_template($template_id=false)
+	function get_template( $template_id = false )
 	{
 		if($template_id) {
-			$this->db->where('template_id',$template_id);
+			$this->db->where( 'template_id', $template_id );
 		}
 		else {
-			$this->db->where('is_default',1);
-			$this->db->where('module_id',1);
+			$this->db->where( 'is_default', 1 );
+			$this->db->where( 'module_id', 1 );
 		}
 		$this->db->limit(1);
-		$query=$this->db->get('templates');
+		$query=$this->db->get( 'templates' );
 		$this->db->flush_cache();
 		return $query->row_array();
 	}

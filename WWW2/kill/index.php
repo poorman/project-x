@@ -1,1 +1,0 @@
-<? session_start();session_destroy();?><script>window.location = ('http://<?php echo $_SERVER['SERVER_NAME']?>');</script>
