@@ -48,22 +48,22 @@ if (file_exists( REL_MODULE_THEMECSS.'theme.php')) {
 <script src="<?php echo REL_MODULE_SCRIPT;?>jquery/jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="<?php echo REL_MODULE_THEMESCRIPT;?>facebox/facebox.js" type="text/javascript"></script>
 <!------------------------------------------------------------------------------------------------------------------->
-<!-- PLUGIN HEADERS -------------------------------------------------------------------------------------------------->
+<!-- COMPONENT HEADERS -------------------------------------------------------------------------------------------------->
 <!------------------------------------------------------------------------------------------------------------------->
 <?php
-if ($plugin_dirs = opendir(REL_PLUGINS)) {
-	while (FALSE !== ($file = readdir($plugin_dirs))) {
+if ($component_dirs = opendir(REL_COMPONENTS)) {
+	while (FALSE !== ($file = readdir($component_dirs))) {
 		if ($file == '..' || $file == '.') {
 			continue;
 		}
-		if (file_exists(REL_PUBLIC_PLUGINS. $file .PLUGIN_CSS.'style.css')) {
-			echo '<link rel="stylesheet" href="' . REL_PUBLIC_PLUGINS. $file .PLUGIN_CSS.'style.css' . '" type="text/css" />'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_COMPONENTS. $file .COMPONENT_CSS.'style.css')) {
+			echo '<link rel="stylesheet" href="' . REL_PUBLIC_COMPONENTS. $file .COMPONENT_CSS.'style.css' . '" type="text/css" />'.PHP_EOL;
 		}
-		if (file_exists(REL_PUBLIC_PLUGINS. $file .PLUGIN_SCRIPT.'script.js')) {
-			echo '<script type="text/javascript" src="' . REL_PUBLIC_PLUGINS. $file .PLUGIN_SCRIPT.'script.js"></script>'.PHP_EOL;
+		if (file_exists(REL_PUBLIC_COMPONENTS. $file .COMPONENT_SCRIPT.'script.js')) {
+			echo '<script type="text/javascript" src="' . REL_PUBLIC_COMPONENTS. $file .COMPONENT_SCRIPT.'script.js"></script>'.PHP_EOL;
 		}
 	}
-	closedir($plugin_dirs);
+	closedir($component_dirs);
 }
 ?>
 

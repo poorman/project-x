@@ -21,12 +21,13 @@ class Ui extends CI_Controller
 	 *
 	 * @return json
 	 */
-	function __construct()
+	function __construct ()
 	{
-		parent::__construct();
-		$this->load->request($this->ui);
+		parent::__construct ();
+		$this->load->request ( $this->ui );
 		$this->url = APPTEMPLATE.'/';
-		$this->load();
+		$this->load ();
+		
 	}
 	
 	/**
@@ -43,9 +44,9 @@ class Ui extends CI_Controller
 	 * controller and function within one of the components
 	 * call maybe ajax request or echo
 	 */
-	 function load()
+	 function load ()
 	 {
-		 $this->default_function = ($this->uri->segment(3)) ? $this->uri->segment(3) : $this->default_function;
+		 $this->default_function = ( $this->uri->segment ( 3 ) ) ? $this->uri->segment ( 3 ) : $this->default_function;
 		 $controller = false;
 		 $function = false;
 		 
@@ -53,58 +54,58 @@ class Ui extends CI_Controller
 			if curl request return as ajax
 			$this->out will get set
 		*/
-		$this->ajaxload = ($this->input->post('curl') == SECRET) ? $this->ajaxload = true : $this->ajaxload;
+		$this->ajaxload = ( $this->input->post ( 'curl ') == SECRET ) ? $this->ajaxload = true : $this->ajaxload;
 		/*
 			if ajax request return as array
 			$this->out will get set
 		*/
-		$this->ajaxload = ($this->input->get('ajax')||$this->input->post('ajax')) ? $this->ajaxload = true : $this->ajaxload;
+		$this->ajaxload = ( $this->input->get ( 'ajax' ) || $this->input->post ( 'ajax' ) ) ? $this->ajaxload = true : $this->ajaxload;
 		/*
 			this is either this constructors own function
 			or
 			this is plugin name
 		*/
-		$controller = $this->uri->segment(2) ? $this->uri->segment(2) : false;
+		$controller = $this->uri->segment ( 2 ) ? $this->uri->segment ( 2 ) : false;
 		/*
 			is call global?
 			global when $function exists within this class
 			or when segment 1 does not exist
 		*/
-		$global = ($controller) ? method_exists($this, $controller) : true;
-		if($this->ui['module_seo'] && $controller) {
+		$global = ( $controller ) ? method_exists( $this, $controller ) : true;
+		if( $this->ui['module_seo'] && $controller ) {
 			/*
 				Trying SEO load
 			*/
-			if(!empty($this->ui['links'][$controller])) {
+			if( ! empty( $this->ui['links'][$controller] ) ) {
 				$controller = $this->ui['links'][$controller]['action'];
-				$global = ($controller) ? method_exists($this, $controller) : true;
-				if($this->uri->segment(3)) {
-					$function = (!empty($this->ui['functions'][$this->uri->segment(3)]['action'])) ? $this->ui['functions'][$this->uri->segment(3)]['action'] : $this->uri->segment(3);
+				$global = ( $controller ) ? method_exists( $this, $controller ) : true;
+				if( $this->uri->segment ( 3 ) ) {
+					$function = ( ! empty ( $this->ui['functions'][$this->uri->segment ( 3 ) ]['action'] ) ) ? $this->ui['functions'][$this->uri->segment ( 3 )]['action'] : $this->uri->segment ( 3 );
 				}
 				else {
 					$function = $this->ui['links'][$controller]['functionality'];
 				}
 			}
-			$function = ($function) ? $function : $this->default_function;
+			$function = ( $function ) ? $function : $this->default_function;
 		}
 		else {
 			/*
 				Non SEO Load
 			*/
-			$function = ($this->uri->segment(3)) ? $this->uri->segment(3) : $this->default_function;
+			$function = ( $this->uri->segment ( 3 ) ) ? $this->uri->segment ( 3 ) : $this->default_function;
 		}
 		/*
 			All following segments convert to parameter ($args)
 		*/
 		$params = NULL;
-		if ($this->uri->segment(4) !== FALSE) {
-			$params = array();
+		if ( $this->uri->segment( 4 )  !== FALSE ) {
+			$params = array ();
 			$param = 4;
 			$has_params = TRUE;
-			while ($has_params) {
-				$params[] = $this->uri->segment($param);
+			while ( $has_params ) {
+				$params[] = $this->uri->segment( $param );
 				$param++;
-				if ($this->uri->segment($param) === FALSE) {
+				if ( $this->uri->segment ( $param ) === FALSE ) {
 					$has_params = FALSE;
 				}
 			}
@@ -112,35 +113,35 @@ class Ui extends CI_Controller
 		/*
 			this is ajax request
 		*/
-		if($this->ajaxload) {
-			if($global) {
+		if ( $this->ajaxload ) {
+			if ( $global ) {
 				/*
 					Global ajax call
 				*/
-				$this->out = $this->$controller();
+				$this->out = $this->$controller ();
 			}
 			else {
 				/*
 					component ajax call
 				*/
-				$this->out = $this->load->instance($this->ui, $controller, $function, $params,true);
+				$this->out = $this->load->instance ($this->ui, $controller, $function, $params, true );
 			}
 		}
 		else {
-			if(!$global) {
+			if ( ! $global ) {
 				/*
 					echo component
 				*/
-				$this->load->instance($this->ui, $controller, $function, $params, true);
+				$this->load->instance( $this->ui, $controller, $function, $params, true );
 			}
 		}
 		/*
 			if there is ajax data to output
 			output as json
 		*/
-		if ($this->out) {//log_msg(json_encode($this->out));
-			echo json_encode($this->out);
-			exit(0);
+		if ( $this->out ) {//log_msg(json_encode($this->out));
+			echo json_encode ( $this->out );
+			exit ( 0 );
 		}
 	 }
 	/**
@@ -148,12 +149,12 @@ class Ui extends CI_Controller
 	 *
 	 * @return array
 	 */
-	function home()
+	function home ()
 	{
-		$this->ui['interface']=true;
+		$this->ui['interface'] = true;
 		$this->ui['content'] = 'content';
 		$view = $this->ui['content'];
-		$this->out['interface'] = $this->load->view($view,$this->ui, TRUE);
+		$this->out['interface'] = $this->load->view ( $view,$this->ui, TRUE );
 		return $this->out;
 	}
 	
@@ -162,22 +163,22 @@ class Ui extends CI_Controller
 	 *
 	 * @return array
 	 */
-	function index()
+	function index ()
 	{
 		//$module = $this->load->load_module($this->ui['module']);
-		$module = $this->load->load_module($this->ui);
-		$module->module();
+		$module = $this->load->load_module ( $this->ui );
+		$module->module ();
 	}
 	
 	/**
 	 * Function is a php starting point for internationalization language switch
 	 * 
 	 */
-	function language($args = array()) {//args should be /language/change/english';
-		$action = $this->uri->segment(3);
-		$language = $this->uri->segment(4);
-		$function = $action.'_language';
-		$this->load->$function($this->ui,$language);
+	function language( $args = array () ) {//args should be /language/change/english';
+		$action = $this->uri->segment ( 3 );
+		$language = $this->uri->segment( 4 );
+		$function = $action . '_language';
+		$this->load->$function ( $this->ui, $language );
 		return;
 	}
 	
@@ -185,11 +186,11 @@ class Ui extends CI_Controller
 	 * Function is a php starting point for internationalization language switch
 	 * 
 	 */
-	function template($args = array()) {//args should be /template/change/sometemplate';
-		$action = $this->uri->segment(3);
-		$template = $this->uri->segment(4);
+	function template ( $args = array () ) {//args should be /template/change/sometemplate';
+		$action = $this->uri->segment ( 3 );
+		$template = $this->uri->segment ( 4 );
 		$function = $action.'_template';
-		$this->load->$function($this->ui,$template);
+		$this->load->$function ( $this->ui, $template);
 		return;
 	}
 	
@@ -197,11 +198,11 @@ class Ui extends CI_Controller
 	 * Function is a php starting point for internationalization language switch
 	 * 
 	 */
-	function theme($args = array()) {//args should be /template/change/sometemplate';
-		$action = $this->uri->segment(3);
-		$template = $this->uri->segment(4);
-		$function = $action.'_template';
-		$this->load->$function($this->ui,$template);
+	function theme( $args = array () ) {//args should be /template/change/sometemplate';
+		$action = $this->uri->segment ( 3 );
+		$template = $this->uri->segment ( 4 );
+		$function = $action . '_template';
+		$this->load->$function( $this->ui, $template );
 		return;
 	}
 	
@@ -212,49 +213,48 @@ class Ui extends CI_Controller
 	 *
 	 * @return array
 	 */
-	function example()
+	function example ()
 	{
-		switch ($this->uri->segment(3)) {
+		switch ( $this->uri->segment ( 3 ) ) {
 			case 'dialog' : 
-				return array(
-							'script' => 'ui.discard("dialog");',
-							'dialog' => $this->load->view($this->url.'examples/dialog',$this->ui, TRUE)
+				return array (
+							'script' => 'ui.discard ( "dialog" );',
+							'dialog' => $this->load->view ( $this->url . 'examples/dialog', $this->ui, TRUE )
 							);
 				break;
 			case 'interface' :
-				return array(
-							'script' => 'ui.discard("interface");',
-							'interface' => $this->load->view($this->url.'examples/interface',NULL, TRUE)
-							
+				return array (
+							'script' => 'ui.discard ( "interface" );',
+							'interface' => $this->load->view ( $this->url . 'examples/interface', NULL, TRUE )
 							);
 				break;
 			case 'element' :
-				if($this->uri->segment(4)) {
-					return array(
-								'script' => 'ui.discard("ajax");',
-								'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE).$this->uri->segment(4)
+				if( $this->uri->segment ( 4 ) ) {
+					return array (
+								'script' => 'ui.discard ( "ajax" );',
+								'ajax' => $this->load->view ( $this->url . 'examples/element', $this->ui, TRUE ) . $this->uri->segment ( 4 )
 								);
 				}
 				else {
-					return array(
-								'script' => 'ui.discard("ajax");',
-								'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE)
+					return array (
+								'script' => 'ui.discard ( "ajax" );',
+								'ajax' => $this->load->view ( $this->url . 'examples/element', $this->ui, TRUE )
 								); 
 				} 
 				break;
 			case 'assets' : 
-							$this->load->model('example_model');
-							$this->ui['model'] = $this->example_model->example();
-							if($this->uri->segment(4)) { 
-								$out = array('script' => 'ui.discard("ajax");alert("Linked via javaScript");', 'ajax' => $this->load->view($this->url.'examples/element',$this->ui, TRUE).$this->uri->segment(4));
+							$this->load->model ( 'example_model' );
+							$this->ui['model'] = $this->example_model->example ();
+							if( $this->uri->segment( 4 ) ) { 
+								$out = array( 'script' => 'ui.discard( "ajax" );alert( "Linked via javaScript" );', 'ajax' => $this->load->view( $this->url . 'examples/element', $this->ui, TRUE) . $this->uri->segment( 4 ) );
 							}
 							else {
-								$out = array('script' => 'ui.discard("ajax");alert("Linked via javaScript");','ajax' => $this->load->view($this->url.'examples/assets',$this->ui, TRUE) ); 
+								$out = array ( 'script' => 'ui.discard ( "ajax" );alert ( "Linked via javaScript" ) ;', 'ajax' => $this->load->view ( $this->url . 'examples/assets', $this->ui, TRUE ) ); 
 							} 
 							return $out; break;
 			default:
 				return array(
-							'script' => 'alert("No tests selected")'
+							'script' => 'alert ( "No tests selected" ) '
 							);
 				break;
 		}

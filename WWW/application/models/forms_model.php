@@ -24,7 +24,7 @@ class Forms_model extends CI_Model
 	 * Select box	
 	 *
 	*/
-	function select_input($properties=array())
+	function select_input( $properties = array() )
 	{
 		/* settings will include
 			values -multidimensional array of keys and values or simple array of values where value is also a key
@@ -33,66 +33,66 @@ class Forms_model extends CI_Model
 			id of element
 			name of element
 		*/
-		if (!empty($properties['label'])) {
+		if ( !empty( $properties['label'] ) ) {
 			$out = '<label ';
-			if (!empty($properties['id'])) {
-				$out .= 'for="'.$properties['id'].'" ';
+			if ( !empty( $properties['id'] ) ) {
+				$out .= 'for="' . $properties['id'] . '" ';
 			}
-			$out .= '>'.$properties['label'].'</label><select ';
+			$out .= '>' . $properties['label'] . '</label><select ';
 		}
 		else {
 			$out = '<select ';
 		}
-		if (!empty($properties['id'])) {
-			$out .= 'id = "'.$properties['id'].'" ';
+		if ( !empty( $properties['id'] ) ) {
+			$out .= 'id = "' . $properties['id'] . '" ';
 		}
-		if (!empty($properties['name'])) {
-			$out .= 'name = "'.$properties['name'].'" ';
+		if ( !empty( $properties['name'] ) ) {
+			$out .= 'name = "' . $properties['name'] . '" ';
 		}
-		if (!empty($properties['class'])) {
+		if ( !empty( $properties['class'] ) ) {
 			$out .= 'class ="';
-			if (is_array($properties['class'])) {
+			if ( is_array( $properties['class'] ) ) {
 				$out .= 'class =" ';
-				foreach ($properties['class'] as $class) {
-					$out .=$class.' ';
+				foreach ( $properties['class'] as $class ) {
+					$out .= $class . ' ';
 				}
 			}
 			else {
-				$out .= 'class ="'.$properties['class'];
+				$out .= 'class ="' . $properties['class'];
 			}
 			$out .= '" ';
 		}
-		if (!empty($properties['script'])) {
-			if (is_array($properties['script'])) {
-				foreach ($properties['script'] as $event => $script) {
-					$out .= $event.' = " ';
+		if ( !empty( $properties['script'] ) ) {
+			if ( is_array( $properties['script'] ) ) {
+				foreach ( $properties['script'] as $event => $script ) {
+					$out .= $event . ' = " ';
 					if (is_array($script)) {
 						foreach ($script as $call) {
-							$out .= $call.'; ';
+							$out .= $call . '; ';
 						}
 					}
 					else {
-						$out .= $script.'; "';
+						$out .= $script . '; "';
 					}
 				}
 			}
 		}
 		$out .= '>';
-		if(!empty($properties['title'])) {
+		if ( !empty ( $properties['title'] ) ) {
 			$out .= '<option id="0" ';
-			if(empty($properties['selected'])) {
+			if ( empty( $properties['selected'] ) ) {
 				$out .= 'selected="selected" ';
 			}
-			$out .= '>'.$properties['title'].'</option>';
+			$out .= '>' . $properties['title'] . '</option>';
 		}
 		foreach ($properties['values'] as $id => $value) {
-			$out .= '<option id = "'.$id.'" ';
-			if (!empty($properties['selected'])) {
-				if ($properties['selected'] == $id) {
+			$out .= '<option id = "' . $id . '" ';
+			if ( ! empty( $properties['selected'] ) ) {
+				if ( $properties['selected'] == $id ) {
 					$out .= 'selected="selected" ';
 				}
 			} 
-			$out .= '>'.$value['name'].'</option>';
+			$out .= '>' . $value['name'] . '</option>';
 		}
 		$out .= '</select>';
 		return $out;

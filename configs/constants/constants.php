@@ -40,7 +40,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
 
-define('NO_PLUGIN',	'<PLUGIN> plugin not existent');
+define('NO_COMPONENT',	'<COMPONENT> component not existent');
 define('NO_MODULE',	'<MODULE> module not existent');
 define('NO_WIDGET',	'<WIDGET> module not existent');
 define('NO_ACCESS',	'You have no access to this component.');
