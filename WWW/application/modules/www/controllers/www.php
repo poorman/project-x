@@ -71,7 +71,7 @@ class Www
 							'script' => 'ui.discard("ajax");'
 							);
 				break;
-			case 'assets' : 
+			case 'assets' :
 					$this->load->module_model($this,$this->ui['module'],'examplemodule_model');
 					$this->ui['model'] = $this->examplemodule_model->example();
 					$script = $this->load->module_view('js_www_assets',$this->ui,TRUE);

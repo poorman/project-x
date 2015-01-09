@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( !defined('BASEPATH')) exit('No direct script access allowed');
 /*
 	Date: 10/14/2014
 	framework Codeigniter 2
@@ -24,7 +24,7 @@ class Language_model extends CI_Model
 	/**
 	 * function returns indexed array of languages
 	 *
-	 * @Param int (module id)
+	 * @Param int(module id)
 	 *
 	 * @return array
 	 */
@@ -41,7 +41,7 @@ class Language_model extends CI_Model
 	/**
 	 * function returns languages data array
 	 *
-	 * @Param int (language id)
+	 * @Param int(language id)
 	 *
 	 * @return array
 	 */
@@ -58,7 +58,7 @@ class Language_model extends CI_Model
 	/**
 	 * function returns language data array
 	 *
-	 * @Param int (language id)
+	 * @Param int(language id)
 	 *
 	 * @return array
 	 */

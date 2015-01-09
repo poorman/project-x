@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( !defined('BASEPATH')) exit('No direct script access allowed');
 /*
 	Date: 10/14/2014
 	framework Codeigniter 2
@@ -66,8 +66,8 @@ class Forms_model extends CI_Model
 			if ( is_array( $properties['script'] ) ) {
 				foreach ( $properties['script'] as $event => $script ) {
 					$out .= $event . ' = " ';
-					if (is_array($script)) {
-						foreach ($script as $call) {
+					if ( is_array( $script ) ) {
+						foreach ( $script as $call ) {
 							$out .= $call . '; ';
 						}
 					}
@@ -78,7 +78,7 @@ class Forms_model extends CI_Model
 			}
 		}
 		$out .= '>';
-		if ( !empty ( $properties['title'] ) ) {
+		if ( !empty( $properties['title'] ) ) {
 			$out .= '<option id="0" ';
 			if ( empty( $properties['selected'] ) ) {
 				$out .= 'selected="selected" ';
@@ -87,7 +87,7 @@ class Forms_model extends CI_Model
 		}
 		foreach ($properties['values'] as $id => $value) {
 			$out .= '<option id = "' . $id . '" ';
-			if ( ! empty( $properties['selected'] ) ) {
+			if ( !empty( $properties['selected'] ) ) {
 				if ( $properties['selected'] == $id ) {
 					$out .= 'selected="selected" ';
 				}

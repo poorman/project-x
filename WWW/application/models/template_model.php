@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( !defined('BASEPATH')) exit('No direct script access allowed');
 /*
 	Date: 10/14/2014
 	framework Codeigniter 2
@@ -24,7 +24,7 @@ class Template_model extends CI_Model
 	/**
 	 * function returns indexed template data array
 	 *
-	 * @Param int (template id)
+	 * @Param int(template id)
 	 *
 	 * @return array
 	 */
@@ -41,7 +41,7 @@ class Template_model extends CI_Model
 	/**
 	 * function returns template data array
 	 *
-	 * @Param int (template id)
+	 * @Param int(template id)
 	 *
 	 * @return array
 	 */
@@ -58,7 +58,7 @@ class Template_model extends CI_Model
 	/**
 	 * function returns default template data for specific module array
 	 *
-	 * @Param int (template id)
+	 * @Param int(template id)
 	 *
 	 * @return array
 	 */
@@ -74,7 +74,7 @@ class Template_model extends CI_Model
 	/**
 	 * function returns template data array for specific template or template default to global
 	 *
-	 * @Param int (template id)
+	 * @Param int(template id)
 	 *
 	 * @return array
 	 */

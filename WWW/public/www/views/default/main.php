@@ -5,7 +5,7 @@ if (!isset($interface)) { //if not refreshing
 }
 /* CONTENT */
 ?>
-VERSION 1.2
+VERSION 1.3
 <? 
 $this->load->module_view($content);?>
 <?
