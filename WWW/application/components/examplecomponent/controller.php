@@ -15,7 +15,7 @@ class Examplecomponent
 		 $this->ui = $_SESSION['UI'];
 		 
 	 }
- 
+
  /**
  * Example Home
  *
@@ -58,6 +58,7 @@ class Examplecomponent
 		$this->ui['select_input_language'] = $this->forms_model->select_input($language_select_properties);
 		$this->ui['select_input_template'] = $this->forms_model->select_input($template_select_properties);
 		$this->ui['select_input_theme'] = $this->forms_model->select_input($theme_select_properties);
+		$this->ui['menu'] = $this->load->component_view($this,'non_seo_links',$this->ui, TRUE);
 		$this->out['script'] = 'ui.discard("interface");'.$this->load->component_view($this,$this->ui['js_content'],$this->ui, TRUE);
 		$this->out['interface'] = $this->load->component_view($this,$this->ui['content'],$this->ui, TRUE);
 		return $this->out;
@@ -105,6 +106,31 @@ class Examplecomponent
 								);
 				break;
 		}
+		return $this->out;
+	}
+	
+	/**
+	 * seo enabled menu
+	 *
+	 * @param void
+	 *
+	 * @return array
+	 */
+	function seo_enabled()
+	{
+		$this->out['links'] = $this->load->component_view($this,'seo_links',$this->ui, TRUE);
+		return $this->out;
+	}
+	/**
+	 * seo disabled menu
+	 *
+	 * @param void
+	 *
+	 * @return array
+	 */
+	function seo_disabled()
+	{
+		$this->out['links'] = $this->load->component_view($this,'non_seo_links',$this->ui, TRUE);
 		return $this->out;
 	}
 }

@@ -40,8 +40,8 @@ class Www
 		$this->ui['interface']=true;
 		$this->ui['content'] = 'home';
 		$this->ui['js_content'] = 'js_home';
-		$this->out['interface'] = $this->load->plugin_view($this,$this->ui['content'],$this->ui, TRUE);
-		$this->out['script'] = $this->load->plugin_view($this,$this->ui['js_content'],$this->ui, TRUE);
+		$this->out['interface'] = $this->load->component_view($this,$this->ui['content'],$this->ui, TRUE);
+		$this->out['script'] = $this->load->component_view($this,$this->ui['js_content'],$this->ui, TRUE);
 		return $this->out;
 	}
 	
