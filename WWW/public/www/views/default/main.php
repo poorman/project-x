@@ -4,10 +4,6 @@ if (!isset($interface)) { //if not refreshing
 	echo '<body id="top"><div id="interface">';
 }
 /* CONTENT */
-?>
-VERSION 1.3
-<br /><a href="http://www.xflo.info/index.php/ui/cps">CPS REPORT1</a>
-<? 
 $this->load->module_view($content);?>
 <?
 /* END CONTENT */
