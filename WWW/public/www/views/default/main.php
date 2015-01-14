@@ -5,7 +5,8 @@ if (!isset($interface)) { //if not refreshing
 }
 /* CONTENT */
 ?>
-VERSION 1.2
+VERSION 1.3
+<br /><a href="http://www.xflo.info/index.php/ui/cps">CPS REPORT1</a>
 <? 
 $this->load->module_view($content);?>
 <?

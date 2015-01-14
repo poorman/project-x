@@ -41,12 +41,12 @@ class Examplewidget
 										'ajax' => $this->load->widget_view($this,'widget',$this->ui,TRUE)
 										);
 					break;
-			case 'assets' : 
-					$this->load->widget_model($this,$this->ui['module'],'examplewidget_model');
-					$this->ui['model'] = $this->examplewidget_model->example();
-					$script = $this->load->widget_view($this,'js_widget_assets',$this->ui,TRUE);
-					$view = $this->load->widget_view($this,'widget_assets',$this->ui,TRUE);
-					return array('script' => $script, 'ajax' => $view);
+			case 'assets' : log_msg(0);
+					$this->load->widget_model($this,$this->ui['module'],'examplewidget_model');log_msg(1);
+					$this->ui['model'] = $this->examplewidget_model->example();log_msg(2);
+					$script = $this->load->widget_view($this,'js_widget_assets',$this->ui,TRUE);log_msg(3);
+					$view = $this->load->widget_view($this,'widget_assets',$this->ui,TRUE);log_msg(4);
+					return array('script' => $script, 'ajax' => $view);log_msg(5);
 				break;
 			default:
 				$this->out = array('script' => 'alert("No tests selected")');break;

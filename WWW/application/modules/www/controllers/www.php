@@ -40,8 +40,8 @@ class Www
 		$this->ui['interface']=true;
 		$this->ui['content'] = 'home';
 		$this->ui['js_content'] = 'js_home';
-		$this->out['interface'] = $this->load->plugin_view($this,$this->ui['content'],$this->ui, TRUE);
-		$this->out['script'] = $this->load->plugin_view($this,$this->ui['js_content'],$this->ui, TRUE);
+		$this->out['interface'] = $this->load->component_view($this,$this->ui['content'],$this->ui, TRUE);
+		$this->out['script'] = $this->load->component_view($this,$this->ui['js_content'],$this->ui, TRUE);
 		return $this->out;
 	}
 	
@@ -71,7 +71,7 @@ class Www
 							'script' => 'ui.discard("ajax");'
 							);
 				break;
-			case 'assets' : 
+			case 'assets' :
 					$this->load->module_model($this,$this->ui['module'],'examplemodule_model');
 					$this->ui['model'] = $this->examplemodule_model->example();
 					$script = $this->load->module_view('js_www_assets',$this->ui,TRUE);
