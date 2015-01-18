@@ -127,7 +127,6 @@ class CI_Router {
 				$segments[] = $this->fetch_method();
 			}
 		}
-
 		// Load the routes.php file.
 		if (defined('ENVIRONMENT') AND is_file(APPPATH.'config/'.ENVIRONMENT.'/routes.php'))
 		{
@@ -148,12 +147,11 @@ class CI_Router {
 		// Were there any query string segments?  If so, we'll validate them and bail out since we're done.
 		if (count($segments) > 0)
 		{
-			return $this->_validate_request($segments);
+			//return $this->_validate_request($segments);
 		}
 
 		// Fetch the complete URI string
 		$this->uri->_fetch_uri_string();
-
 		// Is there a URI string? If not, the default controller specified in the "routes" file will be shown.
 		if ($this->uri->uri_string == '')
 		{
@@ -167,10 +165,11 @@ class CI_Router {
 		$this->uri->_explode_segments();
 
 		// Parse any custom routing that may exist
-		$this->_parse_routes();
-
+		//$this->_parse_routes();
+		
 		// Re-index the segment array so that it starts with 1 rather than 0
 		$this->uri->_reindex_segments();
+		return $this->_set_default_controller();
 	}
 
 	// --------------------------------------------------------------------
