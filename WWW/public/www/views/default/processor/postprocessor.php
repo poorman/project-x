@@ -22,7 +22,7 @@ window.url = null;
 //window.no_refresh = false;
 /*
  * Appends hash to url
-*/
+
 if(!window.location.hash) {
 	window.location.hash = window.pre;
 //	window.no_refresh = true;
@@ -60,10 +60,39 @@ else {
 		} 
 	});
 }
+*/
+/*
+	Listen for click event
+*/
+$('a').click(function (e) {
+	ajaxed = false;
+	url = e.target.href;
+	history.pushState(null, null, url);
+	
+	if($(event.target).hasClass('_import')) {
+		//ui.do_import(e)
+		ajaxed = true;
+	}
+	else {
+		if($(event.target).hasClass('_dialog')) {
+			//ui.do_dialog(e)
+			ajaxed = true;
+		}
+	}
+	if ( ajaxed ) {
+		e.stopPropagation();
+		e.preventDefault();
+	}	
+});
+
+
+
+
 /*
 	Listen for hash change and
 	use path and call ajax request.
 */
+/*
 $(window).bind('hashchange', function () {
 	window.hash = window.location.hash.slice(1);
 	if (window.hash == window.pre) {
@@ -106,6 +135,7 @@ $(window).bind('hashchange', function () {
 		});
 	}
 });
+*/
 /*
 	Initialize
 */
