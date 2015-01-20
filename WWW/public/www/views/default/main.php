@@ -3,8 +3,9 @@ if (!isset($interface)) { //if not refreshing
 	include('processor/preprocessor.php');
 	echo '<body id="top"><div id="interface">';
 }
-/* CONTENT */
-$this->load->module_view($content);?>
+/* CONTENT
+$this->load->module_view($content);
+*/ ?>
 <?
 /* END CONTENT */
 if(!isset($interface)) {
@@ -16,22 +17,24 @@ if(!isset($interface)) {
 <div id="script" style="display:none;"></div> 
 <!-- ajax post script -->
 <!-- Preloaders -->
-<div class="processing galaxy">
+<div id="processing">
+	<div class="processing galaxy">
 		<ul class="loader">
 			<li></li>
 			<li></li>
 			<li></li>
 			<li></li>
 		</ul>
-	<div id="clear_content" style="display:none;"></div> 
-</div>
-<div class="processing pendulum">
-	<div class="bar">
-		<i class="sphere"></i>
+		<div id="clear_content" style="display:none;"></div> 
 	</div>
-</div>
-<div class="processing spinhead">
-	<div class="spinner"></div>
+	<div class="processing pendulum">
+		<div class="bar">
+			<i class="sphere"></i>
+		</div>
+	</div>
+	<div class="processing spinhead">
+		<div class="spinner"></div>
+	</div>
 </div>
 <!-- End Preloaders -->
 <? 

@@ -70,7 +70,7 @@ $('a').click(function (e) {
 	history.pushState(null, null, url);
 	
 	if($(event.target).hasClass('_import')) {
-		//ui.do_import(e)
+		ui.element(url)
 		ajaxed = true;
 	}
 	else {
@@ -146,7 +146,8 @@ $(document).ready(function() {
 	window.processing = $('.processing');
 	window.pseudo_link = document.createElement('a');
 	window.containers = new Array();
-	window.containers_obj = new Array();	
+	window.containers_obj = new Array();
+	window.processing.fadeOut();
 });
 /*
  * UI object
@@ -170,13 +171,13 @@ var ui = {
 /*
  * Loads within element
  */
-	element : function (obj,silent) { // gets data via ajax and places in container; does not change url in browser
+	element : function (url,silent) { // gets data via ajax and places in container; does not change url in browser
 		var self = this;
 		try {
 			if (silent != true) {
 				window.processing.fadeIn(window.speed);
 			}
-			window.url = $(obj).attr('href');
+			window.url = url // $(obj).attr('href');
 			window.url = window.url.replace('#','');
 			var get = window.url.indexOf('?');
 			var query_str = '';
@@ -184,7 +185,7 @@ var ui = {
 				query_str = '&'+window.url.substr(get+1);
 				window.url = window.url.substr(0,get)
 			}
-			window.url=window.base_url+window.url;
+			window.url=url;//window.base_url+window.url;
 			var data = '&ajax=1&screen_height='+window.screen_height+'&screen_width='+window.screen_width;
 			$.ajax ({
 				data : data,
@@ -192,7 +193,7 @@ var ui = {
 				dataType : 'json',
 				url : window.url,
 			
-				success : function(data) {
+				success : function(data) {alert(1);
 					if (data.error != null) {
 						window.location = window.base_url;
 					}
@@ -220,7 +221,7 @@ var ui = {
 					}
 					return true; 
 				},
-				error : function(request, status, error) {
+				error : function(request, status, error) {alert(2);
 					self.handle_error('do_import()::error::'+error);
 					if (window.debug) { 
 						alert('do_import()::error::'+error);

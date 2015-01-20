@@ -23,6 +23,7 @@ class Ui extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+		log_msg(time(),false);
 		$this->load->request( $this->ui );
 		$this->load();
 		
@@ -44,7 +45,7 @@ class Ui extends CI_Controller
 	 */
 	 function load()
 	 {
-		 $this->default_function = ( $this->uri->segment( 3 ) ) ? $this->uri->segment( 3 ) : $this->default_function;
+		 $this->default_function = ( $this->uri->segment( 2 ) ) ? $this->uri->segment( 2 ) : $this->default_function;
 		 $controller = false;
 		 $function = false;
 		 
@@ -63,7 +64,7 @@ class Ui extends CI_Controller
 			or
 			this is plugin name
 		*/
-		$controller = $this->uri->segment( 2 ) ? $this->uri->segment( 2 ) : false;
+		$controller = $this->uri->segment( 1 ) ? $this->uri->segment( 1 ) : false;
 		/*
 			is call global?
 			global when $function exists within this class
@@ -77,8 +78,8 @@ class Ui extends CI_Controller
 			if( !empty( $this->ui['links'][$controller] ) ) {
 				$controller = $this->ui['links'][$controller]['action'];
 				$global = ( $controller ) ? method_exists( $this, $controller ) : true;
-				if( $this->uri->segment( 3 ) ) {
-					$function = ( !empty( $this->ui['functions'][$this->uri->segment( 3 ) ]['action'] ) ) ? $this->ui['functions'][$this->uri->segment( 3 )]['action'] : $this->uri->segment( 3 );
+				if( $this->uri->segment( 2 ) ) {
+					$function = ( !empty( $this->ui['functions'][$this->uri->segment( 2 ) ]['action'] ) ) ? $this->ui['functions'][$this->uri->segment( 2 )]['action'] : $this->uri->segment( 2 );
 				}
 				else {
 					$function = $this->ui['links'][$controller]['functionality'];
@@ -90,15 +91,15 @@ class Ui extends CI_Controller
 			/*
 				Non SEO Load
 			*/
-			$function = ( $this->uri->segment( 3 ) ) ? $this->uri->segment( 3 ) : $this->default_function;
+			$function = ( $this->uri->segment( 2 ) ) ? $this->uri->segment( 2 ) : $this->default_function;
 		}
 		/*
 			All following segments convert to parameter($args)
 		*/
 		$params = NULL;
-		if ( $this->uri->segment( 4 )  !== FALSE ) {
+		if ( $this->uri->segment( 3 )  !== FALSE ) {
 			$params = array();
-			$param = 4;
+			$param = 3;
 			$has_params = TRUE;
 			while( $has_params ) {
 				$params[] = $this->uri->segment( $param );
