@@ -119,7 +119,7 @@ class X_Loader extends CI_Loader
 		$ci =& get_instance(); 
 		$ui['module'] = !empty( $_SESSION['app']['module'] ) ? $_SESSION['app']['module'] : $this->default_module;
 		
-		$ui['app'] = !empty( $_SESSION['app'] ) ? $_SESSION['app'] : $this->setup();
+		$ui['app'] = !empty( $_SESSION['app'] ) ? $_SESSION['app'] : $this->host();
 		if ( !empty( $_SESSION['app'] ) ) {
 			unset( $_SESSION['app'] );
 		}
@@ -1335,36 +1335,6 @@ Addons don't have languages but it does have templates
 			}
 		}
 		return false;
-	}
-	/**
-	 * functon sets up collection 'app' if session failed to set
-	 *
-	 * @param void;
-	 *
-	 * @return array
-	 */
-	function setup ()
-	{
-		$url = $_SERVER['SERVER_NAME'];
-		$module = array_shift( ( explode( ".", $_SERVER['SERVER_NAME'] ) ) );
-		$extension = pathinfo ( $url, PATHINFO_EXTENSION );
-		$parsed_url = parse_url( $url );
-		if ( !empty( $parsed_url['host'] ) ) {
-			$parts = explode( '. ', $parsed_url['host'] );
-		}
-		else {
-			$parts = explode( '. ', $url );
-		}
-		$domain = $parts[1];
-		if ( empty( $parsed_url['scheme'] ) ) {
-			$base_url = 'http://' . ltrim( $url, '/' ). '/';
-			$scheme = 'http://';
-		}
-		else {
-			$scheme = $parsed_url['scheme'];
-		}
-		$app = $_SESSION['app'] = array( 'scheme' => $scheme, 'module' => $module, 'domain' => $domain, 'extension' => $extension, 'url' => $url, 'base_url' => $base_url );
-		return $app;
 	}
 	/**
 	 * function returns components data array

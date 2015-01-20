@@ -18,6 +18,3 @@ RewriteRule .*\.(jpg|jpeg|gif|png|bmp)$ - [F,NC]
 
 FallbackResource /index.php
 DirectoryIndex index.php
-
-
-

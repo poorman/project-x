@@ -1,28 +1,11 @@
 <?php session_start();
 /*
-Setting global session configs for xflo
+	check for disallowed extensions in post load initialization
 */
-if(empty($_SESSION['app'])) {
-	$url = $_SERVER['SERVER_NAME'];
-	$module = array_shift((explode(".",$_SERVER['SERVER_NAME'])));
-	$extension = pathinfo($url, PATHINFO_EXTENSION);
-	$parsed_url = parse_url($url);
-	if(!empty($parsed_url['host'])) {
-		$parts = explode('.',$parsed_url['host']);
-	}
-	else {
-		$parts = explode('.',$url);
-	}
-	
-	$domain = $parts[1];
-	if (empty($parsed_url['scheme'])) {
-		$base_url = 'http://' . ltrim($url, '/').'/';
-		$scheme = 'http://';
-	}
-	else {
-		$scheme = $parsed_url['scheme'];
-	}
-	$_SESSION['app'] = array('scheme' => $scheme, 'module' => $module, 'domain' => $domain, 'extension' => $extension, 'url' => $url, 'base_url' => $base_url);
+$uri_string = $_SERVER[REQUEST_URI];
+$extension = pathinfo ( $uri_string, PATHINFO_EXTENSION );
+if($extension != '') {
+	return;
 }
 /*
  *---------------------------------------------------------------
