@@ -41,6 +41,96 @@ class X_Loader extends CI_Loader
 		$this->components_ci_path = REL_APPLICATION.'components/';
 	}
 
+	/**
+	 *This function is responsible for loading contents bu url
+	 *
+	 */
+	function load_contents($args) {
+		if( empty($this->ui['uri']['controller'] ) ) {
+			$this->ui['content'] = $this->load->module_view( $this->default_content );
+		}
+		else {
+			if ( method_exists( $this, $this->ui['uri']['controller'] ) ) {
+				$this->content = $this->$this->ui['uri']['controller']();
+			}
+			else {
+				if ( !empty($this->ui['links'][$this->ui['uri']['controller']] ) ) {
+					$this->action = $this->ui['links'][$this->ui['uri']['controller']];
+				}
+				else {
+					if( in_array( $this->ui['uri']['controller'],$this->ui['module_controllers'] ) ) {
+						//load module controller
+						$this->content = $this->load->load_module( $this->ui, $this->ui['uri']['controller'], $this->ui['uri']['function'], $this->ui['uri']['params']);
+						//$module->module();
+					}
+					else {
+						if( in_array( $this->ui['uri']['controller'], $this->ui['component_controllers'] ) ) {
+							//load component controller
+							$this->content = $this->load->load_component( $this->ui, $this->ui['uri']['controller'], $this->ui['uri']['function'], $this->ui['uri']['params']);
+						}
+					}
+				}
+			}
+			if( !empty( $this->action ) ) {
+				$action = $this->action['action'];
+				if ( $this->ui['uri']['function'] != $this->default_function )
+					$method = $this->ui['uri']['function']; 
+				else {
+					$method = (!empty ( $this->action['functionality'] ) ) ? $this->action['functionality'] : $this->default_function;
+				}
+				if ( $this->action['module_id'] ) {
+					/* this is module call */
+					
+				}
+				else {
+					/* this is component call */
+					if ( in_array( $action, $this->ui['component_controllers'] ) ) {
+						$component = $this->load->load_component($action,$this->ui['uri']['params']);
+						if ( !empty( $method ) ) {
+							$this->content = $component->$method($this->ui['uri']['params']);
+						}
+						else {
+							$this->content = $component->$this->default_function($this->ui['uri']['params']);
+						}
+					}
+				}
+				if( is_array($this->content)) {
+						$script = $content = '';
+						foreach( $this->content as $element=>$contents ) {
+							if( $element == 'script' ) {
+								$script = '<script>' .$contents . '</script>';
+							}
+							if($element == 'interface') {
+								$content = $contents;
+							}
+						}
+						$this->ui['content'] = $script.$content;
+					}
+			}
+			else {
+				if ( !empty( $this->content ) ) {
+					if( is_array($this->content)) {
+						$script = $content = '';
+						foreach( $this->content as $element=>$contents ) {
+							if( $element == 'script' ) {
+								$script = '<script>' .$contents . '</script>';
+							}
+							if($element == 'interface') {
+								$content = $contents;
+							}
+						}
+						$this->ui['content'] = $script.$content;
+					}
+				}
+				else {
+					$this->ui['content'] = $this->load->module_view( $this->default_content );
+				}
+			}
+		}
+	}
+
+
+
 	/*
 	* once a component is loaded, assigns the $ci object's properties to the new component object
 	*
@@ -626,6 +716,7 @@ class X_Loader extends CI_Loader
 				}
 				else {
 					$links[$link->link] = array(
+													'parent_id' => $link->parent_id,
 													'module_id' => $link->module_id,
 													'action' => $link->action,
 													'functionality' => $link->functionality
@@ -673,7 +764,9 @@ class X_Loader extends CI_Loader
 				}
 			}
 			else {
-				$class = $module;
+				if ( ! $class ) {
+					$class = $module;
+				}
 			}
 			$instance_name = $module . $module_id . $class;
 			// see if there already is an instance of the component
@@ -1210,7 +1303,7 @@ Addons don't have languages but it does have templates
 	 *
 	 * @return array
 	 */
-	function request( &$ui )
+	function request( &$ui)
 	{
 		$ci =& get_instance(); 
 		/*
@@ -1237,6 +1330,31 @@ Addons don't have languages but it does have templates
 		$ui['url'] = $url;
 		$ui['base_url'] = $base_url;
 		
+		
+		/*
+			All following segments convert to parameter($args)
+		*/
+		$ui['params'] = NULL;
+		$ui['controller'] = $ci->uri->segment( 1 );
+		$ui['function'] = $ci->uri->segment( 2 );
+		if ( $ci->uri->segment( 3 )  !== FALSE ) {
+			$ui['params'] = array();
+			$param = 3;
+			$has_params = TRUE;
+			while( $has_params ) {
+				$ui['params'][] = $ci->uri->segment( $param );
+				$param++;
+				if ( $ci->uri->segment( $param ) === FALSE ) {
+					$has_params = FALSE;
+				}
+			}
+		}
+		
+		
+		/*
+		
+			setting current view mode
+		*/
 		if ( !empty( $_SESSION['module'] ) && $_SESSION['module'] == $ci->uri->segment( 2 ) ) {
 			$_SESSION['widget'] = $ci->uri->segment( 3 );
 			if( isset( $_SESSION['component'] ) ) {

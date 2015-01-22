@@ -10,6 +10,10 @@
 class Www
 {
 	private $ui;
+	private $action = NULL;
+	private $content = NULL;
+	private $default_content = DEFAULT_CONTENT;
+	private $default_function = DEFAULT_FUNCTION;
 	private $out = NULL;
 	function __construct()
 	{
@@ -23,8 +27,8 @@ class Www
 	*/
 	function module()
 	{
-		$this->ui['content'] = 'content';
 		$view = 'main';
+		$this->ui['interface'] = NULL;
 		$this->load->module_view($view,$this->ui);
 	}
 	

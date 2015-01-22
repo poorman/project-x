@@ -3,9 +3,10 @@ if (!isset($interface)) { //if not refreshing
 	include('processor/preprocessor.php');
 	echo '<body id="top"><div id="interface">';
 }
-/* CONTENT
-$this->load->module_view($content);
-*/ ?>
+/* CONTENT */
+//echo $content;
+$this->load->module_view('content');
+ ?>
 <?
 /* END CONTENT */
 if(!isset($interface)) {

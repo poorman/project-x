@@ -23,8 +23,7 @@ class Ui extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
-		log_msg(time(),false);
-		$this->load->request( $this->ui );
+		$this->load->request( $this->ui);
 		$this->load();
 		
 	}
@@ -82,7 +81,7 @@ class Ui extends CI_Controller
 					$function = ( !empty( $this->ui['functions'][$this->uri->segment( 2 ) ]['action'] ) ) ? $this->ui['functions'][$this->uri->segment( 2 )]['action'] : $this->uri->segment( 2 );
 				}
 				else {
-					$function = $this->ui['links'][$controller]['functionality'];
+					$function = ( !empty ($this->ui['links'][$controller]['functionality'] ) ) ? $this->ui['links'][$controller]['functionality'] : $this->default_function;
 				}
 			}
 			$function = ( $function ) ? $function : $this->default_function;
@@ -92,22 +91,6 @@ class Ui extends CI_Controller
 				Non SEO Load
 			*/
 			$function = ( $this->uri->segment( 2 ) ) ? $this->uri->segment( 2 ) : $this->default_function;
-		}
-		/*
-			All following segments convert to parameter($args)
-		*/
-		$params = NULL;
-		if ( $this->uri->segment( 3 )  !== FALSE ) {
-			$params = array();
-			$param = 3;
-			$has_params = TRUE;
-			while( $has_params ) {
-				$params[] = $this->uri->segment( $param );
-				$param++;
-				if ( $this->uri->segment( $param ) === FALSE ) {
-					$has_params = FALSE;
-				}
-			}
 		}
 		/*
 			this is ajax request
@@ -123,7 +106,7 @@ class Ui extends CI_Controller
 				/*
 					component ajax call
 				*/
-				$this->out = $this->load->instance($this->ui, $controller, $function, $params, true );
+				$this->out = $this->load->instance($this->ui, $controller, $function, $this->ui['params'], true );
 			}
 		}
 		else {
@@ -131,7 +114,7 @@ class Ui extends CI_Controller
 				/*
 					echo component
 				*/
-				$this->load->instance( $this->ui, $controller, $function, $params, true );
+				$this->load->instance( $this->ui, $controller, $function, $this->ui['params'], true );
 			}
 		}
 		/*
@@ -164,8 +147,7 @@ class Ui extends CI_Controller
 	 */
 	function index()
 	{
-		//$module = $this->load->load_module($this->ui['module']);
-		$module = $this->load->load_module( $this->ui );
+		$module = $this->load->load_module( $this->ui);
 		$module->module();
 	}
 	

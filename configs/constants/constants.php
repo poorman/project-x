@@ -50,3 +50,6 @@ define('SECRET',	'project-x-frame');
 define('DEV_IP',	'50.165.206.137');
 define('DOMAIN_URL','www.xflo.info/');
 define('DOMAIN_HTTP_URL','http://www.xflo.info/');
+
+define('DEFAULT_CONTENT','content');
+define('DEFAULT_FUNCTION','home');
