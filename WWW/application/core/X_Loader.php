@@ -237,14 +237,14 @@ class X_Loader extends CI_Loader
 					echo component
 				*/
 				if ( $active_view ) {
-qe(22);					if ( isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] ) {
+					if ( isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] ) {
 						/*
 							refresh hits here
 							reload shell as well
 						*/
 						$this->out = $this->load_shell( $ui, $this->instance( $ui, $controller, $function, $ui['uri']['params'], true ) );
 					}
-					else {
+					else {qe(22);	
 						$this->out = $this->instance( $ui, $controller, $function, $ui['uri']['params'], true );
 					}
 				}
