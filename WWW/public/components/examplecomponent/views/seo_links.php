@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('Access denied.'); ?>
 	<fieldset class="example_fieldset global_border">
-		<li><a href="<?php echo PRE?>/examplecomponent/seo_disabled" onClick="ui.element(this);return false;">SEO Disabled links</a></li>
+		<li><a href="/examplecomponent/seo_disabled" class="element">SEO Disabled links</a></li>
     </fieldset>
     <fieldset class="example_fieldset global_border">
 		<legend class="global_font bold" >Global</legend>

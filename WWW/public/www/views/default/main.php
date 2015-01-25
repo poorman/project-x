@@ -39,7 +39,6 @@ if(!isset($interface)) {
 		<div class="spinner"></div>
 	</div>
 </div>
-<div id="unloader"></div>
 <!-- End Preloaders -->
 <script><!--{script}--></script>
 <? 

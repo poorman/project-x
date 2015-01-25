@@ -218,13 +218,13 @@ class X_Loader extends CI_Loader
 			/*
 				this is ajax request
 			*/
-		if ( $global ) {
+			if ( $global ) {
 				/*
 					Global ajax call
 				*/
 				$this->out = $controller;
 			}
-		else {
+			else {
 					/*
 					component ajax call
 				*/
@@ -252,6 +252,10 @@ class X_Loader extends CI_Loader
 					$this->out = $this->load_shell( $ui, $this->instance( $ui, $controller, $function, $ui['uri']['params'], true ) );
 				}
 			}
+			/*
+				Append Shell when non-ajax load
+			*/
+			$this->out = $this->load_shell( $ui, $this->out, true );
 		}
 		return ( isset($this->out) ) ? $this->out : NULL;
 	 }
