@@ -53,3 +53,4 @@ define('DOMAIN_HTTP_URL','http://www.xflo.info/');
 
 define('DEFAULT_CONTENT','content');
 define('DEFAULT_FUNCTION','home');
+define('DEFAULT_SHELL_VIEW','main');

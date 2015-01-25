@@ -5,8 +5,10 @@ if (!isset($interface)) { //if not refreshing
 }
 /* CONTENT */
 //echo $content;
-$this->load->module_view('content');
+//$this->load->module_view('content');
  ?>
+  <!--{interface}-->
+ <a href="http://www.msn.com">unload</a>
 <?
 /* END CONTENT */
 if(!isset($interface)) {
@@ -37,7 +39,9 @@ if(!isset($interface)) {
 		<div class="spinner"></div>
 	</div>
 </div>
+<div id="unloader"></div>
 <!-- End Preloaders -->
+<script><!--{script}--></script>
 <? 
 	include('processor/postprocessor.php');
 	echo '</body></html>';

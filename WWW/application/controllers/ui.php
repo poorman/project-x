@@ -23,109 +23,34 @@ class Ui extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->request( $this->ui);
-		$this->load();
 		
-	}
-	
-	/**
-	 * curl and ajax request processor
-	 *
-	 * @param void
-	 *
-	 * @return array
-	 *
-	 * global echo call should bypass all function calls in this function(this note is for non-ajax calls only)
-	 * if no segments set then it is  a call to function within this controller, this call is echo only
-	 * segment 1 will either be name of function in this controller<br />
-	 * or it will become collection of names for
-	 * controller and function within one of the components
-	 * call maybe ajax request or echo
-	 */
-	 function load()
-	 {
-		 $this->default_function = ( $this->uri->segment( 2 ) ) ? $this->uri->segment( 2 ) : $this->default_function;
-		 $controller = false;
-		 $function = false;
-		 
-		/* 
-			if curl request return as ajax
-			$this->out will get set
-		*/
-		$this->ajaxload = ( $this->input->post( 'curl ') == SECRET ) ? $this->ajaxload = true : $this->ajaxload;
 		/*
-			if ajax request return as array
-			$this->out will get set
+			Save all available global methods
 		*/
-		$this->ajaxload = ( $this->input->get( 'ajax' ) || $this->input->post( 'ajax' ) ) ? $this->ajaxload = true : $this->ajaxload;
+		$this->ui['global_methods'] = get_class_methods($this);
+		
 		/*
-			this is either this constructors own function
-			or
-			this is plugin name
+			Process request to loader
 		*/
-		$controller = $this->uri->segment( 1 ) ? $this->uri->segment( 1 ) : false;
-		/*
-			is call global?
-			global when $function exists within this class
-			or when segment 1 does not exist
-		*/
-		$global = ( $controller ) ? method_exists( $this, $controller ) : true;
-		if( $this->ui['module_seo'] && $controller ) {
-			/*
-				Trying SEO load
-			*/
-			if( !empty( $this->ui['links'][$controller] ) ) {
-				$controller = $this->ui['links'][$controller]['action'];
-				$global = ( $controller ) ? method_exists( $this, $controller ) : true;
-				if( $this->uri->segment( 2 ) ) {
-					$function = ( !empty( $this->ui['functions'][$this->uri->segment( 2 ) ]['action'] ) ) ? $this->ui['functions'][$this->uri->segment( 2 )]['action'] : $this->uri->segment( 2 );
-				}
-				else {
-					$function = ( !empty ($this->ui['links'][$controller]['functionality'] ) ) ? $this->ui['links'][$controller]['functionality'] : $this->default_function;
-				}
-			}
-			$function = ( $function ) ? $function : $this->default_function;
-		}
-		else {
-			/*
-				Non SEO Load
-			*/
-			$function = ( $this->uri->segment( 2 ) ) ? $this->uri->segment( 2 ) : $this->default_function;
-		}
-		/*
-			this is ajax request
-		*/
-		if ( $this->ajaxload ) {
-			if ( $global ) {
-				/*
-					Global ajax call
-				*/
-				$this->out = $this->$controller();
-			}
-			else {
-				/*
-					component ajax call
-				*/
-				$this->out = $this->load->instance($this->ui, $controller, $function, $this->ui['params'], true );
-			}
-		}
-		else {
-			if ( !$global ) {
-				/*
-					echo component
-				*/
-				$this->load->instance( $this->ui, $controller, $function, $this->ui['params'], true );
-			}
-		}
+		$this->out = $this->load->loader($this->ui);
+		
 		/*
 			if there is ajax data to output
 			output as json
 		*/
-		if ( $this->out ) {//log_msg(json_encode($this->out));
-			echo json_encode( $this->out );
-			exit( 0 );
+		if ( isset($this->out) && $this->out ) {//log_msg(json_encode($this->out));
+			if( !is_array( $this->out ) ) { 
+				if( is_string($this->out) && method_exists($this, $this->out) ) {
+					$this->out = $this->$this->out;
+				}
+			}
+			else {
+				echo json_encode( $this->out );
+				exit( 0 );
+			}
 		}
-	 }
+	}
+	
 	/**
 	 * home when refreshed
 	 *
@@ -147,8 +72,13 @@ class Ui extends CI_Controller
 	 */
 	function index()
 	{
-		$module = $this->load->load_module( $this->ui);
-		$module->module();
+		if ( isset( $this->out ) ) {
+			echo $this->out;
+		}
+		else {
+			$module = $this->load->load_module( $this->ui);
+			$module->module();
+		}
 	}
 	
 	/**

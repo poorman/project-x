@@ -19,6 +19,13 @@ window.screen_width = null;
 window.speed = 150;// speed for fadeIn/fadeOut 
 window.timestamp =new Date().getTime();
 window.url = null;
+//$("#unloader").load('http://www.xflo.info/test.html');
+/* destroys session on page unload */
+window.onbeforeunload = function (e) {
+$("#unloader").load('http://www.xflo.info/unload.php');
+};
+
+
 //window.no_refresh = false;
 /*
  * Appends hash to url

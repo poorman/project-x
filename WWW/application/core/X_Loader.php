@@ -16,12 +16,16 @@ class X_Loader extends CI_Loader
 	var $device = NULL;
 	var $host = NULL;
 	var $controler = 'ui';
+	var $supercontroller = 'ui';
 	var $default_module = 'www';
-	var $default_function = 'home';
+	private $default_content = DEFAULT_CONTENT;
+	private $default_function = DEFAULT_FUNCTION;
 	var $_template = 'default/';
 	var $modules_ci_path = '';
 	var $plugins_ci_path = '';
-	
+	private $shell_view = DEFAULT_SHELL_VIEW;
+	private $out = NULL; //output array
+	protected $ajaxload = false;
 	/**
 	 * Constructor
 	 */
@@ -42,25 +46,295 @@ class X_Loader extends CI_Loader
 	}
 
 	/**
-	 *This function is responsible for loading contents bu url
+	 * superloader
 	 *
+	 * @param array
+	 *
+	 * @return array || string
+	 *
+	 * global echo call should bypass all function calls in this function(this note is for non-ajax calls only)
+	 * if no segments set then it is  a call to function within this controller, this call is echo only
+	 * segment 1 will either be name of function in this controller<br />
+	 * or it will become collection of names for
+	 * controller and function within one of the components
+	 * call maybe ajax request or echo
 	 */
-	function load_contents($args) {
-		if( empty($this->ui['uri']['controller'] ) ) {
-			$this->ui['content'] = $this->load->module_view( $this->default_content );
+	function loader( &$ui )
+	{
+		$ci =& get_instance();
+		/*
+			If active_view not set, we need to reload all elements down to shell
+		*/
+		$active_view = isset($_SESSION['active_view']) ? $_SESSION['active_view'] : false;
+//qe($active_view);
+		if(!$active_view) {
+			$_SESSION['active_view'] = 1;
+		}
+		/*
+			check for existing session
+		*/
+		if ( !empty( $_SESSION['UI'] ) ) {
+			$ui = $_SESSION['UI'];
+		}
+		
+		/*
+			This gives variables
+		
+			[scheme] => http://
+			[module] => www
+			[domain] => xflo
+			[extension] => info
+			[url] => www.xflo.info
+			[base_url] => http://www.xflo.info/
+		*/
+		extract( $this->host = $this->host() );
+		$ui['module'] = $module;
+		$ui['scheme'] = $scheme;
+		$ui['domain'] = $domain;
+		$ui['extension'] = $extension;
+		$ui['url'] = $url;
+		$ui['base_url'] = $base_url;
+		
+		/*
+			setting current view mode
+		*/
+		if ( !empty( $_SESSION['module'] ) && $_SESSION['module'] == $ci->uri->segment( 2 ) ) {
+			$_SESSION['widget'] = $ci->uri->segment( 3 );
+			if( isset( $_SESSION['component'] ) ) {
+				unset( $_SESSION['component'] );
+			}
 		}
 		else {
-			if ( method_exists( $this, $this->ui['uri']['controller'] ) ) {
-				$this->content = $this->$this->ui['uri']['controller']();
+			if ( $ci->uri->segment( 2 ) ) {
+				$_SESSION['component'] = $ci->uri->segment( 2 );
 			}
-			else {
-				if ( !empty($this->ui['links'][$this->ui['uri']['controller']] ) ) {
-					$this->action = $this->ui['links'][$this->ui['uri']['controller']];
+			if ( isset( $_SESSION['widget'] ) ) {
+				unset( $_SESSION['widget'] );
+			}
+		}
+		
+		
+		/* 
+			Make sure session exists beyond this point 
+		*/
+		if ( !empty( $_SESSION['UI'] ) ) {
+			$ui = $_SESSION['UI'];
+			
+			/*
+				loads global functions
+				i.e. 
+				defining paths 
+				and 
+				GET requests to argunebts passed to ajaxed functions referred as args[]
+			*/
+			$this->paths( $ui );
+			$this->get_request( );
+			
+			/*
+				Loads component definitions
+			*/
+			$this->language( $ui );
+		}
+		else {
+			
+			/*
+				creates session with all variables for current user/group
+			*/
+			$this->client_session( $ui );
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/*
+			All following segments convert to parameter($args)
+		*/
+		$ui['uri'] = array();
+		$ui['uri']['params'] = NULL;
+		if ( $ci->uri->segment( 3 )  !== FALSE ) {
+			$ui['uri']['params'] = array();
+			$param = 3;
+			$has_params = TRUE;
+			while( $has_params ) {
+				$ui['uri']['params'][] = $ci->uri->segment( $param );
+				$param++;
+				if ( $ci->uri->segment( $param ) === FALSE ) {
+					$has_params = FALSE;
+				}
+			}
+		}
+		$this->default_function = ( $ci->uri->segment( 2 ) ) ? $ci->uri->segment( 2 ) : $this->default_function;
+		$controller = false;
+		$function = false;
+
+		/* 
+			if curl request return as ajax
+			$this->out will get set
+		*/
+		$this->ajaxload = ( $ci->input->post( 'curl ') == SECRET ) ? $this->ajaxload = true : $this->ajaxload;
+
+		/*
+			if ajax request return as array
+			$this->out will get set
+		*/
+		$this->ajaxload = ( $ci->input->get( 'ajax' ) || $ci->input->post( 'ajax' ) ) ? $this->ajaxload = true : $this->ajaxload;
+
+		/*
+			this is either this constructors own function
+			or
+			this is plugin name
+		*/
+		$controller = $ci->uri->segment( 1 ) ? $ci->uri->segment( 1 ) : false;
+
+		/*
+			is call global?
+			global when $function exists within this class
+			or when segment 1 does not exist
+		*/
+		$global = ( $controller ) ? in_array( $controller, $ui['global_methods'] ) : true;
+		if( $ui['module_seo'] && $controller ) {
+			/*
+				Trying SEO load
+			*/
+			if( !empty( $ui['links'][$controller] ) ) {
+				$controller = $ui['links'][$controller]['action'];
+				$global = ( $controller ) ? in_array( $controller, $ui['global_methods'] ) : true;
+				if( $ci->uri->segment( 2 ) ) {
+					$function = ( !empty( $this->ui['functions'][$ci->uri->segment( 2 ) ]['action'] ) ) ? $ui['functions'][$ci->uri->segment( 2 )]['action'] : $ci->uri->segment( 2 );
 				}
 				else {
+					$function = ( !empty ($ui['links'][$controller]['functionality'] ) ) ? $ui['links'][$controller]['functionality'] : $this->default_function;
+				}
+			}
+			$function = ( $function ) ? $function : $this->default_function;
+		}
+		else {
+			/*
+				Non SEO Load
+			*/
+			$function = ( $ci->uri->segment( 2 ) ) ? $ci->uri->segment( 2 ) : $this->default_function;
+		}
+		$ui['uri']['controller'] = $controller;
+		$ui['uri']['function'] = $function; 
+		
+		if ( $this->ajaxload ) {
+			/*
+				this is ajax request
+			*/
+		if ( $global ) {
+				/*
+					Global ajax call
+				*/
+				$this->out = $controller;
+			}
+		else {
+					/*
+					component ajax call
+				*/
+				$this->out = $this->instance($ui, $controller, $function, $ui['uri']['params'], true );
+			}
+		}
+		else {
+			if ( !$global ) {
+				/*
+					echo component
+				*/
+				if ( $active_view ) {
+qe(22);					if ( isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] ) {
+						/*
+							refresh hits here
+							reload shell as well
+						*/
+						$this->out = $this->load_shell( $ui, $this->instance( $ui, $controller, $function, $ui['uri']['params'], true ) );
+					}
+					else {
+						$this->out = $this->instance( $ui, $controller, $function, $ui['uri']['params'], true );
+					}
+				}
+				else {
+					$this->out = $this->load_shell( $ui, $this->instance( $ui, $controller, $function, $ui['uri']['params'], true ) );
+				}
+			}
+		}
+		return ( isset($this->out) ) ? $this->out : NULL;
+	 }
+	 
+	 function load_shell($ui, $contents = array()) {
+		$output = '';
+		$ui['interface'] = NULL;
+		$output = $shell = $this->module_view( $this->shell_view, $ui, true );
+		
+		if( is_array( $contents ) ) {
+			foreach ($contents as $tag => $content ) {
+				$tag = '<!--{'.$tag.'}-->';
+				$output = str_replace( $tag, $content, $output );
+				
+			}
+		}
+		else {
+			return str_replace( '{interface}', $content, $shell );
+	 	}
+		return $output;
+	 }
+	/**
+	 *This function is responsible for loading contents by direct url
+	 *
+	 */
+	function load_contents( &$ui=array() ) {
+		
+		$output = '';
+		$shell = '';
+		if( empty($ui['uri']['controller'] ) ) {
+			/*
+				if no controller set, then load shell + default content
+			*/
+			$ui['interface'] = NULL;
+			$output = $this->module_view( $this->shell_view, $ui, true );
+			$contents = $this->module_view( $this->default_content, $ui, true );
+			foreach ($contents as $tag => $content ) {
+				$tag = '{' . $tag . '}';
+				$output = str_replace( $tag, $content, $output );
+			}
+			echo $output;
+			exit(0);
+		}
+		else {
+			/*
+				controller is set 
+			*/
+			if ( in_array( $ui['uri']['controller'], $ui['global_methods'] ) ) {
+				/* 
+					Since this is a global controller there is no processing needed here.
+					Global controllers do not load by ajax or need any component/module/widget loads either
+					Sending false back to global will simply ignore any other processing, and call that funtion
+				*/
+				return false;
+			}
+			
+			/*
+			
+			
+			
+			
+			
+			
+			
+				/*
+					controller is set to sub class
+					Lets find correct action to take
+				*/
+				if ( !empty($this->ui['links'][$ui['uri']['controller']] ) ) {
+					/*
+						Action found in database as collection
+					*/
+					$action = $this->ui['links'][$ui['uri']['controller']];
+				}
+				else {
+					/* 
+						Action was not found in database
+					*/
 					if( in_array( $this->ui['uri']['controller'],$this->ui['module_controllers'] ) ) {
-						//load module controller
-						$this->content = $this->load->load_module( $this->ui, $this->ui['uri']['controller'], $this->ui['uri']['function'], $this->ui['uri']['params']);
+						/*
+							Action found in modules collection
+						*/
+						$contents = $this->load->load_module( $this->ui, $this->ui['uri']['controller'], $this->ui['uri']['function'], $this->ui['uri']['params']);
 						//$module->module();
 					}
 					else {
@@ -70,7 +344,7 @@ class X_Loader extends CI_Loader
 						}
 					}
 				}
-			}
+			
 			if( !empty( $this->action ) ) {
 				$action = $this->action['action'];
 				if ( $this->ui['uri']['function'] != $this->default_function )
@@ -206,9 +480,9 @@ class X_Loader extends CI_Loader
 	 */
 	function client_session( &$ui, $mode = false )
 	{
+		
 		$ci =& get_instance(); 
 		$ui['module'] = !empty( $_SESSION['app']['module'] ) ? $_SESSION['app']['module'] : $this->default_module;
-		
 		$ui['app'] = !empty( $_SESSION['app'] ) ? $_SESSION['app'] : $this->host();
 		if ( !empty( $_SESSION['app'] ) ) {
 			unset( $_SESSION['app'] );
@@ -294,6 +568,7 @@ class X_Loader extends CI_Loader
 		$this->ui['user_widgets'] = $ui['user_widgets'];
 		$this->language( $ui );//loads component definitions
 		$_SESSION['UI'] = $ui;
+		
 	}
 	
 	/**
@@ -640,6 +915,7 @@ class X_Loader extends CI_Loader
 		
 		
 		if ( in_array( $action,$ui['component_controllers'] ) ) {
+			
 			$out = $this->component( $action, $function, $params,true );
 		}
 		else {
@@ -861,7 +1137,7 @@ class X_Loader extends CI_Loader
 		}
 		return  $instances[$instance_name];
 	}
-	
+	 
 	/**
 	 * check and load component
 	 *
@@ -1296,110 +1572,6 @@ Addons don't have languages but it does have templates
 		define( 'PLUGIN_THEMECSS', PLUGIN_TEMPLATECSS . $theme );
 	}
 	
-	/**
-	 * set all client session data
-	 *
-	 * @param void;
-	 *
-	 * @return array
-	 */
-	function request( &$ui)
-	{
-		$ci =& get_instance(); 
-		/*
-			check for existing session
-		*/
-		if ( !empty( $_SESSION['UI'] ) ) {
-			$ui = $_SESSION['UI'];
-		}
-		/*
-			This gives variables
-		
-			[scheme] => http://
-			[module] => www
-			[domain] => xflo
-			[extension] => info
-			[url] => www.xflo.info
-			[base_url] => http://www.xflo.info/
-		*/
-		extract( $this->host = $this->host() );
-		$ui['module'] = $module;
-		$ui['scheme'] = $scheme;
-		$ui['domain'] = $domain;
-		$ui['extension'] = $extension;
-		$ui['url'] = $url;
-		$ui['base_url'] = $base_url;
-		
-		
-		/*
-			All following segments convert to parameter($args)
-		*/
-		$ui['params'] = NULL;
-		$ui['controller'] = $ci->uri->segment( 1 );
-		$ui['function'] = $ci->uri->segment( 2 );
-		if ( $ci->uri->segment( 3 )  !== FALSE ) {
-			$ui['params'] = array();
-			$param = 3;
-			$has_params = TRUE;
-			while( $has_params ) {
-				$ui['params'][] = $ci->uri->segment( $param );
-				$param++;
-				if ( $ci->uri->segment( $param ) === FALSE ) {
-					$has_params = FALSE;
-				}
-			}
-		}
-		
-		
-		/*
-		
-			setting current view mode
-		*/
-		if ( !empty( $_SESSION['module'] ) && $_SESSION['module'] == $ci->uri->segment( 2 ) ) {
-			$_SESSION['widget'] = $ci->uri->segment( 3 );
-			if( isset( $_SESSION['component'] ) ) {
-				unset( $_SESSION['component'] );
-			}
-		}
-		else {
-			if ( $ci->uri->segment( 2 ) ) {
-				$_SESSION['component'] = $ci->uri->segment( 2 );
-			}
-			if ( isset( $_SESSION['widget'] ) ) {
-				unset( $_SESSION['widget'] );
-			}
-		}
-		
-		//check if segment 2 is current module
-		//then set $_SESSION['widget'] = $ci->uri->segment(3);
-		/* 
-			Make sure session exists beyond this point 
-		*/
-		if ( !empty( $_SESSION['UI'] ) ) {
-			$ui = $_SESSION['UI'];
-			/*
-				loads global functions
-				i.e. 
-				defining paths 
-				and 
-				GET requests to argunebts passed to ajaxed functions referred as args[]
-			*/
-			$this->paths( $ui );
-			$this->get_request( );
-			
-			/*
-				Loads component definitions
-			*/
-			$this->language( $ui );
-		}
-		else {
-			/*
-				creates session with all variables for current user/group
-			*/
-			$this->client_session( $ui );
-		}
-	}
-
 	/**
 	 * Prototype function not in production
 	 * reset some conditional client session data

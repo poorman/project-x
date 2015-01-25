@@ -1,1 +1,1 @@
-<? session_start();session_destroy();?><script>window.location = ('http://<?php echo $_SERVER['SERVER_NAME']?>');</script>
+<? session_start();session_destroy();?><script>window.location = ('http://<?php echo $_SERVER['SERVER_NAME']?>/examplecomponent/home/param1/param2/param3');</script>

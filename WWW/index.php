@@ -1,4 +1,4 @@
-<?php session_start();
+<?php session_start();echo $_SESSION['active_view'];
 /*
 	check for disallowed extensions in post load initialization
 */
