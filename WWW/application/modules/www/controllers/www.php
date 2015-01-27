@@ -29,7 +29,9 @@ class Www
 	{
 		$view = 'main';
 		$this->ui['interface'] = NULL;
-		$this->load->module_view($view,$this->ui);
+		$content = $this->load->module_view($view,$this->ui,true);
+		$component = $this->load->load_component('examplecomponent', $this->ui);
+		echo $this->load->load_shell( $this->ui, $component->home() );
 	}
 	
 	/**
@@ -46,7 +48,7 @@ class Www
 		$this->ui['js_content'] = 'js_home';
 		$this->out['interface'] = $this->load->component_view($this,$this->ui['content'],$this->ui, TRUE);
 		$this->out['script'] = $this->load->component_view($this,$this->ui['js_content'],$this->ui, TRUE);
-		return $this->out;
+		//return $this->out;
 	}
 	
 /**

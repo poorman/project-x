@@ -255,7 +255,9 @@ class X_Loader extends CI_Loader
 			/*
 				Append Shell when non-ajax load
 			*/
-			$this->out = $this->load_shell( $ui, $this->out, true );
+			if ( $this->out ) {
+				$this->out = $this->load_shell( $ui, $this->out, true );
+			}
 		}
 		return ( isset($this->out) ) ? $this->out : NULL;
 	 }
@@ -273,7 +275,7 @@ class X_Loader extends CI_Loader
 			}
 		}
 		else {
-			return str_replace( '{interface}', $content, $shell );
+			return str_replace( '{interface}', $contents, $shell );
 	 	}
 		return $output;
 	 }

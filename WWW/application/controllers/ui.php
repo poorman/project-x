@@ -76,6 +76,7 @@ class Ui extends CI_Controller
 			echo $this->out;
 		}
 		else {
+			
 			$module = $this->load->load_module( $this->ui);
 			$module->module();
 		}
